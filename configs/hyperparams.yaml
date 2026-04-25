@@ -1,0 +1,68 @@
+arima:
+  stepwise: true
+  information_criterion: aic
+  max_p: 7
+  max_q: 7
+  max_d: 2
+  seasonal: false
+
+sarima:
+  stepwise: true
+  information_criterion: aic
+  max_p: 5
+  max_q: 5
+  max_d: 2
+  seasonal: true
+  max_P: 2
+  max_Q: 2
+  max_D: 1
+  m_daily: 7
+  m_weekly: 52
+
+prophet:
+  yearly_seasonality: true
+  weekly_seasonality: true
+  daily_seasonality: false
+  seasonality_mode: additive
+  interval_width: 0.95
+
+xgboost:
+  n_estimators: 200
+  max_depth: 5
+  learning_rate: 0.05
+  subsample: 0.8
+  colsample_bytree: 0.8
+  random_state: 42
+  lag_window: 14
+
+lstm:
+  units_layer1: 64
+  units_layer2: 32
+  dropout: 0.2
+  epochs: 100
+  batch_size: 16
+  patience: 10
+  optimizer: adam
+  lag_window: 14
+  validation_split: 0.1
+  random_seed: 42
+
+hybrid:
+  arima:
+    stepwise: true
+    max_p: 5
+    max_q: 5
+    seasonal: false
+  xgboost_residual:
+    n_estimators: 100
+    max_depth: 4
+    learning_rate: 0.1
+    random_state: 42
+    lag_window: 14
+
+evaluation:
+  train_test_split: 0.8
+  random_seed: 42
+  dm_test_loss: squared_error
+  dm_test_h: 1
+  significance_levels: [0.10, 0.05, 0.01]

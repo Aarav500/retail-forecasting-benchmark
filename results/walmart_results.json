@@ -1,0 +1,89 @@
+{
+  "dataset": "walmart",
+  "n_train": 114,
+  "n_test": 29,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 0, 4)",
+      "rmse": 165.2297,
+      "mae": 135.8587,
+      "mape": 0.6013,
+      "mean_residual": -106.0137,
+      "residual_std": 126.7358,
+      "train_time": 6.281,
+      "pred_time": 2.0087
+    },
+    "SARIMA": {
+      "model": "SARIMA(1, 0, 2)x(0, 0, 0, 7)",
+      "rmse": 123.1266,
+      "mae": 95.4191,
+      "mape": 0.4242,
+      "mean_residual": -80.1636,
+      "residual_std": 93.4556,
+      "train_time": 6.8214,
+      "pred_time": 1.3869
+    },
+    "Prophet": {
+      "model": "Prophet",
+      "rmse": 944.9314,
+      "mae": 942.5645,
+      "mape": 4.0956,
+      "mean_residual": 942.5645,
+      "residual_std": 66.84,
+      "train_time": 0.1844,
+      "pred_time": 0.0584
+    },
+    "XGBoost": {
+      "model": "XGBoost",
+      "rmse": 292.3375,
+      "mae": 257.239,
+      "mape": 1.1148,
+      "mean_residual": 106.1314,
+      "residual_std": 272.3918,
+      "train_time": 0.8481,
+      "pred_time": 0.0936
+    },
+    "LSTM": {
+      "model": "LSTM",
+      "rmse": 907.6497,
+      "mae": 827.9948,
+      "mape": 3.618,
+      "mean_residual": -521.6763,
+      "residual_std": 742.7529,
+      "train_time": 11.4045,
+      "pred_time": 4.5873
+    },
+    "Hybrid": {
+      "model": "Hybrid(ARIMA+XGB)",
+      "rmse": 83.1532,
+      "mae": 61.9195,
+      "mape": 0.2626,
+      "mean_residual": -0.9244,
+      "residual_std": 83.148,
+      "train_time": 6.9055,
+      "pred_time": 4.3104
+    }
+  },
+  "dm_tests": {
+    "SARIMA": {
+      "dm_stat": -55.0208,
+      "p_value": 0.0
+    },
+    "Prophet": {
+      "dm_stat": -56.0449,
+      "p_value": 0.0
+    },
+    "XGBoost": {
+      "dm_stat": -49.0753,
+      "p_value": 0.0
+    },
+    "LSTM": {
+      "dm_stat": -38.7248,
+      "p_value": 0.0
+    },
+    "Hybrid": {
+      "dm_stat": -61.5871,
+      "p_value": 0.0
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "dataset": "Real_Electronics",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 0, 1)",
+      "rmse": 227.2025,
+      "mae": 177.2068,
+      "mape": 2.0088,
+      "mean_residual": -49.9819,
+      "residual_std": 221.6366,
+      "train_time": 0.7213,
+      "pred_time": 1.0981
+    },
+    "SARIMA": {
+      "model": "SARIMA(0, 0, 1)x(0, 0, 1, 7)",
+      "rmse": 229.5169,
+      "mae": 181.0203,
+      "mape": 2.0531,
+      "mean_residual": -57.8018,
+      "residual_std": 222.1192,
+      "train_time": 3.1197,
+      "pred_time": 1.8802
+    },
+    "Prophet": {
+      "model": "Prophet",
+      "rmse": 278.018,
+      "mae": 224.713,
+      "mape": 2.5243,
+      "mean_residual": 33.4101,
+      "residual_std": 276.0032,
+      "train_time": 0.0981,
+      "pred_time": 0.1095
+    },
+    "XGBoost": {
+      "model": "XGBoost",
+      "rmse": 249.2596,
+      "mae": 188.0972,
+      "mape": 2.1312,
+      "mean_residual": -56.0325,
+      "residual_std": 242.88,
+      "train_time": 0.5721,
+      "pred_time": 0.0201
+    },
+    "LSTM": {
+      "model": "LSTM",
+      "rmse": 230.0552,
+      "mae": 171.5044,
+      "mape": 1.9376,
+      "mean_residual": -17.8138,
+      "residual_std": 229.3644,
+      "train_time": 8.5195,
+      "pred_time": 3.2542
+    },
+    "Hybrid": {
+      "model": "Hybrid(ARIMA+XGB)",
+      "rmse": 240.6525,
+      "mae": 182.9282,
+      "mape": 2.0713,
+      "mean_residual": -35.3016,
+      "residual_std": 238.0492,
+      "train_time": 1.1078,
+      "pred_time": 2.9115
+    }
+  },
+  "dm_tests": {
+    "SARIMA": {
+      "dm_stat": -82.7714,
+      "p_value": 0.0
+    },
+    "Prophet": {
+      "dm_stat": -70.5063,
+      "p_value": 0.0
+    },
+    "XGBoost": {
+      "dm_stat": -79.9563,
+      "p_value": 0.0
+    },
+    "LSTM": {
+      "dm_stat": -81.5927,
+      "p_value": 0.0
+    },
+    "Hybrid": {
+      "dm_stat": -78.5406,
+      "p_value": 0.0
+    }
+  }
+}

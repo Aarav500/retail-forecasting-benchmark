@@ -1,0 +1,89 @@
+{
+  "dataset": "Real_Food",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 0, 0)",
+      "rmse": 255.7638,
+      "mae": 216.5523,
+      "mape": 2.1012,
+      "mean_residual": 43.3569,
+      "residual_std": 252.0621,
+      "train_time": 0.9717,
+      "pred_time": 0.3999
+    },
+    "SARIMA": {
+      "model": "SARIMA(0, 0, 0)x(0, 0, 0, 7)",
+      "rmse": 255.7638,
+      "mae": 216.5523,
+      "mape": 2.1012,
+      "mean_residual": 43.3569,
+      "residual_std": 252.0621,
+      "train_time": 1.4212,
+      "pred_time": 0.4209
+    },
+    "Prophet": {
+      "model": "Prophet",
+      "rmse": 530.0921,
+      "mae": 441.6213,
+      "mape": 4.3268,
+      "mean_residual": -300.3758,
+      "residual_std": 436.7746,
+      "train_time": 0.4422,
+      "pred_time": 0.0492
+    },
+    "XGBoost": {
+      "model": "XGBoost",
+      "rmse": 304.0816,
+      "mae": 240.5695,
+      "mape": 2.3281,
+      "mean_residual": 75.9686,
+      "residual_std": 294.4391,
+      "train_time": 0.8907,
+      "pred_time": 0.0869
+    },
+    "LSTM": {
+      "model": "LSTM",
+      "rmse": 262.8168,
+      "mae": 221.1198,
+      "mape": 2.1427,
+      "mean_residual": 56.8991,
+      "residual_std": 256.5836,
+      "train_time": 7.3521,
+      "pred_time": 3.2464
+    },
+    "Hybrid": {
+      "model": "Hybrid(ARIMA+XGB)",
+      "rmse": 312.3689,
+      "mae": 254.4443,
+      "mape": 2.4651,
+      "mean_residual": 68.5252,
+      "residual_std": 304.7599,
+      "train_time": 1.2967,
+      "pred_time": 0.888
+    }
+  },
+  "dm_tests": {
+    "SARIMA": {
+      "dm_stat": -101.8997,
+      "p_value": 0.0
+    },
+    "Prophet": {
+      "dm_stat": -71.767,
+      "p_value": 0.0
+    },
+    "XGBoost": {
+      "dm_stat": -90.6914,
+      "p_value": 0.0
+    },
+    "LSTM": {
+      "dm_stat": -100.6233,
+      "p_value": 0.0
+    },
+    "Hybrid": {
+      "dm_stat": -89.7278,
+      "p_value": 0.0
+    }
+  }
+}

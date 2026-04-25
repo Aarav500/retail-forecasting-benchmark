@@ -1,0 +1,89 @@
+{
+  "dataset": "Real_Furniture",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 0, 0)",
+      "rmse": 219.0582,
+      "mae": 167.7752,
+      "mape": 1.5951,
+      "mean_residual": 56.5814,
+      "residual_std": 211.6248,
+      "train_time": 1.0411,
+      "pred_time": 1.1741
+    },
+    "SARIMA": {
+      "model": "SARIMA(1, 0, 0)x(0, 0, 0, 7)",
+      "rmse": 219.0582,
+      "mae": 167.7752,
+      "mape": 1.5951,
+      "mean_residual": 56.5814,
+      "residual_std": 211.6248,
+      "train_time": 2.0029,
+      "pred_time": 1.1149
+    },
+    "Prophet": {
+      "model": "Prophet",
+      "rmse": 287.8189,
+      "mae": 231.8876,
+      "mape": 2.2129,
+      "mean_residual": 69.7727,
+      "residual_std": 279.2338,
+      "train_time": 0.0927,
+      "pred_time": 0.109
+    },
+    "XGBoost": {
+      "model": "XGBoost",
+      "rmse": 251.5539,
+      "mae": 185.4843,
+      "mape": 1.7633,
+      "mean_residual": 70.0724,
+      "residual_std": 241.5972,
+      "train_time": 0.5724,
+      "pred_time": 0.0217
+    },
+    "LSTM": {
+      "model": "LSTM",
+      "rmse": 219.8772,
+      "mae": 169.1106,
+      "mape": 1.6075,
+      "mean_residual": 66.3454,
+      "residual_std": 209.6289,
+      "train_time": 26.0284,
+      "pred_time": 3.2652
+    },
+    "Hybrid": {
+      "model": "Hybrid(ARIMA+XGB)",
+      "rmse": 262.8147,
+      "mae": 210.2855,
+      "mape": 2.0043,
+      "mean_residual": 53.6369,
+      "residual_std": 257.2832,
+      "train_time": 1.499,
+      "pred_time": 2.6925
+    }
+  },
+  "dm_tests": {
+    "SARIMA": {
+      "dm_stat": -102.0408,
+      "p_value": 0.0
+    },
+    "Prophet": {
+      "dm_stat": -93.7908,
+      "p_value": 0.0
+    },
+    "XGBoost": {
+      "dm_stat": -89.7341,
+      "p_value": 0.0
+    },
+    "LSTM": {
+      "dm_stat": -108.0504,
+      "p_value": 0.0
+    },
+    "Hybrid": {
+      "dm_stat": -89.5037,
+      "p_value": 0.0
+    }
+  }
+}

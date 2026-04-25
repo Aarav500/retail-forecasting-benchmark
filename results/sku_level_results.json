@@ -1,0 +1,162 @@
+{
+  "Product_67": {
+    "cat": "Food",
+    "n": 181,
+    "cv": 0.284,
+    "arima_rmse": 18.25,
+    "xgb_rmse": 18.19,
+    "winner": "XGBoost"
+  },
+  "Product_43": {
+    "cat": "Food",
+    "n": 181,
+    "cv": 0.315,
+    "arima_rmse": 12.15,
+    "xgb_rmse": 14.53,
+    "winner": "ARIMA"
+  },
+  "Product_405": {
+    "cat": "Food",
+    "n": 181,
+    "cv": 0.278,
+    "arima_rmse": 13.63,
+    "xgb_rmse": 16.92,
+    "winner": "ARIMA"
+  },
+  "Product_507": {
+    "cat": "Food",
+    "n": 181,
+    "cv": 0.314,
+    "arima_rmse": 13.3,
+    "xgb_rmse": 13.49,
+    "winner": "ARIMA"
+  },
+  "Product_250": {
+    "cat": "Food",
+    "n": 181,
+    "cv": 0.277,
+    "arima_rmse": 11.88,
+    "xgb_rmse": 14.86,
+    "winner": "ARIMA"
+  },
+  "Product_18": {
+    "cat": "Electronics",
+    "n": 181,
+    "cv": 0.26,
+    "arima_rmse": 14.11,
+    "xgb_rmse": 14.07,
+    "winner": "XGBoost"
+  },
+  "Product_664": {
+    "cat": "Electronics",
+    "n": 181,
+    "cv": 0.3,
+    "arima_rmse": 15.75,
+    "xgb_rmse": 18.97,
+    "winner": "ARIMA"
+  },
+  "Product_363": {
+    "cat": "Electronics",
+    "n": 181,
+    "cv": 0.273,
+    "arima_rmse": 16.28,
+    "xgb_rmse": 16.12,
+    "winner": "XGBoost"
+  },
+  "Product_58": {
+    "cat": "Electronics",
+    "n": 181,
+    "cv": 0.302,
+    "arima_rmse": 16.77,
+    "xgb_rmse": 17.94,
+    "winner": "ARIMA"
+  },
+  "Product_663": {
+    "cat": "Electronics",
+    "n": 181,
+    "cv": 0.308,
+    "arima_rmse": 12.82,
+    "xgb_rmse": 14.43,
+    "winner": "ARIMA"
+  },
+  "Product_427": {
+    "cat": "Clothing",
+    "n": 181,
+    "cv": 0.297,
+    "arima_rmse": 14.97,
+    "xgb_rmse": 15.09,
+    "winner": "ARIMA"
+  },
+  "Product_769": {
+    "cat": "Clothing",
+    "n": 181,
+    "cv": 0.279,
+    "arima_rmse": 14.82,
+    "xgb_rmse": 16.46,
+    "winner": "ARIMA"
+  },
+  "Product_203": {
+    "cat": "Clothing",
+    "n": 181,
+    "cv": 0.323,
+    "arima_rmse": 16.5,
+    "xgb_rmse": 18.43,
+    "winner": "ARIMA"
+  },
+  "Product_367": {
+    "cat": "Clothing",
+    "n": 181,
+    "cv": 0.292,
+    "arima_rmse": 13.51,
+    "xgb_rmse": 14.57,
+    "winner": "ARIMA"
+  },
+  "Product_608": {
+    "cat": "Clothing",
+    "n": 181,
+    "cv": 0.305,
+    "arima_rmse": 15.8,
+    "xgb_rmse": 17.24,
+    "winner": "ARIMA"
+  },
+  "Product_737": {
+    "cat": "Furniture",
+    "n": 181,
+    "cv": 0.282,
+    "arima_rmse": 12.49,
+    "xgb_rmse": 12.52,
+    "winner": "ARIMA"
+  },
+  "Product_733": {
+    "cat": "Furniture",
+    "n": 181,
+    "cv": 0.334,
+    "arima_rmse": 18.03,
+    "xgb_rmse": 19.34,
+    "winner": "ARIMA"
+  },
+  "Product_644": {
+    "cat": "Furniture",
+    "n": 181,
+    "cv": 0.322,
+    "arima_rmse": 14.86,
+    "xgb_rmse": 16.77,
+    "winner": "ARIMA"
+  },
+  "Product_470": {
+    "cat": "Furniture",
+    "n": 181,
+    "cv": 0.305,
+    "arima_rmse": 15.01,
+    "xgb_rmse": 15.57,
+    "winner": "ARIMA"
+  },
+  "Product_428": {
+    "cat": "Furniture",
+    "n": 181,
+    "cv": 0.303,
+    "arima_rmse": 13.5,
+    "xgb_rmse": 16.0,
+    "winner": "ARIMA"
+  }
+}
