@@ -1,0 +1,276 @@
+{
+  "results": [
+    {
+      "id": "M11368",
+      "cv": 0.033,
+      "ac1": 0.841,
+      "n": 102,
+      "arima_rmse": 103.36,
+      "naive_rmse": 156.05,
+      "seasonal_naive_rmse": 116.02,
+      "ratio_vs_naive": 0.662,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10457",
+      "cv": 0.047,
+      "ac1": 0.982,
+      "n": 76,
+      "arima_rmse": 43.63,
+      "naive_rmse": 81.39,
+      "seasonal_naive_rmse": 34.06,
+      "ratio_vs_naive": 0.536,
+      "winner": "SeasonalNaive"
+    },
+    {
+      "id": "M10669",
+      "cv": 0.063,
+      "ac1": 0.694,
+      "n": 138,
+      "arima_rmse": 254.67,
+      "naive_rmse": 377.19,
+      "seasonal_naive_rmse": 323.39,
+      "ratio_vs_naive": 0.675,
+      "winner": "AR1"
+    },
+    {
+      "id": "M11312",
+      "cv": 0.022,
+      "ac1": 0.49,
+      "n": 102,
+      "arima_rmse": 181.89,
+      "naive_rmse": 236.94,
+      "seasonal_naive_rmse": 257.55,
+      "ratio_vs_naive": 0.768,
+      "winner": "AR1"
+    },
+    {
+      "id": "M12870",
+      "cv": 0.087,
+      "ac1": 0.997,
+      "n": 174,
+      "arima_rmse": 269.28,
+      "naive_rmse": 717.74,
+      "seasonal_naive_rmse": 430.33,
+      "ratio_vs_naive": 0.375,
+      "winner": "AR1"
+    },
+    {
+      "id": "M12862",
+      "cv": 0.052,
+      "ac1": 0.913,
+      "n": 102,
+      "arima_rmse": 303.19,
+      "naive_rmse": 759.4,
+      "seasonal_naive_rmse": 408.09,
+      "ratio_vs_naive": 0.399,
+      "winner": "AR1"
+    },
+    {
+      "id": "M12252",
+      "cv": 0.044,
+      "ac1": 0.828,
+      "n": 78,
+      "arima_rmse": 126.25,
+      "naive_rmse": 412.47,
+      "seasonal_naive_rmse": 379.61,
+      "ratio_vs_naive": 0.306,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10424",
+      "cv": 0.074,
+      "ac1": 0.888,
+      "n": 68,
+      "arima_rmse": 134.27,
+      "naive_rmse": 160.72,
+      "seasonal_naive_rmse": 122.33,
+      "ratio_vs_naive": 0.835,
+      "winner": "SeasonalNaive"
+    },
+    {
+      "id": "M10530",
+      "cv": 0.121,
+      "ac1": 0.968,
+      "n": 98,
+      "arima_rmse": 309.84,
+      "naive_rmse": 1027.62,
+      "seasonal_naive_rmse": 933.79,
+      "ratio_vs_naive": 0.302,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10601",
+      "cv": 0.291,
+      "ac1": 0.629,
+      "n": 127,
+      "arima_rmse": 676.13,
+      "naive_rmse": 915.03,
+      "seasonal_naive_rmse": 277.71,
+      "ratio_vs_naive": 0.739,
+      "winner": "SeasonalNaive"
+    },
+    {
+      "id": "M10376",
+      "cv": 0.123,
+      "ac1": 0.762,
+      "n": 184,
+      "arima_rmse": 316.84,
+      "naive_rmse": 167.13,
+      "seasonal_naive_rmse": 168.08,
+      "ratio_vs_naive": 1.896,
+      "winner": "Naive"
+    },
+    {
+      "id": "M11439",
+      "cv": 0.154,
+      "ac1": 0.976,
+      "n": 174,
+      "arima_rmse": 580.13,
+      "naive_rmse": 415.36,
+      "seasonal_naive_rmse": 428.04,
+      "ratio_vs_naive": 1.397,
+      "winner": "Naive"
+    },
+    {
+      "id": "M10100",
+      "cv": 0.245,
+      "ac1": 0.851,
+      "n": 186,
+      "arima_rmse": 481.6,
+      "naive_rmse": 584.64,
+      "seasonal_naive_rmse": 560.9,
+      "ratio_vs_naive": 0.824,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10480",
+      "cv": 0.179,
+      "ac1": 0.999,
+      "n": 169,
+      "arima_rmse": 169.25,
+      "naive_rmse": 481.99,
+      "seasonal_naive_rmse": 214.44,
+      "ratio_vs_naive": 0.351,
+      "winner": "AR1"
+    },
+    {
+      "id": "M11333",
+      "cv": 0.229,
+      "ac1": 0.997,
+      "n": 150,
+      "arima_rmse": 333.66,
+      "naive_rmse": 634.97,
+      "seasonal_naive_rmse": 381.93,
+      "ratio_vs_naive": 0.525,
+      "winner": "AR1"
+    },
+    {
+      "id": "M12522",
+      "cv": 0.145,
+      "ac1": 0.989,
+      "n": 102,
+      "arima_rmse": 132.3,
+      "naive_rmse": 608.8,
+      "seasonal_naive_rmse": 157.28,
+      "ratio_vs_naive": 0.217,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10630",
+      "cv": 0.342,
+      "ac1": 0.899,
+      "n": 126,
+      "arima_rmse": 879.24,
+      "naive_rmse": 3738.01,
+      "seasonal_naive_rmse": 915.33,
+      "ratio_vs_naive": 0.235,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10525",
+      "cv": 0.313,
+      "ac1": 0.987,
+      "n": 174,
+      "arima_rmse": 274.87,
+      "naive_rmse": 773.69,
+      "seasonal_naive_rmse": 280.96,
+      "ratio_vs_naive": 0.355,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10527",
+      "cv": 0.325,
+      "ac1": 0.997,
+      "n": 150,
+      "arima_rmse": 684.71,
+      "naive_rmse": 2598.14,
+      "seasonal_naive_rmse": 918.09,
+      "ratio_vs_naive": 0.264,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10644",
+      "cv": 0.356,
+      "ac1": 0.999,
+      "n": 197,
+      "arima_rmse": 1060.1,
+      "naive_rmse": 4001.02,
+      "seasonal_naive_rmse": 1229.91,
+      "ratio_vs_naive": 0.265,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10617",
+      "cv": 0.465,
+      "ac1": 0.993,
+      "n": 150,
+      "arima_rmse": 2633.82,
+      "naive_rmse": 5621.59,
+      "seasonal_naive_rmse": 2763.81,
+      "ratio_vs_naive": 0.469,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10636",
+      "cv": 0.455,
+      "ac1": 0.999,
+      "n": 187,
+      "arima_rmse": 652.22,
+      "naive_rmse": 4671.78,
+      "seasonal_naive_rmse": 664.86,
+      "ratio_vs_naive": 0.14,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10223",
+      "cv": 0.31,
+      "ac1": 0.562,
+      "n": 174,
+      "arima_rmse": 1565.88,
+      "naive_rmse": 1646.76,
+      "seasonal_naive_rmse": 1934.87,
+      "ratio_vs_naive": 0.951,
+      "winner": "AR1"
+    },
+    {
+      "id": "M10297",
+      "cv": 0.334,
+      "ac1": 0.873,
+      "n": 161,
+      "arima_rmse": 3279.36,
+      "naive_rmse": 2251.13,
+      "seasonal_naive_rmse": 386.71,
+      "ratio_vs_naive": 1.457,
+      "winner": "SeasonalNaive"
+    }
+  ],
+  "win_counts": {
+    "AR1": 18,
+    "Naive": 2,
+    "SeasonalNaive": 4
+  },
+  "total": 24,
+  "mean_ratio": 0.623,
+  "ar1_beats_naive": 21
+}

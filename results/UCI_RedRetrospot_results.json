@@ -1,0 +1,14 @@
+{
+  "dataset": "UCI_RedRetrospot",
+  "metrics": {
+    "ARIMA": {
+      "rmse": 953.4
+    },
+    "XGBoost": {
+      "rmse": 900.0
+    },
+    "Hybrid": {
+      "rmse": 854.8
+    }
+  }
+}

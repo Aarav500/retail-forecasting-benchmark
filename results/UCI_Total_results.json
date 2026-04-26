@@ -1,0 +1,14 @@
+{
+  "dataset": "UCI_Total",
+  "metrics": {
+    "ARIMA": {
+      "rmse": 97294.6
+    },
+    "XGBoost": {
+      "rmse": 86497.5
+    },
+    "Hybrid": {
+      "rmse": 86037.6
+    }
+  }
+}

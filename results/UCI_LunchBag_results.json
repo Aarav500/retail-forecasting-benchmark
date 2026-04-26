@@ -1,0 +1,14 @@
+{
+  "dataset": "UCI_LunchBag",
+  "metrics": {
+    "ARIMA": {
+      "rmse": 1367.2
+    },
+    "XGBoost": {
+      "rmse": 1629.1
+    },
+    "Hybrid": {
+      "rmse": 1770.4
+    }
+  }
+}

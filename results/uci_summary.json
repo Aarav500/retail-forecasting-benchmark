@@ -1,0 +1,42 @@
+{
+  "UCI_JumboBag": {
+    "ARIMA": 7153.038,
+    "SARIMA": 7153.038,
+    "Prophet": 159711.8816,
+    "XGBoost": 6781.1627,
+    "LSTM": 6667.3704,
+    "Hybrid": 8010.8853
+  },
+  "UCI_LunchBag": {
+    "ARIMA": 1367.1971,
+    "SARIMA": 1367.1971,
+    "Prophet": 71514.8479,
+    "XGBoost": 1650.3272,
+    "LSTM": 1488.5347,
+    "Hybrid": 1543.4672
+  },
+  "UCI_RedRetrospot": {
+    "ARIMA": 953.37,
+    "SARIMA": 953.37,
+    "Prophet": 46381.4452,
+    "XGBoost": 967.4884,
+    "LSTM": 1071.5693,
+    "Hybrid": 974.8892
+  },
+  "UCI_CakeStand": {
+    "ARIMA": 1022.7284,
+    "SARIMA": 1022.7284,
+    "Prophet": 96071.6011,
+    "XGBoost": 977.39,
+    "LSTM": 1116.2069,
+    "Hybrid": 996.2352
+  },
+  "UCI_Total": {
+    "ARIMA": 97294.5877,
+    "SARIMA": 97294.5877,
+    "Prophet": 1953192.4514,
+    "XGBoost": 94913.9558,
+    "LSTM": 94168.5382,
+    "Hybrid": 82736.2682
+  }
+}

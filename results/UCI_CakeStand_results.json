@@ -1,0 +1,14 @@
+{
+  "dataset": "UCI_CakeStand",
+  "metrics": {
+    "ARIMA": {
+      "rmse": 1022.7
+    },
+    "XGBoost": {
+      "rmse": 1039.8
+    },
+    "Hybrid": {
+      "rmse": 973.4
+    }
+  }
+}

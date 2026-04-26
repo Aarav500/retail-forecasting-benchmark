@@ -1,0 +1,14 @@
+{
+  "dataset": "UCI_JumboBag",
+  "metrics": {
+    "ARIMA": {
+      "rmse": 7153.0
+    },
+    "XGBoost": {
+      "rmse": 7141.2
+    },
+    "Hybrid": {
+      "rmse": 8021.1
+    }
+  }
+}
