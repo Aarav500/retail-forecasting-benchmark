@@ -1267,6 +1267,7 @@ Ported from `code/experiment.py:run_hybrid`. Fits ARIMA, then an XGBoost
 regressor on ARIMA's in-sample residuals; forecasts are the ARIMA
 forecast plus the XGBoost residual correction.
 """
+import copy
 import time
 
 import numpy as np
@@ -1332,14 +1333,19 @@ class HybridForecaster(BaseForecaster):
 
     def predict_rolling(self, test: pd.Series) -> Forecast:
         t0 = time.time()
+        # Deep-copy before rolling: pmdarima's .update() mutates the model
+        # in place, so rolling on self._arima_model directly would make
+        # predict_rolling non-idempotent across repeated calls (see Task 6's
+        # ARIMA/SARIMA fix for the same issue).
+        arima_model = copy.deepcopy(self._arima_model)
         history = list(self._train_values)
         res_history = list(self._res_history)
         test_values = test.values.astype(float)
         forecasts = []
 
         for i in range(len(test_values)):
-            self._arima_model.update(history[-1:])
-            arima_fc = self._arima_model.predict(n_periods=1)[0]
+            arima_model.update(history[-1:])
+            arima_fc = arima_model.predict(n_periods=1)[0]
 
             if self._has_xgb and len(res_history) >= self.lags:
                 x_res = np.array(res_history[-self.lags:]).reshape(1, -1)
