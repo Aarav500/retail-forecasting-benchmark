@@ -2451,6 +2451,16 @@ git add experiments/configs experiments/scripts
 git commit -m "feat: add run_baselines.py and run_ablation.py experiment scripts"
 ```
 
+**Post-implementation additions (applied directly to code, not reflected in the code blocks above):**
+- Added `tests/test_experiment_scripts.py` (2 tests: `build_models()` construction check against the real yaml config; `run_dataset()`'s structural output contract on real D-Mart food data with LSTM epochs overridden to 3 for speed). The plan originally specified no test file for this task — added afterward since every other task has one and Task 15's verification is a statistical sweep, not a fast structural-contract test.
+- Fixed a Critical bug found in code review: `preds_by_model[model_name] = preds` was set before `compute_metrics()` validated the predictions, so a model producing non-finite (NaN) predictions ended up with a bogus DM-test entry (misreported as "not significant") while being silently absent from `metrics`. Fixed by only registering `preds_by_model`/`results` after `compute_metrics` succeeds.
+- Added a `"failed_models": {model_name: str(exc)}` field to `run_dataset()`'s output so per-model failures (including ARIMA failing, which previously zeroed out the whole dataset's `dm_tests` with no explanation) are visible in the saved JSON, not just stdout.
+- Wired the previously-dead `hyperparams.yaml` `evaluation:` block (`train_test_split`, `dm_test_h`, `significance_levels`) into `run_dataset()`/`diebold_mariano_test`/`bonferroni_correct` (behavior-preserving — confirmed the yaml's values match the prior hardcoded defaults exactly).
+- Added a `--datasets` CLI filter to `main()` for smoke-testing a subset before Task 15's full ~30-60 minute, 35-dataset sweep.
+- Added `tests/conftest.py` calling `matplotlib.use("Agg")` before test collection — an unrelated latent bug found during verification: `prophet`'s transitive `pyplot` import locks in whatever backend is active depending on test collection order, and `shortseq/visualization/figures.py`'s own backend guard correctly declines to override an already-resolved one, so the outcome was order-dependent before this fix.
+
+See commit `c95f0c0` on `feature/shortseq-scaffold` for the actual changes.
+
 ---
 
 ### Task 14: Repo reorganization and retiring `code/`
