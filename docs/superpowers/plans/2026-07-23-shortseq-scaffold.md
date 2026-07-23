@@ -2221,6 +2221,12 @@ Fixes a bug present in `code/experiment.py:run_dataset_experiment`: the
 original DM test call passed each model's *residuals, reversed* as the
 comparison series instead of its actual predictions. This version passes
 each model's real predictions.
+
+Also applies Bonferroni correction (`shortseq.evaluation.dm_test.bonferroni_correct`)
+across each dataset's family of pairwise DM tests (every non-ARIMA model
+vs. ARIMA, on that one dataset) — see the comment at the correction call
+site for why datasets are treated as separate families rather than
+correcting globally across all datasets.
 """
 import json
 from pathlib import Path
@@ -2228,7 +2234,7 @@ from pathlib import Path
 import yaml
 
 from shortseq.datasets.registry import load_all
-from shortseq.evaluation.dm_test import diebold_mariano_test
+from shortseq.evaluation.dm_test import bonferroni_correct, diebold_mariano_test
 from shortseq.evaluation.metrics import compute_metrics
 from shortseq.models.arima import ARIMAForecaster
 from shortseq.models.hybrid import HybridForecaster
@@ -2309,6 +2315,17 @@ def run_dataset(name: str, dataset, config: dict, split: float = 0.8) -> dict:
                 continue
             dm_stat, p_val = diebold_mariano_test(test.values, arima_preds, preds)
             dm_tests[model_name] = {"dm_stat": dm_stat, "p_value": p_val}
+
+        # Bonferroni-correct across this dataset's family of pairwise DM tests
+        # (every non-ARIMA model vs. ARIMA, on this one dataset). Each dataset
+        # is treated as its own family since the comparisons within it share
+        # the same baseline and the same test set; correcting across datasets
+        # too would be double-counting when this dict is combined by later
+        # aggregate analysis (Task 11's ranking).
+        p_values = {name: dm["p_value"] for name, dm in dm_tests.items()}
+        corrected = bonferroni_correct(p_values)
+        for model_name, dm in dm_tests.items():
+            dm["significant_bonferroni"] = corrected[model_name]["significant"]
 
     output = {
         "dataset": name,
