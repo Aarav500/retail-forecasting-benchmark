@@ -16,6 +16,20 @@ from .base import BaseForecaster, Forecast
 
 
 class LSTMForecaster(BaseForecaster):
+    """2-layer LSTM baseline over a MinMax-scaled lagged window.
+
+    Note on reproducibility: `random_seed` is passed to `tf.random.set_seed`,
+    but that alone does not guarantee run-to-run determinism on CPU. TensorFlow's
+    CPU kernels (oneDNN-backed) use multi-threaded floating-point reductions
+    whose summation order — and therefore rounding — can vary between runs
+    regardless of seed; true determinism would additionally require
+    `tf.config.experimental.enable_op_determinism()` plus single-threaded
+    execution. As a result, forecasts/RMSE from this model may vary slightly
+    across runs even with identical seed and data. This is inherited unchanged
+    from the original `code/experiment.py:run_lstm` seeding, not a regression
+    introduced here.
+    """
+
     def __init__(self, lags: int = 14, units_layer1: int = 64, units_layer2: int = 32,
                  dropout: float = 0.2, epochs: int = 100, batch_size: int = 16,
                  patience: int = 10, validation_split: float = 0.1, random_seed: int = 42):

@@ -24,6 +24,8 @@ def test_xgboost_forecaster_fits_and_predicts_real_dmart_food():
     forecast = model.predict_rolling(test)
     assert forecast.point.shape == (len(test),)
     assert model.train_time_ is not None
+    assert model.pred_time_ is not None
+    assert model.name == "XGBoost"
 
 
 def test_lstm_forecaster_fits_and_predicts_real_dmart_food():
@@ -32,6 +34,8 @@ def test_lstm_forecaster_fits_and_predicts_real_dmart_food():
     forecast = model.predict_rolling(test)
     assert forecast.point.shape == (len(test),)
     assert model.train_time_ is not None
+    assert model.pred_time_ is not None
+    assert model.name == "LSTM"
 
 
 def test_xgboost_predict_rolling_is_idempotent_across_repeated_calls():

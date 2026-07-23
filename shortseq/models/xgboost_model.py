@@ -57,6 +57,13 @@ class XGBoostForecaster(BaseForecaster):
         test_values = test.values.astype(float)
         forecasts = []
         for i in range(len(test_values)):
+            # NOTE: the `else` branch below is structurally unreachable and kept only
+            # because it mirrors the original script. `fit()` calls create_lag_features
+            # on `train`, which raises ValueError itself if len(train) < self.lags
+            # (empty 1-D array), so a model only ever exists when len(train) >= lags;
+            # `history` starts at len(train) and only grows in this loop, so
+            # `len(history) >= self.lags` always holds here. Not a working safety net
+            # for short series — a true small-series guard would need to live in fit().
             if len(history) >= self.lags:
                 x = np.array(history[-self.lags:]).reshape(1, -1)
                 pred = self._model.predict(x)[0]
