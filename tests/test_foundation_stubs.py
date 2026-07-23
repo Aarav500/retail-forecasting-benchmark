@@ -1,0 +1,29 @@
+import pytest
+
+from shortseq.models.foundation.chronos import ChronosForecaster
+from shortseq.models.foundation.timesfm import TimesFMForecaster
+from shortseq.models.foundation.moirai import MoiraiForecaster
+from shortseq.models.foundation.moment import MomentForecaster
+from shortseq.models.foundation.timer import TimerForecaster
+from shortseq.models.foundation.ttm import TTMForecaster
+from shortseq.models.foundation.lag_llama import LagLlamaForecaster
+from shortseq.models.foundation.forecastpfn import ForecastPFNForecaster
+
+STUB_CLASSES = [
+    ChronosForecaster, TimesFMForecaster, MoiraiForecaster, MomentForecaster,
+    TimerForecaster, TTMForecaster, LagLlamaForecaster, ForecastPFNForecaster,
+]
+
+
+@pytest.mark.parametrize("cls", STUB_CLASSES)
+def test_foundation_stub_raises_not_implemented_on_fit(cls):
+    model = cls()
+    with pytest.raises(NotImplementedError):
+        model.fit(None)
+
+
+@pytest.mark.parametrize("cls", STUB_CLASSES)
+def test_foundation_stub_raises_not_implemented_on_predict(cls):
+    model = cls()
+    with pytest.raises(NotImplementedError):
+        model.predict_rolling(None)
