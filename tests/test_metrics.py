@@ -48,6 +48,7 @@ def test_dm_test_with_multistep_horizon_exercises_newey_west_loop():
     assert isinstance(dm_stat, float)
     assert isinstance(p_val, float)
     assert not np.isnan(dm_stat)
+    assert dm_stat == pytest.approx(1.2921, abs=1e-3)
 
 
 def test_bonferroni_correct_scales_alpha():
