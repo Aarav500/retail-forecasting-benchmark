@@ -32,6 +32,10 @@ class SeasonalNaiveForecaster(BaseForecaster):
         m = self.season_length
         forecasts = []
         for i in range(len(test_values)):
+            # Unlike XGBoost's analogous branch (dead code there — fit() itself
+            # guarantees len(history) >= lags), this fallback is genuinely
+            # reachable: e.g. a weekly series with season_length=52 and under
+            # a year of training data never has m prior values to look back to.
             pred = history[-m] if len(history) >= m else float(np.mean(history))
             forecasts.append(pred)
             history.append(test_values[i])

@@ -6,6 +6,7 @@ forecast plus the XGBoost residual correction.
 """
 import copy
 import time
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -44,7 +45,10 @@ class HybridForecaster(BaseForecaster):
                 suppress_warnings=True, error_action="ignore",
                 max_p=self.arima_max_p, max_q=self.arima_max_q,
             )
-        except Exception:
+        except Exception as exc:
+            warnings.warn(
+                f"auto_arima with bounds failed ({exc!r}); falling back to information_criterion='aic'"
+            )
             self._arima_model = pm.auto_arima(
                 values, seasonal=False, information_criterion="aic",
                 suppress_warnings=True,
