@@ -7,7 +7,7 @@ true value back into the model's history before the next step (no
 look-ahead).
 """
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 import numpy as np
@@ -21,8 +21,14 @@ class Forecast:
     `dist` is reserved for probabilistic models (e.g. foundation models)
     that produce more than a point estimate; unset for classical/ML
     baselines, none of which currently produce one.
+
+    `point` is excluded from the generated `__eq__` (compare=False):
+    it's a numpy array, and the default dataclass equality does a
+    tuple-wise `==` over fields, which raises `ValueError: The truth
+    value of an array ... is ambiguous` for array-valued fields instead
+    of returning True/False.
     """
-    point: np.ndarray
+    point: np.ndarray = field(compare=False)
     dist: Optional[object] = None
 
 

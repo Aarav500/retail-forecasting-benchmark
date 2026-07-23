@@ -41,3 +41,5 @@ def test_make_dataset_builds_series_dataset_with_stats():
     assert ds.n == 5
     assert ds.real is True
     assert ds.zero_frac == pytest.approx(0.2)
+    assert ds.cv == pytest.approx(compute_cv(series))
+    assert ds.ac1 == pytest.approx(compute_ac1(series))

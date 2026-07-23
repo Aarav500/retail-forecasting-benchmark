@@ -1,8 +1,7 @@
 """Dataset contract shared by every ShortSeq data loader."""
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 from statsmodels.tsa.stattools import acf
 
@@ -11,8 +10,16 @@ DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
 @dataclass
 class SeriesDataset:
+    """A single named time series plus precomputed summary statistics.
+
+    `series` is excluded from the generated `__eq__` (compare=False):
+    it's a pandas Series, and the default dataclass equality does a
+    tuple-wise `==` over fields, which raises `ValueError: The truth
+    value of a Series ... is ambiguous` for Series-valued fields instead
+    of returning True/False.
+    """
     name: str
-    series: pd.Series  # datetime-indexed
+    series: pd.Series = field(compare=False)  # datetime-indexed
     freq: str  # 'D', 'W', or 'M'
     n: int
     cv: float
