@@ -11,3 +11,6 @@ paper.out
 .worktrees/
 .venv/
 venv/
+*.egg-info/
+build/
+dist/
