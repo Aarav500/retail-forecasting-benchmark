@@ -27,3 +27,14 @@ def test_foundation_stub_raises_not_implemented_on_predict(cls):
     model = cls()
     with pytest.raises(NotImplementedError):
         model.predict_rolling(None)
+
+
+def test_foundation_stub_default_names():
+    assert ChronosForecaster().name == "Chronos-small"
+    assert TimesFMForecaster().name == "TimesFM-200m"
+    assert MoiraiForecaster().name == "Moirai-small"
+    assert MomentForecaster().name == "Moment-small"
+    assert TimerForecaster().name == "Timer-base"
+    assert TTMForecaster().name == "TTM-512-96"
+    assert LagLlamaForecaster().name == "Lag-Llama"
+    assert ForecastPFNForecaster().name == "ForecastPFN"

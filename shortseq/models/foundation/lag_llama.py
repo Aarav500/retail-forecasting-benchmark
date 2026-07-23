@@ -11,8 +11,9 @@ _NOT_IMPLEMENTED = (
 
 
 class LagLlamaForecaster(BaseForecaster):
-    """Zero-shot Lag-Llama forecaster (6M parameters, single size per the
-    execution plan)."""
+    """Zero-shot Lag-Llama forecaster (~6M parameters per public reports,
+    single size; not independently verified against the actual model
+    release)."""
 
     def __init__(self):
         super().__init__()

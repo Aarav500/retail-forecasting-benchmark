@@ -11,8 +11,9 @@ _NOT_IMPLEMENTED = (
 
 
 class ForecastPFNForecaster(BaseForecaster):
-    """Zero-shot ForecastPFN forecaster (25M parameters, single size per
-    the execution plan)."""
+    """Zero-shot ForecastPFN forecaster (~25M parameters per public
+    reports, single size; not independently verified against the actual
+    model release)."""
 
     def __init__(self):
         super().__init__()

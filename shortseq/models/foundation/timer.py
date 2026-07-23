@@ -11,8 +11,9 @@ _NOT_IMPLEMENTED = (
 
 
 class TimerForecaster(BaseForecaster):
-    """Zero-shot Timer forecaster. Sizes per the execution plan:
-    base(50M), large(670M)."""
+    """Zero-shot Timer forecaster. Sizes: base(~50M), large(~670M) per
+    public reports; not independently verified against the actual model
+    release."""
 
     def __init__(self, size: str = "base"):
         super().__init__()
