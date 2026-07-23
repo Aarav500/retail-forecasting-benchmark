@@ -10,6 +10,19 @@ GitHub: [github.com/Aarav500/retail-forecasting-benchmark](https://github.com/Aa
 
 ---
 
+This repo hosts the TMLR submission above **and** its in-progress successor,
+**ShortSeq** — a pip-installable benchmark package for evaluating foundation
+models against classical baselines on short retail time series. The TMLR
+results (6 models, 5 dataset sources) are preserved exactly and are now
+served by the `shortseq` package described below; ShortSeq's follow-on work
+(8 foundation models, more datasets, probabilistic metrics) is scaffolded
+but not yet run. See [Project status](#project-status) for exactly what's
+implemented vs. stubbed, and
+[`docs/superpowers/specs/2026-07-23-shortseq-scaffold-design.md`](docs/superpowers/specs/2026-07-23-shortseq-scaffold-design.md)
+for the full design rationale behind the package layout.
+
+---
+
 ## Windows setup note: put your venv outside the repo
 
 On Windows, create the virtualenv **outside this repo**, at a short path such as
@@ -23,8 +36,15 @@ this project has opted not to require.
 ```bash
 "C:/Users/you/AppData/Local/Programs/Python/Python311/python.exe" -m venv "C:/venvs/shortseq"
 C:/venvs/shortseq/Scripts/python.exe -m pip install --upgrade pip
-C:/venvs/shortseq/Scripts/python.exe -m pip install -r requirements.txt
+C:/venvs/shortseq/Scripts/python.exe -m pip install -e .
 ```
+
+`pip install -e .` (installing the `shortseq` package itself, editable) pulls in
+its runtime dependencies from `pyproject.toml` and is the recommended install
+path now that the code lives in an importable package rather than flat
+scripts. `requirements.txt` is kept as an alternative/pinned-versions option
+and for the `jupyter`/`ipykernel` extras it includes that aren't package
+dependencies.
 
 Linux/macOS contributors aren't affected and can use a normal in-repo `.venv` as usual.
 
@@ -82,6 +102,12 @@ Mean AR(1)/Naive ratio: **0.623** (37.7% RMSE reduction). Consistent across all 
 
 ARIMA: 165.23 → Hybrid: **83.15**. All DM tests: p<0.001.
 
+*(These are the TMLR-submitted numbers, from `paper/paper.pdf` Table II and
+its companion tables. Re-running `experiments/scripts/run_baselines.py` in a
+different environment reproduces ARIMA/SARIMA/XGBoost/Hybrid to the same
+values — those models are deterministic — while LSTM will vary slightly
+run-to-run, see [Reproducibility](#reproducibility).)*
+
 ---
 
 ## Quickstart
@@ -91,23 +117,32 @@ Windows users: see the "Windows setup note" above first — create your venv out
 ```bash
 git clone https://github.com/Aarav500/retail-forecasting-benchmark
 cd retail-forecasting-benchmark
-pip install -r requirements.txt
+pip install -e .
 
-# Run D-Mart experiments (~45 min, CPU only)
-python code/real_experiment.py
+# Smoke-test on a single dataset first (finishes in well under a minute)
+python experiments/scripts/run_baselines.py --datasets dmart_food
 
-# Run UCI experiments
-python code/figures_new_datasets.py
+# Run the full baseline sweep: all 7 baselines x all 35 currently-loaded
+# series (D-Mart x4, UCI x5, Walmart, M5, M4 x24) — expect 30-90+ minutes
+# on CPU, dominated by LSTM training
+python experiments/scripts/run_baselines.py
 
-# Run M4 experiments
-python code/m4_experiment.py
+# Run the training-window-size ablation (D-Mart Food)
+python experiments/scripts/run_ablation.py
+python experiments/scripts/run_ablation.py --lstm   # include the LSTM arm
 
-# Run ablation study
-python code/ablation.py
+# Generate figures (see shortseq/visualization/figures.py for the fig_*
+# functions; each takes a results dict rather than reading fixed paths)
+```
 
-# Generate all figures
-python code/figures_v2.py
-python code/figures_new_datasets.py
+Results land as one JSON per dataset in `experiments/results/`, e.g.
+`experiments/results/dmart_food_results.json` (RMSE/MAE/MAPE per model,
+Bonferroni-corrected DM tests vs. ARIMA, and any per-model failures).
+
+Run the test suite with:
+
+```bash
+pytest tests/
 ```
 
 ---
@@ -116,30 +151,66 @@ python code/figures_new_datasets.py
 
 ```
 retail-forecasting-benchmark/
-├── paper.pdf / paper.tex          # Full paper (TMLR submission)
-├── requirements.txt
-├── LICENSE                        # MIT
-├── configs/
-│   └── hyperparams.yaml           # All hyperparameters
-├── code/
-│   ├── experiment.py              # Main benchmark pipeline
-│   ├── real_experiment.py         # D-Mart experiments
-│   ├── figures_v2.py              # Main paper figures (Fig 1–10)
-│   ├── figures_new_datasets.py    # UCI + regime figures (Fig 11–12)
-│   ├── m4_experiment.py           # M4 Micro Monthly experiments
-│   └── ablation.py                # Training window ablation
-├── data/
-│   ├── real_food/electronics/clothing/furniture.csv   # D-Mart (real)
-│   ├── uci_*.csv                  # UCI Online Retail (real, UK)
-│   ├── m4_sample_ids.csv          # M4 series IDs (24 sampled)
-│   ├── m4_monthly_train.csv       # M4 training data
-│   ├── walmart.csv                # Walmart-calibrated weekly
-│   └── m5.csv                     # M5-calibrated intermittent
-├── figures/                       # All 12 paper figures (PNG + PDF)
-├── results/                       # JSON results (all experiments)
-└── notebooks/
-    └── exploration.ipynb          # EDA and result exploration
+├── shortseq/                        # the pip-installable package
+│   ├── datasets/                    # SeriesDataset loaders + registry (dmart, uci,
+│   │                                 # walmart, m5, m4; load_all()/load_regime()/load_source())
+│   ├── models/                      # BaseForecaster implementations
+│   │   └── foundation/              # foundation-model stubs (not yet implemented)
+│   ├── evaluation/                  # metrics, DM test, ranking
+│   ├── analysis/                    # boundary analysis (not yet implemented)
+│   └── visualization/               # reproducible figure generation
+├── experiments/
+│   ├── configs/hyperparams.yaml     # all model hyperparameters
+│   ├── scripts/                     # run_baselines.py, run_ablation.py
+│   └── results/                     # JSON results (TMLR + any local reruns)
+├── data/                            # D-Mart / UCI / M4 / Walmart / M5 CSVs
+├── paper/
+│   ├── paper.pdf                    # the TMLR submission
+│   └── figures/                     # the paper's 12 figures (PNG + PDF)
+├── tests/                           # pytest suite for shortseq/ and experiments/scripts
+├── docs/superpowers/                # design spec + implementation plan for this scaffold
+├── notebooks/                       # EDA and result exploration
+├── pyproject.toml                   # PEP 621 + setuptools — `pip install -e .`
+└── requirements.txt                 # pinned deps (alternative to pyproject.toml install)
 ```
+
+---
+
+## Project status
+
+This repo is mid-migration from the flat TMLR scripts (`code/`, now retired
+and recoverable via the `tmlr-submission` git tag) into `shortseq`, the base
+package for a larger follow-on NeurIPS Datasets & Benchmarks submission. See
+[`docs/superpowers/specs/2026-07-23-shortseq-scaffold-design.md`](docs/superpowers/specs/2026-07-23-shortseq-scaffold-design.md)
+for the full rationale, interface contracts (`BaseForecaster`, `SeriesDataset`),
+and the old-code-to-new-package migration mapping.
+
+**Implemented and verified against real data (7 baselines):**
+ARIMA, SARIMA, XGBoost, LSTM, Hybrid (ARIMA+XGBoost residual correction),
+Prophet, and SeasonalNaive — all in `shortseq/models/`, run end-to-end by
+`experiments/scripts/run_baselines.py` across all 35 currently-loaded series.
+
+**Implemented — evaluation and figures:**
+RMSE/MAE/MAPE metrics, the Diebold-Mariano test with a Bonferroni-correction
+helper (`shortseq/evaluation/`), and reproducible figure generation
+(`shortseq/visualization/figures.py`).
+
+**Stubbed (interfaces defined, raise `NotImplementedError`, real work not started):**
+- 8 foundation models — Chronos, TimesFM, Moirai, Moment, Timer, TTM,
+  Lag-Llama, ForecastPFN (`shortseq/models/foundation/`)
+- 7 additional dataset sources — Favorita, Rossmann, real Walmart,
+  Corporación Favorita, StoreSales, M4 Weekly, M3 Monthly, Tourism
+  (named in `shortseq/datasets/registry.py`, not yet acquired/loaded)
+- Probabilistic metrics — CRPS, prediction-interval coverage
+  (`shortseq/evaluation/metrics.py`) — meaningless until a model above
+  produces a predictive distribution
+- Friedman/Nemenyi statistical ranking (`shortseq/evaluation/ranking.py`)
+  and boundary-map logistic regression (`shortseq/analysis/boundary.py`)
+  — meaningful only once the foundation-model results above exist across
+  many (n, AC(1)) combinations
+
+None of the stubbed pieces fabricate results — they raise clearly, with a
+docstring pointing at what has to happen first.
 
 ---
 
@@ -147,9 +218,15 @@ retail-forecasting-benchmark/
 
 - Fixed random seeds: `numpy.random.seed(42)`, `tf.random.set_seed(42)`
 - Strict temporal 80/20 split — no look-ahead
-- Practitioner-default hyperparameters throughout (`configs/hyperparams.yaml`)
+- Practitioner-default hyperparameters throughout (`experiments/configs/hyperparams.yaml`)
 - CPU-only — no GPU required
 - All DM tests: two-sided, Newey-West variance, squared-error loss, p<0.001
+- ARIMA, SARIMA, XGBoost, and Hybrid are deterministic given the seed and
+  reproduce bit-for-bit across environments. **LSTM is not**: TensorFlow's
+  CPU kernels are not run-to-run deterministic even with a fixed seed, so
+  expect small (not gross) variation in LSTM's numbers between runs/machines
+  — this is inherited from the original implementation, not introduced by
+  the `shortseq` migration.
 
 ---
 
