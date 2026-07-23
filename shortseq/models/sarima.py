@@ -2,7 +2,9 @@
 
 Ported from `code/experiment.py:run_arima` (seasonal=True branch).
 """
+import copy
 import time
+import warnings
 
 import pandas as pd
 import pmdarima as pm
@@ -25,6 +27,7 @@ class SARIMAForecaster(BaseForecaster):
         t0 = time.time()
         values = train.values.astype(float)
         m = 7 if len(values) > 50 else 4
+        seasonal_ok = True
         try:
             self._model = pm.auto_arima(
                 values, seasonal=True, m=m, stepwise=True,
@@ -32,12 +35,16 @@ class SARIMAForecaster(BaseForecaster):
                 max_p=self.max_p, max_q=self.max_q,
                 max_P=self.max_P, max_Q=self.max_Q,
             )
-            self.name = f"SARIMA{self._model.order}x{self._model.seasonal_order}"
-        except Exception:
+        except Exception as exc:
+            warnings.warn(f"seasonal auto_arima failed ({exc!r}); falling back to non-seasonal auto_arima")
+            seasonal_ok = False
             self._model = pm.auto_arima(
                 values, seasonal=False, stepwise=True,
                 suppress_warnings=True, error_action="ignore",
             )
+        if seasonal_ok:
+            self.name = f"SARIMA{self._model.order}x{self._model.seasonal_order}"
+        else:
             self.name = f"ARIMA{self._model.order}"
         self._train_values = list(values)
         self.train_time_ = time.time() - t0
@@ -45,6 +52,8 @@ class SARIMAForecaster(BaseForecaster):
 
     def predict_rolling(self, test: pd.Series) -> Forecast:
         test_values = test.values.astype(float)
-        forecasts, pred_time = rolling_arima_forecast(self._model, self._train_values, test_values)
+        forecasts, pred_time = rolling_arima_forecast(
+            copy.deepcopy(self._model), self._train_values, test_values
+        )
         self.pred_time_ = pred_time
         return Forecast(point=forecasts)

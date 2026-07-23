@@ -2,7 +2,9 @@
 
 Ported from `code/experiment.py:run_arima` (seasonal=False branch).
 """
+import copy
 import time
+import warnings
 
 import pandas as pd
 import pmdarima as pm
@@ -28,7 +30,8 @@ class ARIMAForecaster(BaseForecaster):
                 suppress_warnings=True, error_action="ignore",
                 max_p=self.max_p, max_q=self.max_q,
             )
-        except Exception:
+        except Exception as exc:
+            warnings.warn(f"auto_arima with bounds failed ({exc!r}); falling back to unbounded search")
             self._model = pm.auto_arima(
                 values, seasonal=False, stepwise=True,
                 suppress_warnings=True, error_action="ignore",
@@ -40,6 +43,8 @@ class ARIMAForecaster(BaseForecaster):
 
     def predict_rolling(self, test: pd.Series) -> Forecast:
         test_values = test.values.astype(float)
-        forecasts, pred_time = rolling_arima_forecast(self._model, self._train_values, test_values)
+        forecasts, pred_time = rolling_arima_forecast(
+            copy.deepcopy(self._model), self._train_values, test_values
+        )
         self.pred_time_ = pred_time
         return Forecast(point=forecasts)
