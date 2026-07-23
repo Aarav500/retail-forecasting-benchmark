@@ -14,7 +14,7 @@ def load_dmart() -> dict[str, SeriesDataset]:
     out: dict[str, SeriesDataset] = {}
     for cat in CATEGORIES:
         df = pd.read_csv(DATA_DIR / f"real_{cat}.csv", parse_dates=["ds"])
-        series = df.set_index("ds")["y"].astype(float)
+        series = df.set_index("ds")["y"].astype(float).sort_index()
         name = f"dmart_{cat}"
         out[name] = make_dataset(name, series, freq="D", real=True)
     return out

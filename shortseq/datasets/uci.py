@@ -17,6 +17,6 @@ def load_uci() -> dict[str, SeriesDataset]:
     out: dict[str, SeriesDataset] = {}
     for name, fname in FILES.items():
         df = pd.read_csv(DATA_DIR / fname, parse_dates=["ds"])
-        series = df.set_index("ds")["y"].astype(float)
+        series = df.set_index("ds")["y"].astype(float).sort_index()
         out[name] = make_dataset(name, series, freq="W", real=True)
     return out

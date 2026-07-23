@@ -21,6 +21,10 @@ def load_m4() -> dict[str, SeriesDataset]:
     for _, row in sample.iterrows():
         series_id = row["id"]
         values = train_df.loc[series_id].dropna().values.astype(float)
+        # No explicit sort needed here: the index is synthetic, built by
+        # period_range(...) in the same order as the already-dropna'd
+        # values, so it is chronological by construction, not by trust in
+        # CSV row order.
         index = pd.period_range("2000-01", periods=len(values), freq="M").to_timestamp()
         series = pd.Series(values, index=index)
         name = f"m4_{series_id}"
