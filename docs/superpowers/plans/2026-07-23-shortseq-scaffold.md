@@ -2266,7 +2266,13 @@ def build_models(config: dict, freq: str, season_length: int) -> dict:
             max_p=config["sarima"]["max_p"], max_q=config["sarima"]["max_q"],
             max_P=config["sarima"]["max_P"], max_Q=config["sarima"]["max_Q"],
         ),
-        "Prophet": ProphetForecaster(freq=freq),
+        "Prophet": ProphetForecaster(
+            freq=freq, yearly_seasonality=config["prophet"]["yearly_seasonality"],
+            weekly_seasonality=config["prophet"]["weekly_seasonality"],
+            daily_seasonality=config["prophet"]["daily_seasonality"],
+            seasonality_mode=config["prophet"]["seasonality_mode"],
+            interval_width=config["prophet"]["interval_width"],
+        ),
         "XGBoost": XGBoostForecaster(
             lags=config["xgboost"]["lag_window"], n_estimators=config["xgboost"]["n_estimators"],
             max_depth=config["xgboost"]["max_depth"], learning_rate=config["xgboost"]["learning_rate"],
