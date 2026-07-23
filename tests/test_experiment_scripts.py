@@ -61,7 +61,7 @@ def test_run_dataset_structural_contract_on_real_dmart_food(tmp_path, monkeypatc
 
     assert (tmp_path / "dmart_food_results.json").exists()
 
-    assert set(output) == {"dataset", "n_train", "n_test", "metrics", "dm_tests"}
+    assert set(output) == {"dataset", "n_train", "n_test", "metrics", "dm_tests", "failed_models"}
 
     assert set(output["metrics"]) == set(EXPECTED_MODEL_CLASSES)
     for metrics in output["metrics"].values():
@@ -70,3 +70,11 @@ def test_run_dataset_structural_contract_on_real_dmart_food(tmp_path, monkeypatc
     assert set(output["dm_tests"]) == set(EXPECTED_MODEL_CLASSES) - {"ARIMA"}
     for dm in output["dm_tests"].values():
         assert set(dm) == {"dm_stat", "p_value", "significant_bonferroni"}
+
+    # Every DM-tested model must have a corresponding metrics entry: a model
+    # whose predictions diverge (e.g. NaN) should be excluded from dm_tests
+    # exactly like it's excluded from metrics, never show up in one but not
+    # the other (the bug this test is designed to catch: preds_by_model used
+    # to be populated before compute_metrics could raise, so a NaN-producing
+    # model could get a dm_tests entry with no metrics entry at all).
+    assert set(output["dm_tests"]) <= set(output["metrics"]) - {"ARIMA"}

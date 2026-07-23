@@ -20,6 +20,7 @@ vs. ARIMA, on that one dataset) — see the comment at the correction call
 site for why datasets are treated as separate families rather than
 correcting globally across all datasets.
 """
+import argparse
 import json
 from pathlib import Path
 
@@ -82,7 +83,10 @@ def build_models(config: dict, freq: str, season_length: int) -> dict:
     }
 
 
-def run_dataset(name: str, dataset, config: dict, split: float = 0.8) -> dict:
+def run_dataset(name: str, dataset, config: dict, split: float = None) -> dict:
+    if split is None:
+        split = config["evaluation"]["train_test_split"]
+
     series = dataset.series
     split_idx = int(len(series) * split)
     train, test = series.iloc[:split_idx], series.iloc[split_idx:]
@@ -92,26 +96,37 @@ def run_dataset(name: str, dataset, config: dict, split: float = 0.8) -> dict:
 
     results = {}
     preds_by_model = {}
+    failed_models = {}
     for model_name, model in models.items():
         try:
             model.fit(train)
             forecast = model.predict_rolling(test)
             preds = forecast.point[: len(test)]
-            preds_by_model[model_name] = preds
-            results[model_name] = compute_metrics(
+            # compute_metrics is called BEFORE preds_by_model is populated: if a
+            # model produces non-finite predictions, compute_metrics (sklearn)
+            # raises here and the except block below keeps it out of both
+            # `results` and `preds_by_model` — otherwise it would silently
+            # end up in the DM-test loop (which iterates over preds_by_model)
+            # with no corresponding `metrics` entry, surfacing as a bogus
+            # "not significant" DM result instead of a visible failure.
+            metrics = compute_metrics(
                 test.values, preds, model.name, model.train_time_, model.pred_time_
             )
+            preds_by_model[model_name] = preds
+            results[model_name] = metrics
             print(f"  {model_name}: RMSE={results[model_name]['rmse']:.2f}")
         except Exception as exc:
+            failed_models[model_name] = str(exc)
             print(f"  [{name}/{model_name}] failed: {exc}")
 
     dm_tests = {}
     if "ARIMA" in preds_by_model:
         arima_preds = preds_by_model["ARIMA"]
+        dm_h = config["evaluation"]["dm_test_h"]
         for model_name, preds in preds_by_model.items():
             if model_name == "ARIMA":
                 continue
-            dm_stat, p_val = diebold_mariano_test(test.values, arima_preds, preds)
+            dm_stat, p_val = diebold_mariano_test(test.values, arima_preds, preds, h=dm_h)
             dm_tests[model_name] = {"dm_stat": dm_stat, "p_value": p_val}
 
         # Bonferroni-correct across this dataset's family of pairwise DM tests
@@ -121,7 +136,8 @@ def run_dataset(name: str, dataset, config: dict, split: float = 0.8) -> dict:
         # too would be double-counting when this dict is combined by later
         # aggregate analysis (Task 11's ranking).
         p_values = {model_name: dm["p_value"] for model_name, dm in dm_tests.items()}
-        corrected = bonferroni_correct(p_values)
+        alpha = config["evaluation"]["significance_levels"][1]  # the 0.05 entry
+        corrected = bonferroni_correct(p_values, alpha=alpha)
         for model_name, dm in dm_tests.items():
             dm["significant_bonferroni"] = corrected[model_name]["significant"]
 
@@ -131,6 +147,7 @@ def run_dataset(name: str, dataset, config: dict, split: float = 0.8) -> dict:
         "n_test": len(test),
         "metrics": {k: {mk: mv for mk, mv in v.items() if mk != "residuals"} for k, v in results.items()},
         "dm_tests": dm_tests,
+        "failed_models": failed_models,
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     with open(RESULTS_DIR / f"{name}_results.json", "w") as f:
@@ -138,11 +155,13 @@ def run_dataset(name: str, dataset, config: dict, split: float = 0.8) -> dict:
     return output
 
 
-def main():
+def main(dataset_names: list[str] = None):
     with open(CONFIG_PATH) as f:
         config = yaml.safe_load(f)
 
     datasets = load_all()
+    if dataset_names:
+        datasets = {k: v for k, v in datasets.items() if k in dataset_names}
     print(f"Running baselines on {len(datasets)} datasets...")
     for name, dataset in datasets.items():
         print(f"\n{'=' * 60}\n{name} | n={dataset.n} | freq={dataset.freq}\n{'=' * 60}")
@@ -151,4 +170,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--datasets", nargs="+",
+        help="Only run these dataset names (e.g. dmart_food walmart), for smoke-testing "
+             "before committing to the full ~30-60 minute, 35-dataset sweep",
+    )
+    args = parser.parse_args()
+    main(dataset_names=args.datasets)
