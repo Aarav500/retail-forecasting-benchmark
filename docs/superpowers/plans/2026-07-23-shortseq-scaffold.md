@@ -2518,12 +2518,16 @@ git commit -m "refactor: retire code/ scripts, reorganize results/paper/figures 
 - [ ] **Step 1: Run the full test suite**
 
 Run: `C:/venvs/shortseq/Scripts/python.exe -m pytest tests/ -v`
-Expected: all 51 tests pass (6 base + 9 datasets + 6 metrics + 2 classical models + 3 ML models + 2 hybrid/naive + 1 Prophet + 16 foundation stubs + 2 analysis stubs + 4 figures, from Tasks 3-12).
+Expected: all 64 tests pass (the count grew from the original 51 estimate as review fix-rounds added regression tests — e.g. idempotency tests for ARIMA/SARIMA/XGBoost/LSTM/Hybrid/Prophet, a foundation-stub default-name test, and Task 13's `test_experiment_scripts.py`). If the actual count differs from 64, that's fine as long as everything passes — don't treat a different-but-passing count as a failure.
 
 - [ ] **Step 2: Run the real baseline experiment end-to-end**
 
-Run: `C:/venvs/shortseq/Scripts/python.exe experiments/scripts/run_baselines.py`
-Expected: completes without crashing, prints RMSE per model per dataset, writes JSON files into `experiments/results/`.
+First smoke-test on one dataset using the `--datasets` filter added during Task 13's review:
+`C:/venvs/shortseq/Scripts/python.exe experiments/scripts/run_baselines.py --datasets dmart_food`
+Expected: completes in well under a minute, prints RMSE per model, writes `experiments/results/dmart_food_results.json`.
+
+Then run the full sweep (all 35 datasets — D-Mart×4, UCI×5, Walmart, M5, M4×24): `C:/venvs/shortseq/Scripts/python.exe experiments/scripts/run_baselines.py`
+Expected: completes without crashing, prints RMSE per model per dataset, writes JSON files into `experiments/results/`. **This is a genuinely long-running command** — Task 13's review benchmarked ~40s per dataset on real D-Mart data at the yaml's default LSTM `epochs=100`, so budget on the order of 30-60+ minutes for the full 35-dataset sweep (M5's larger series and M4's 24 series will add time). Run it with a long enough timeout / in the background rather than assuming it'll finish quickly, and don't interrupt it partway — there's no resume/skip-if-exists logic, so an interrupted run's already-completed datasets are fine (each is written immediately) but a restart will redo everything from scratch.
 
 - [ ] **Step 3: Sanity-check the D-Mart numbers against `paper/paper.pdf`**
 
