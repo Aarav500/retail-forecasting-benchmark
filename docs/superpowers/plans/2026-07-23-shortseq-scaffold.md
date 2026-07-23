@@ -73,7 +73,7 @@ Add a short section near the top of `README.md` (this can be folded into the big
 - [ ] **Step 6: Commit**
 
 ```bash
-git add requirements.txt
+git add requirements.txt README.md
 git commit -m "chore: add pyyaml to requirements, document short-path venv requirement on Windows"
 ```
 
@@ -1267,6 +1267,7 @@ Ported from `code/experiment.py:run_hybrid`. Fits ARIMA, then an XGBoost
 regressor on ARIMA's in-sample residuals; forecasts are the ARIMA
 forecast plus the XGBoost residual correction.
 """
+import copy
 import time
 
 import numpy as np
@@ -1332,14 +1333,19 @@ class HybridForecaster(BaseForecaster):
 
     def predict_rolling(self, test: pd.Series) -> Forecast:
         t0 = time.time()
+        # Deep-copy before rolling: pmdarima's .update() mutates the model
+        # in place, so rolling on self._arima_model directly would make
+        # predict_rolling non-idempotent across repeated calls (see Task 6's
+        # ARIMA/SARIMA fix for the same issue).
+        arima_model = copy.deepcopy(self._arima_model)
         history = list(self._train_values)
         res_history = list(self._res_history)
         test_values = test.values.astype(float)
         forecasts = []
 
         for i in range(len(test_values)):
-            self._arima_model.update(history[-1:])
-            arima_fc = self._arima_model.predict(n_periods=1)[0]
+            arima_model.update(history[-1:])
+            arima_fc = arima_model.predict(n_periods=1)[0]
 
             if self._has_xgb and len(res_history) >= self.lags:
                 x_res = np.array(res_history[-self.lags:]).reshape(1, -1)
@@ -2221,6 +2227,12 @@ Fixes a bug present in `code/experiment.py:run_dataset_experiment`: the
 original DM test call passed each model's *residuals, reversed* as the
 comparison series instead of its actual predictions. This version passes
 each model's real predictions.
+
+Also applies Bonferroni correction (`shortseq.evaluation.dm_test.bonferroni_correct`)
+across each dataset's family of pairwise DM tests (every non-ARIMA model
+vs. ARIMA, on that one dataset) — see the comment at the correction call
+site for why datasets are treated as separate families rather than
+correcting globally across all datasets.
 """
 import json
 from pathlib import Path
@@ -2228,7 +2240,7 @@ from pathlib import Path
 import yaml
 
 from shortseq.datasets.registry import load_all
-from shortseq.evaluation.dm_test import diebold_mariano_test
+from shortseq.evaluation.dm_test import bonferroni_correct, diebold_mariano_test
 from shortseq.evaluation.metrics import compute_metrics
 from shortseq.models.arima import ARIMAForecaster
 from shortseq.models.hybrid import HybridForecaster
@@ -2309,6 +2321,17 @@ def run_dataset(name: str, dataset, config: dict, split: float = 0.8) -> dict:
                 continue
             dm_stat, p_val = diebold_mariano_test(test.values, arima_preds, preds)
             dm_tests[model_name] = {"dm_stat": dm_stat, "p_value": p_val}
+
+        # Bonferroni-correct across this dataset's family of pairwise DM tests
+        # (every non-ARIMA model vs. ARIMA, on this one dataset). Each dataset
+        # is treated as its own family since the comparisons within it share
+        # the same baseline and the same test set; correcting across datasets
+        # too would be double-counting when this dict is combined by later
+        # aggregate analysis (Task 11's ranking).
+        p_values = {name: dm["p_value"] for name, dm in dm_tests.items()}
+        corrected = bonferroni_correct(p_values)
+        for model_name, dm in dm_tests.items():
+            dm["significant_bonferroni"] = corrected[model_name]["significant"]
 
     output = {
         "dataset": name,
@@ -2486,7 +2509,9 @@ Expected: completes without crashing, prints RMSE per model per dataset, writes 
 
 - [ ] **Step 3: Sanity-check the D-Mart numbers against `paper/paper.pdf`**
 
-Read `experiments/results/dmart_food_results.json` and compare its ARIMA RMSE to the paper's reported Food RMSE (255.76). Expect the same ballpark (not necessarily bit-exact — the refactor changes no algorithm, but pmdarima/XGBoost/TensorFlow have some run-to-run nondeterminism even with fixed seeds). A large divergence (e.g. 2x+ different) means something was mis-ported — stop and investigate rather than continuing.
+Read `experiments/results/dmart_food_results.json` and compare its ARIMA RMSE to the paper's reported Food RMSE (255.76). Expect the same ballpark (not necessarily bit-exact — dependency-version drift, see the version-risk note above). A large divergence (e.g. 2x+ different) means something was mis-ported — stop and investigate rather than continuing.
+
+Note the LSTM number specifically deserves a looser bar than the others: Task 7's review confirmed `tf.random.set_seed` does not make this LSTM implementation actually reproducible run-to-run on CPU (verified: identical seed, identical data, different forecasts across separate process runs, due to TensorFlow's floating-point non-determinism under CPU-parallel reduction) — this is inherited from the original `code/experiment.py`, not introduced by the port. ARIMA, SARIMA, XGBoost, and Hybrid are all confirmed deterministic (idempotency-tested in Tasks 6/7/8), so a divergence in *those* models' numbers is meaningful signal; a modest LSTM divergence between runs is expected and not on its own evidence of a porting error.
 
 - [ ] **Step 4: Rewrite `README.md`**
 
