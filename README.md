@@ -86,6 +86,8 @@ ARIMA: 165.23 → Hybrid: **83.15**. All DM tests: p<0.001.
 
 ## Quickstart
 
+Windows users: see the "Windows setup note" above first — create your venv outside this repo (e.g. `C:\venvs\shortseq`) before running `pip install` below.
+
 ```bash
 git clone https://github.com/Aarav500/retail-forecasting-benchmark
 cd retail-forecasting-benchmark

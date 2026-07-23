@@ -9,3 +9,5 @@ paper.out
 *.blg
 *.bbl
 .worktrees/
+.venv/
+venv/
