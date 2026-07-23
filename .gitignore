@@ -8,3 +8,4 @@ paper.out
 *.synctex.gz
 *.blg
 *.bbl
+.worktrees/
