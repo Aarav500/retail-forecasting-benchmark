@@ -2509,7 +2509,9 @@ Expected: completes without crashing, prints RMSE per model per dataset, writes 
 
 - [ ] **Step 3: Sanity-check the D-Mart numbers against `paper/paper.pdf`**
 
-Read `experiments/results/dmart_food_results.json` and compare its ARIMA RMSE to the paper's reported Food RMSE (255.76). Expect the same ballpark (not necessarily bit-exact — the refactor changes no algorithm, but pmdarima/XGBoost/TensorFlow have some run-to-run nondeterminism even with fixed seeds). A large divergence (e.g. 2x+ different) means something was mis-ported — stop and investigate rather than continuing.
+Read `experiments/results/dmart_food_results.json` and compare its ARIMA RMSE to the paper's reported Food RMSE (255.76). Expect the same ballpark (not necessarily bit-exact — dependency-version drift, see the version-risk note above). A large divergence (e.g. 2x+ different) means something was mis-ported — stop and investigate rather than continuing.
+
+Note the LSTM number specifically deserves a looser bar than the others: Task 7's review confirmed `tf.random.set_seed` does not make this LSTM implementation actually reproducible run-to-run on CPU (verified: identical seed, identical data, different forecasts across separate process runs, due to TensorFlow's floating-point non-determinism under CPU-parallel reduction) — this is inherited from the original `code/experiment.py`, not introduced by the port. ARIMA, SARIMA, XGBoost, and Hybrid are all confirmed deterministic (idempotency-tested in Tasks 6/7/8), so a divergence in *those* models' numbers is meaningful signal; a modest LSTM divergence between runs is expected and not on its own evidence of a porting error.
 
 - [ ] **Step 4: Rewrite `README.md`**
 
