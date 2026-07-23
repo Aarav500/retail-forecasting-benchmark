@@ -10,6 +10,26 @@ GitHub: [github.com/Aarav500/retail-forecasting-benchmark](https://github.com/Aa
 
 ---
 
+## Windows setup note: put your venv outside the repo
+
+On Windows, create the virtualenv **outside this repo**, at a short path such as
+`C:\venvs\shortseq` — not an in-repo `.venv`. TensorFlow's and JupyterLab's own
+package internals contain deeply-nested paths that, combined with a long project
+path (especially under a synced folder like OneDrive), exceed Windows' 260-character
+path limit and break installation (`OSError: [Errno 2] No such file or directory`).
+The alternative fix, enabling Windows Long Path support, is a system-settings change
+this project has opted not to require.
+
+```bash
+"C:/Users/you/AppData/Local/Programs/Python/Python311/python.exe" -m venv "C:/venvs/shortseq"
+C:/venvs/shortseq/Scripts/python.exe -m pip install --upgrade pip
+C:/venvs/shortseq/Scripts/python.exe -m pip install -r requirements.txt
+```
+
+Linux/macOS contributors aren't affected and can use a normal in-repo `.venv` as usual.
+
+---
+
 ## Summary
 
 We benchmark six forecasting methods across **5 dataset sources, 3 countries, 34 time series**:
