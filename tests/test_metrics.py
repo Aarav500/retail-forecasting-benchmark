@@ -40,6 +40,16 @@ def test_dm_test_identical_predictions_gives_zero_stat():
     assert p_val == 1.0
 
 
+def test_dm_test_with_multistep_horizon_exercises_newey_west_loop():
+    actual = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])
+    pred1 = np.array([1.2, 2.3, 2.8, 4.1, 4.9, 6.2, 6.8, 8.3])
+    pred2 = np.array([1.1, 1.9, 3.2, 3.8, 5.2, 5.9, 7.1, 7.8])
+    dm_stat, p_val = diebold_mariano_test(actual, pred1, pred2, h=2)
+    assert isinstance(dm_stat, float)
+    assert isinstance(p_val, float)
+    assert not np.isnan(dm_stat)
+
+
 def test_bonferroni_correct_scales_alpha():
     p_values = {"A": 0.02, "B": 0.04}
     result = bonferroni_correct(p_values, alpha=0.05)

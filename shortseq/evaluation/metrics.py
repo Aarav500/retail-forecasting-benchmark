@@ -11,6 +11,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 
 def compute_metrics(actual, predicted, model_name: str, train_time: float, pred_time: float) -> dict:
+    """Note: `mape` is NaN when every value in `actual` is zero (e.g. an all-zero
+    intermittent-demand window, as can occur in M5) — callers should handle NaN."""
     actual = np.asarray(actual, dtype=float)
     predicted = np.asarray(predicted, dtype=float)
     rmse = np.sqrt(mean_squared_error(actual, predicted))

@@ -7,7 +7,11 @@ from scipy import stats
 
 
 def diebold_mariano_test(actual, pred1, pred2, h: int = 1) -> tuple[float, float]:
-    """DM test statistic and two-sided p-value. H0: pred1 and pred2 are equally accurate."""
+    """DM test statistic and two-sided p-value. H0: pred1 and pred2 are equally accurate.
+
+    Note: for degenerate inputs (e.g. n=1) `np.var(d, ddof=1)` is NaN, which does not
+    satisfy `var_d <= 0`, so the no-difference fallback is skipped and this returns
+    `(nan, nan)` rather than `(0.0, 1.0)`."""
     e1 = np.asarray(actual, dtype=float) - np.asarray(pred1, dtype=float)
     e2 = np.asarray(actual, dtype=float) - np.asarray(pred2, dtype=float)
     d = e1 ** 2 - e2 ** 2
