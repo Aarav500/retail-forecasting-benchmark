@@ -73,7 +73,7 @@ Add a short section near the top of `README.md` (this can be folded into the big
 - [ ] **Step 6: Commit**
 
 ```bash
-git add requirements.txt
+git add requirements.txt README.md
 git commit -m "chore: add pyyaml to requirements, document short-path venv requirement on Windows"
 ```
 
