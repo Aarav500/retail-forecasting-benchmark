@@ -985,6 +985,8 @@ git add shortseq/models/_arima_utils.py shortseq/models/arima.py shortseq/models
 git commit -m "feat: port ARIMA and SARIMA baselines into shortseq.models"
 ```
 
+**Post-implementation correction (applied directly to code, not reflected in the code blocks above):** code review after Task 6 found that `predict_rolling` mutated the shared fitted `pmdarima` model in place via `.update()`, making repeated calls on the same fitted model silently non-idempotent (contaminated forecasts on the second call, no error). Fixed in both `arima.py` and `sarima.py` by deep-copying `self._model` before the rolling loop (`rolling_arima_forecast(copy.deepcopy(self._model), ...)`), with a regression test added to `tests/test_models_classical.py` proving idempotency. The same pattern was applied proactively to `HybridForecaster` in Task 8 (which has its own internal ARIMA model) before it shipped. See commit `36d2ddb` on `feature/shortseq-scaffold` for the actual fix.
+
 ---
 
 ### Task 7: ML baselines — XGBoost, LSTM
