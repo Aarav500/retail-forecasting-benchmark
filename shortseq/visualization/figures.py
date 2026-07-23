@@ -6,11 +6,43 @@ which functions were dropped and why.
 from pathlib import Path
 
 import matplotlib
-# Force a non-interactive backend: this module only ever writes figures to
-# disk, and the platform-default GUI backend (e.g. TkAgg) is not guaranteed
-# to be usable/stable in headless environments (CI, worker processes)
-# where no display is attached. Must be set before importing pyplot.
-matplotlib.use("Agg")
+
+
+def _backend_already_configured() -> bool:
+    """True if a backend has already been picked (by the caller, an rc
+    file, or $MPLBACKEND) -- i.e. whether it is safe to default to "Agg"
+    below without clobbering someone else's choice.
+
+    NOTE: checking `"matplotlib.pyplot" in sys.modules` is NOT a valid
+    proxy for this (verified: it produces a false negative). The normal
+    calling convention is `matplotlib.use("TkAgg")` *before*
+    `import matplotlib.pyplot`, and `matplotlib.use()` deliberately does
+    not import pyplot when it isn't already imported (see its docstring/
+    source) precisely to avoid forcing premature backend resolution --
+    so pyplot can be absent from `sys.modules` even though the caller has
+    already configured a backend. Instead we read the rcParam directly
+    via the public `auto_select=False` accessor (matplotlib>=3.10), which
+    returns the configured backend without triggering matplotlib's lazy
+    auto-detection, or `None` if nothing has been configured yet.
+    """
+    try:
+        return matplotlib.get_backend(auto_select=False) is not None
+    except TypeError:
+        # matplotlib < 3.10 lacks the `auto_select` kwarg. Fall back to
+        # the private accessor `matplotlib.use()` itself relies on
+        # internally for this exact "already set?" check.
+        return matplotlib.rcParams._get_backend_or_none() is not None
+
+
+# Default to a non-interactive backend only if nothing has configured a
+# backend yet: this module only ever writes figures to disk, and the
+# platform-default GUI backend (e.g. TkAgg) is not guaranteed to be
+# usable/stable in headless environments (CI, worker processes) where no
+# display is attached. Guarded so we never clobber a caller's own prior
+# `matplotlib.use(...)` choice -- libraries should not call `.use()`
+# unconditionally (see matplotlib's own guidance for library code).
+if not _backend_already_configured():
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
