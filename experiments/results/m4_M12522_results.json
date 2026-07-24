@@ -1,0 +1,97 @@
+{
+  "dataset": "m4_M12522",
+  "n_train": 81,
+  "n_test": 21,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(2, 2, 1)",
+      "rmse": 64.3797,
+      "mae": 51.7591,
+      "mape": 1.817,
+      "mean_residual": -7.6646,
+      "residual_std": 63.9218,
+      "train_time": 5.9695,
+      "pred_time": 1.41
+    },
+    "SARIMA": {
+      "model": "SARIMA(3, 2, 1)x(2, 0, 2, 7)",
+      "rmse": 69.1133,
+      "mae": 56.8024,
+      "mape": 1.9918,
+      "mean_residual": -6.2302,
+      "residual_std": 68.8319,
+      "train_time": 40.8333,
+      "pred_time": 2.4327
+    },
+    "XGBoost": {
+      "model": "XGBoost",
+      "rmse": 144.4163,
+      "mae": 129.5055,
+      "mape": 4.506,
+      "mean_residual": 127.1443,
+      "residual_std": 68.4865,
+      "train_time": 0.1331,
+      "pred_time": 0.0081
+    },
+    "LSTM": {
+      "model": "LSTM",
+      "rmse": 98.174,
+      "mae": 84.3264,
+      "mape": 2.9993,
+      "mean_residual": -67.6434,
+      "residual_std": 71.1513,
+      "train_time": 13.9731,
+      "pred_time": 5.3205
+    },
+    "Hybrid": {
+      "model": "Hybrid(ARIMA+XGB)",
+      "rmse": 64.8494,
+      "mae": 54.0862,
+      "mape": 1.8982,
+      "mean_residual": -7.3293,
+      "residual_std": 64.4339,
+      "train_time": 6.6829,
+      "pred_time": 1.6935
+    },
+    "Naive": {
+      "model": "SeasonalNaive(m=12)",
+      "rmse": 110.0978,
+      "mae": 92.381,
+      "mape": 3.2434,
+      "mean_residual": 80.381,
+      "residual_std": 75.2358,
+      "train_time": 0.0,
+      "pred_time": 0.0
+    }
+  },
+  "dm_tests": {
+    "SARIMA": {
+      "dm_stat": -1.5516,
+      "p_value": 0.1208,
+      "significant_bonferroni": false
+    },
+    "XGBoost": {
+      "dm_stat": -4.1035,
+      "p_value": 0.0,
+      "significant_bonferroni": true
+    },
+    "LSTM": {
+      "dm_stat": -2.4421,
+      "p_value": 0.0146,
+      "significant_bonferroni": false
+    },
+    "Hybrid": {
+      "dm_stat": -0.1614,
+      "p_value": 0.8718,
+      "significant_bonferroni": false
+    },
+    "Naive": {
+      "dm_stat": -2.358,
+      "p_value": 0.0184,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {
+    "Prophet": "Invalid frequency: M. Failed to parse with error message: ValueError(\"'M' is no longer supported for offsets. Please use 'ME' instead.\")"
+  }
+}

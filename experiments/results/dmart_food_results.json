@@ -1,0 +1,110 @@
+{
+  "dataset": "dmart_food",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 0, 0)",
+      "rmse": 255.7638,
+      "mae": 216.5523,
+      "mape": 2.1012,
+      "mean_residual": 43.3569,
+      "residual_std": 252.0621,
+      "train_time": 1.2201,
+      "pred_time": 1.3371
+    },
+    "SARIMA": {
+      "model": "SARIMA(0, 0, 0)x(0, 0, 0, 7)",
+      "rmse": 255.7638,
+      "mae": 216.5523,
+      "mape": 2.1012,
+      "mean_residual": 43.3569,
+      "residual_std": 252.0621,
+      "train_time": 4.6008,
+      "pred_time": 1.3044
+    },
+    "Prophet": {
+      "model": "Prophet",
+      "rmse": 529.7384,
+      "mae": 441.2211,
+      "mape": 4.3236,
+      "mean_residual": -301.2052,
+      "residual_std": 435.7731,
+      "train_time": 0.4436,
+      "pred_time": 0.1966
+    },
+    "XGBoost": {
+      "model": "XGBoost",
+      "rmse": 307.9955,
+      "mae": 243.4037,
+      "mape": 2.3556,
+      "mean_residual": 75.3235,
+      "residual_std": 298.6429,
+      "train_time": 1.4412,
+      "pred_time": 0.0711
+    },
+    "LSTM": {
+      "model": "LSTM",
+      "rmse": 270.3961,
+      "mae": 225.2367,
+      "mape": 2.1771,
+      "mean_residual": 85.7488,
+      "residual_std": 256.4394,
+      "train_time": 17.908,
+      "pred_time": 10.9651
+    },
+    "Hybrid": {
+      "model": "Hybrid(ARIMA+XGB)",
+      "rmse": 312.3689,
+      "mae": 254.4443,
+      "mape": 2.4651,
+      "mean_residual": 68.5252,
+      "residual_std": 304.7599,
+      "train_time": 1.7026,
+      "pred_time": 1.3715
+    },
+    "Naive": {
+      "model": "SeasonalNaive(m=7)",
+      "rmse": 341.4725,
+      "mae": 257.9981,
+      "mape": 2.5108,
+      "mean_residual": 24.7482,
+      "residual_std": 340.5745,
+      "train_time": 0.0,
+      "pred_time": 0.0
+    }
+  },
+  "dm_tests": {
+    "SARIMA": {
+      "dm_stat": 0.0,
+      "p_value": 1.0,
+      "significant_bonferroni": false
+    },
+    "Prophet": {
+      "dm_stat": -4.1195,
+      "p_value": 0.0,
+      "significant_bonferroni": true
+    },
+    "XGBoost": {
+      "dm_stat": -2.7753,
+      "p_value": 0.0055,
+      "significant_bonferroni": true
+    },
+    "LSTM": {
+      "dm_stat": -1.9071,
+      "p_value": 0.0565,
+      "significant_bonferroni": false
+    },
+    "Hybrid": {
+      "dm_stat": -2.9944,
+      "p_value": 0.0027,
+      "significant_bonferroni": true
+    },
+    "Naive": {
+      "dm_stat": -1.9791,
+      "p_value": 0.0478,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}
