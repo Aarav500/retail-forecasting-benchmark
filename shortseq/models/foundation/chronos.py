@@ -8,6 +8,20 @@ context, repeat) rather than a single batch call, so DM tests stay
 comparable across all models. `Forecast.dist` is populated with the
 raw sampled trajectories per step (reserved for this since Task 3 —
 CRPS/coverage stubs can consume it later).
+
+`ChronosPipeline.predict()` samples stochastically (temperature/top-k/
+top-p) with no seed of its own, so `predict_rolling` seeds `torch` once
+per call before its rolling loop to match the determinism convention
+used by the other baselines (`random_seed` on LSTM/XGBoost, etc.) and
+to make repeated calls with the same inputs reproducible.
+
+The `context`/`inputs` keyword name for `ChronosPipeline.predict()` has
+varied across package versions (older examples used `context=`; the
+current API — see the `chronos-forecasting` docs — uses `inputs=`).
+`requirements-gpu.txt` pins `chronos-forecasting>=1.4.0` with no upper
+bound, so the installed version on the GPU box isn't fixed at wrapper-
+authoring time; the tensor is passed positionally below so this works
+regardless of which keyword name the installed version expects.
 """
 import time
 
@@ -28,12 +42,13 @@ _MODEL_IDS = {
 
 
 class ChronosForecaster(BaseForecaster):
-    def __init__(self, size: str = "small", num_samples: int = 20):
+    def __init__(self, size: str = "small", num_samples: int = 20, seed: int = 42):
         super().__init__()
         if size not in _MODEL_IDS:
             raise ValueError(f"Unknown Chronos size {size!r}; choose from {list(_MODEL_IDS)}")
         self.size = size
         self.num_samples = num_samples
+        self.seed = seed
         self.name = f"Chronos-{size}"
         self._pipeline = None
         self._context: list = []
@@ -52,20 +67,31 @@ class ChronosForecaster(BaseForecaster):
 
     def predict_rolling(self, test: pd.Series) -> Forecast:
         t0 = time.time()
-        context = list(self._context)
+        # Seed once per call so two calls with the same trained model and
+        # the same `test` series draw identical sample paths (stochastic
+        # sampling otherwise has no reproducibility guarantee).
+        torch.manual_seed(self.seed)
+        context_tensor = torch.tensor(self._context, dtype=torch.float32)
         test_values = test.values.astype(float)
         points = []
         dist = []
         for i in range(len(test_values)):
-            context_tensor = torch.tensor(context, dtype=torch.float32)
+            # Positional arg: `chronos-forecasting` has renamed this
+            # parameter across versions (`context=` -> `inputs=`); passing
+            # positionally works regardless of which name is installed.
             samples_tensor = self._pipeline.predict(
-                context=context_tensor,
+                context_tensor,
                 prediction_length=1,
                 num_samples=self.num_samples,
+                limit_prediction_length=True,
             )
             samples = samples_tensor[0, :, 0].float().cpu().numpy()
             points.append(float(np.median(samples)))
             dist.append(samples.tolist())
-            context.append(test_values[i])  # true value revealed, no look-ahead
+            # True value revealed, no look-ahead. Append via `cat` instead
+            # of rebuilding the tensor from the full Python list each step
+            # (avoids O(n^2) rebuilds across a long rolling loop).
+            next_val = torch.tensor([test_values[i]], dtype=torch.float32)
+            context_tensor = torch.cat([context_tensor, next_val])
         self.pred_time_ = time.time() - t0
         return Forecast(point=np.array(points), dist=dist)
