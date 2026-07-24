@@ -1,0 +1,35 @@
+{
+  "dataset": "dmart_food",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 0, 0)",
+      "rmse": 255.7638,
+      "mae": 216.5523,
+      "mape": 2.1012,
+      "mean_residual": 43.3569,
+      "residual_std": 252.0621,
+      "train_time": 1.099,
+      "pred_time": 0.3799
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 269.8756,
+      "mae": 231.284,
+      "mape": 2.2523,
+      "mean_residual": 13.0853,
+      "residual_std": 269.5581,
+      "train_time": 0.4345,
+      "pred_time": 1.0052
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": -1.3585,
+      "p_value": 0.1743,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,35 @@
+{
+  "dataset": "uci_regency_cakestand",
+  "n_train": 42,
+  "n_test": 11,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 1, 0)",
+      "rmse": 1022.7284,
+      "mae": 796.8764,
+      "mape": 34.8429,
+      "mean_residual": 190.2218,
+      "residual_std": 1004.8826,
+      "train_time": 0.3854,
+      "pred_time": 0.0896
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 974.0474,
+      "mae": 792.0312,
+      "mape": 30.6905,
+      "mean_residual": 586.1742,
+      "residual_std": 777.9255,
+      "train_time": 0.1634,
+      "pred_time": 0.2263
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": 0.2598,
+      "p_value": 0.795,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}

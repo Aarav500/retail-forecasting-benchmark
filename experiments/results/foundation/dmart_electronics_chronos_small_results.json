@@ -1,0 +1,35 @@
+{
+  "dataset": "dmart_electronics",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 0, 1)",
+      "rmse": 227.2025,
+      "mae": 177.2068,
+      "mape": 2.0088,
+      "mean_residual": -49.9819,
+      "residual_std": 221.6366,
+      "train_time": 0.866,
+      "pred_time": 1.1158
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 222.6035,
+      "mae": 165.0282,
+      "mape": 1.8621,
+      "mean_residual": -20.1072,
+      "residual_std": 221.6935,
+      "train_time": 0.1807,
+      "pred_time": 0.7746
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": 0.4071,
+      "p_value": 0.6839,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}

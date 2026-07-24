@@ -1,0 +1,35 @@
+{
+  "dataset": "walmart",
+  "n_train": 114,
+  "n_test": 29,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 0, 4)",
+      "rmse": 165.2297,
+      "mae": 135.8587,
+      "mape": 0.6013,
+      "mean_residual": -106.0136,
+      "residual_std": 126.7358,
+      "train_time": 5.0892,
+      "pred_time": 1.481
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 79.834,
+      "mae": 61.6919,
+      "mape": 0.2684,
+      "mean_residual": -38.0081,
+      "residual_std": 70.2059,
+      "train_time": 0.1981,
+      "pred_time": 0.6255
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": 2.8363,
+      "p_value": 0.0046,
+      "significant_bonferroni": true
+    }
+  },
+  "failed_models": {}
+}

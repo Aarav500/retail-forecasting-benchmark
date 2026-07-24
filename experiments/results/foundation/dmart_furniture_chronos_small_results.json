@@ -1,0 +1,35 @@
+{
+  "dataset": "dmart_furniture",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 0, 0)",
+      "rmse": 219.0582,
+      "mae": 167.7752,
+      "mape": 1.5951,
+      "mean_residual": 56.5814,
+      "residual_std": 211.6248,
+      "train_time": 1.2162,
+      "pred_time": 0.8127
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 239.05,
+      "mae": 181.6302,
+      "mape": 1.7342,
+      "mean_residual": 21.7819,
+      "residual_std": 238.0556,
+      "train_time": 0.1686,
+      "pred_time": 0.7659
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": -1.304,
+      "p_value": 0.1922,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,35 @@
+{
+  "dataset": "uci_lunch_bag",
+  "n_train": 42,
+  "n_test": 11,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 1, 1)",
+      "rmse": 1367.1971,
+      "mae": 1097.3036,
+      "mape": 25.5936,
+      "mean_residual": 129.365,
+      "residual_std": 1361.063,
+      "train_time": 0.8289,
+      "pred_time": 0.1541
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 1760.8869,
+      "mae": 1281.7313,
+      "mape": 26.302,
+      "mean_residual": 957.1333,
+      "residual_std": 1478.0456,
+      "train_time": 0.1903,
+      "pred_time": 0.2325
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": -1.4502,
+      "p_value": 0.147,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}

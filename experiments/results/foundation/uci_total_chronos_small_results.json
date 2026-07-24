@@ -1,0 +1,35 @@
+{
+  "dataset": "uci_total",
+  "n_train": 42,
+  "n_test": 11,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 0, 0)",
+      "rmse": 97294.5877,
+      "mae": 75973.1383,
+      "mape": 24.5327,
+      "mean_residual": 69351.4231,
+      "residual_std": 68239.4087,
+      "train_time": 1.0853,
+      "pred_time": 0.1886
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 88181.4724,
+      "mae": 63482.8567,
+      "mape": 19.2858,
+      "mean_residual": 60686.0504,
+      "residual_std": 63977.9287,
+      "train_time": 0.1716,
+      "pred_time": 0.2293
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": 1.5739,
+      "p_value": 0.1155,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}

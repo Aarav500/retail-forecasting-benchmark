@@ -1,0 +1,35 @@
+{
+  "dataset": "dmart_clothing",
+  "n_train": 144,
+  "n_test": 37,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 0, 0)",
+      "rmse": 238.7779,
+      "mae": 187.0032,
+      "mape": 1.8112,
+      "mean_residual": -35.4226,
+      "residual_std": 236.1358,
+      "train_time": 2.8486,
+      "pred_time": 0.3487
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 245.3516,
+      "mae": 194.4418,
+      "mape": 1.8798,
+      "mean_residual": -22.0318,
+      "residual_std": 244.3604,
+      "train_time": 0.1607,
+      "pred_time": 0.7674
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": -0.7627,
+      "p_value": 0.4457,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}

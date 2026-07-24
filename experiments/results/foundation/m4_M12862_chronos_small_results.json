@@ -1,0 +1,35 @@
+{
+  "dataset": "m4_M12862",
+  "n_train": 81,
+  "n_test": 21,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(2, 1, 0)",
+      "rmse": 134.8158,
+      "mae": 115.1795,
+      "mape": 1.4083,
+      "mean_residual": 1.2272,
+      "residual_std": 134.8102,
+      "train_time": 1.0627,
+      "pred_time": 0.6636
+    },
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 140.091,
+      "mae": 115.3624,
+      "mape": 1.4058,
+      "mean_residual": 8.8969,
+      "residual_std": 139.8082,
+      "train_time": 0.1805,
+      "pred_time": 0.4353
+    }
+  },
+  "dm_tests": {
+    "Chronos-small": {
+      "dm_stat": -0.5313,
+      "p_value": 0.5952,
+      "significant_bonferroni": false
+    }
+  },
+  "failed_models": {}
+}
