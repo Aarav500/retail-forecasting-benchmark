@@ -10,8 +10,8 @@
       "mape": 25.5936,
       "mean_residual": 129.365,
       "residual_std": 1361.063,
-      "train_time": 2.9803,
-      "pred_time": 0.4737
+      "train_time": 0.6769,
+      "pred_time": 0.1055
     },
     "SARIMA": {
       "model": "SARIMA(0, 1, 1)x(0, 0, 0, 4)",
@@ -20,8 +20,8 @@
       "mape": 25.5936,
       "mean_residual": 129.365,
       "residual_std": 1361.063,
-      "train_time": 5.5049,
-      "pred_time": 0.3888
+      "train_time": 1.4413,
+      "pred_time": 0.1062
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 1477.2808,
       "mean_residual": 56665.9742,
       "residual_std": 43627.3214,
-      "train_time": 0.4498,
-      "pred_time": 0.1304
+      "train_time": 0.3318,
+      "pred_time": 0.035
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 39.6724,
       "mean_residual": -1111.7312,
       "residual_std": 1250.4899,
-      "train_time": 1.1828,
-      "pred_time": 0.0205
+      "train_time": 0.0574,
+      "pred_time": 0.005
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 1517.2797,
-      "mae": 1210.2359,
-      "mape": 28.4507,
-      "mean_residual": 337.1829,
-      "residual_std": 1479.3396,
-      "train_time": 14.2002,
-      "pred_time": 3.1173
+      "rmse": 1570.1034,
+      "mae": 1249.9549,
+      "mape": 28.2651,
+      "mean_residual": 530.6692,
+      "residual_std": 1477.7059,
+      "train_time": 3.7672,
+      "pred_time": 0.8727
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 35.3111,
       "mean_residual": -868.5193,
       "residual_std": 1275.9174,
-      "train_time": 2.83,
-      "pred_time": 0.4997
+      "train_time": 0.6954,
+      "pred_time": 0.148
     },
     "Naive": {
       "model": "SeasonalNaive(m=52)",
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": -0.9896,
-      "p_value": 0.3224,
+      "dm_stat": -1.2723,
+      "p_value": 0.2033,
       "significant_bonferroni": false
     },
     "Hybrid": {

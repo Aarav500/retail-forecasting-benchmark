@@ -10,8 +10,8 @@
       "mape": 24.5327,
       "mean_residual": 69351.4234,
       "residual_std": 68239.4092,
-      "train_time": 3.2551,
-      "pred_time": 0.4563
+      "train_time": 0.861,
+      "pred_time": 0.1041
     },
     "SARIMA": {
       "model": "SARIMA(1, 0, 0)x(0, 0, 0, 4)",
@@ -20,8 +20,8 @@
       "mape": 24.5327,
       "mean_residual": 69351.4234,
       "residual_std": 68239.4092,
-      "train_time": 2.2458,
-      "pred_time": 0.433
+      "train_time": 0.6502,
+      "pred_time": 0.1072
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 605.048,
       "mean_residual": 1514693.3101,
       "residual_std": 1233152.4578,
-      "train_time": 0.384,
-      "pred_time": 0.1366
+      "train_time": 0.2904,
+      "pred_time": 0.0384
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 26.9195,
       "mean_residual": 53590.1569,
       "residual_std": 76422.1838,
-      "train_time": 1.3036,
-      "pred_time": 0.0129
+      "train_time": 0.0835,
+      "pred_time": 0.005
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 100784.2407,
-      "mae": 78161.2705,
-      "mape": 24.6178,
-      "mean_residual": 78161.2705,
-      "residual_std": 63626.0871,
-      "train_time": 13.6324,
-      "pred_time": 3.0216
+      "rmse": 94305.9678,
+      "mae": 70726.5305,
+      "mape": 21.8833,
+      "mean_residual": 70726.5305,
+      "residual_std": 62380.874,
+      "train_time": 3.6177,
+      "pred_time": 0.8732
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 22.7843,
       "mean_residual": 39366.1382,
       "residual_std": 72770.8549,
-      "train_time": 3.4673,
-      "pred_time": 0.4794
+      "train_time": 0.8867,
+      "pred_time": 0.1451
     },
     "Naive": {
       "model": "SeasonalNaive(m=52)",
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": -0.8177,
-      "p_value": 0.4135,
+      "dm_stat": 0.6673,
+      "p_value": 0.5046,
       "significant_bonferroni": false
     },
     "Hybrid": {

@@ -10,8 +10,8 @@
       "mape": 34.2096,
       "mean_residual": 237.8836,
       "residual_std": 923.2147,
-      "train_time": 2.2802,
-      "pred_time": 0.299
+      "train_time": 0.5704,
+      "pred_time": 0.0695
     },
     "SARIMA": {
       "model": "SARIMA(0, 0, 0)x(0, 0, 0, 4)",
@@ -20,8 +20,8 @@
       "mape": 34.2096,
       "mean_residual": 237.8836,
       "residual_std": 923.2147,
-      "train_time": 2.6131,
-      "pred_time": 0.2956
+      "train_time": 0.7204,
+      "pred_time": 0.0753
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 1691.8779,
       "mean_residual": 35699.9836,
       "residual_std": 29609.9566,
-      "train_time": 0.4183,
-      "pred_time": 0.1345
+      "train_time": 0.3237,
+      "pred_time": 0.0347
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 31.7696,
       "mean_residual": 364.513,
       "residual_std": 923.8121,
-      "train_time": 1.1233,
-      "pred_time": 0.0209
+      "train_time": 0.1001,
+      "pred_time": 0.004
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 1071.818,
-      "mae": 878.0398,
-      "mape": 30.6071,
-      "mean_residual": 557.7692,
-      "residual_std": 915.2526,
-      "train_time": 14.1788,
-      "pred_time": 3.1145
+      "rmse": 1070.3876,
+      "mae": 876.1481,
+      "mape": 30.5169,
+      "mean_residual": 558.1707,
+      "residual_std": 913.3319,
+      "train_time": 5.4259,
+      "pred_time": 0.8944
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 27.8767,
       "mean_residual": 475.5996,
       "residual_std": 851.0075,
-      "train_time": 2.4991,
-      "pred_time": 0.3252
+      "train_time": 0.5899,
+      "pred_time": 0.0955
     },
     "Naive": {
       "model": "SeasonalNaive(m=52)",
@@ -71,7 +71,7 @@
       "mean_residual": 225.6866,
       "residual_std": 917.9949,
       "train_time": 0.0,
-      "pred_time": 0.0009
+      "pred_time": 0.0
     }
   },
   "dm_tests": {
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": -1.2823,
-      "p_value": 0.1997,
+      "dm_stat": -1.2658,
+      "p_value": 0.2056,
       "significant_bonferroni": false
     },
     "Hybrid": {

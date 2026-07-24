@@ -10,8 +10,8 @@
       "mape": 2.0088,
       "mean_residual": -49.9819,
       "residual_std": 221.6366,
-      "train_time": 2.412,
-      "pred_time": 2.6411
+      "train_time": 0.6296,
+      "pred_time": 0.7396
     },
     "SARIMA": {
       "model": "SARIMA(0, 0, 1)x(0, 0, 1, 7)",
@@ -20,8 +20,8 @@
       "mape": 2.0531,
       "mean_residual": -57.8018,
       "residual_std": 222.1192,
-      "train_time": 11.2738,
-      "pred_time": 5.6548
+      "train_time": 2.89,
+      "pred_time": 1.5105
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 2.5243,
       "mean_residual": 33.4102,
       "residual_std": 276.0026,
-      "train_time": 0.335,
-      "pred_time": 0.1964
+      "train_time": 0.2127,
+      "pred_time": 0.0655
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 2.0965,
       "mean_residual": -50.8499,
       "residual_std": 239.6585,
-      "train_time": 1.0761,
-      "pred_time": 0.0564
+      "train_time": 0.0825,
+      "pred_time": 0.014
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 230.0234,
-      "mae": 171.1716,
-      "mape": 1.936,
-      "mean_residual": -27.6204,
-      "residual_std": 228.3591,
-      "train_time": 26.8359,
-      "pred_time": 6.1257
+      "rmse": 229.4429,
+      "mae": 171.033,
+      "mape": 1.9335,
+      "mean_residual": -23.149,
+      "residual_std": 228.2722,
+      "train_time": 6.6305,
+      "pred_time": 2.5801
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 2.0713,
       "mean_residual": -35.3016,
       "residual_std": 238.0492,
-      "train_time": 0.6298,
-      "pred_time": 1.507
+      "train_time": 0.6267,
+      "pred_time": 1.0412
     },
     "Naive": {
       "model": "SeasonalNaive(m=7)",
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": -0.3423,
-      "p_value": 0.7321,
+      "dm_stat": -0.2606,
+      "p_value": 0.7944,
       "significant_bonferroni": false
     },
     "Hybrid": {

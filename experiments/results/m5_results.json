@@ -10,8 +10,8 @@
       "mape": 46.9132,
       "mean_residual": 0.2838,
       "residual_std": 3.3153,
-      "train_time": 2.2585,
-      "pred_time": 0.9995
+      "train_time": 2.1605,
+      "pred_time": 1.0456
     },
     "SARIMA": {
       "model": "SARIMA(0, 0, 0)x(0, 0, 0, 7)",
@@ -20,8 +20,8 @@
       "mape": 46.9132,
       "mean_residual": 0.2838,
       "residual_std": 3.3153,
-      "train_time": 1.3917,
-      "pred_time": 0.9998
+      "train_time": 1.3498,
+      "pred_time": 1.0718
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 63.2234,
       "mean_residual": 1.5531,
       "residual_std": 3.9067,
-      "train_time": 0.182,
-      "pred_time": 0.0515
+      "train_time": 0.228,
+      "pred_time": 0.0755
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 44.5719,
       "mean_residual": 0.3441,
       "residual_std": 3.5188,
-      "train_time": 0.0701,
-      "pred_time": 0.026
+      "train_time": 0.0815,
+      "pred_time": 0.0378
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 3.3301,
-      "mae": 2.8984,
-      "mape": 47.0009,
-      "mean_residual": 0.4009,
-      "residual_std": 3.3058,
-      "train_time": 7.2977,
-      "pred_time": 4.6003
+      "rmse": 3.3357,
+      "mae": 2.9077,
+      "mape": 47.2395,
+      "mean_residual": 0.43,
+      "residual_std": 3.3078,
+      "train_time": 7.1854,
+      "pred_time": 4.8452
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 47.136,
       "mean_residual": 0.487,
       "residual_std": 3.4673,
-      "train_time": 1.3762,
-      "pred_time": 1.509
+      "train_time": 1.3483,
+      "pred_time": 1.4969
     },
     "Naive": {
       "model": "SeasonalNaive(m=7)",
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": -0.1201,
-      "p_value": 0.9044,
+      "dm_stat": -0.4082,
+      "p_value": 0.6832,
       "significant_bonferroni": false
     },
     "Hybrid": {

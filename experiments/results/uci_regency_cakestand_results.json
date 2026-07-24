@@ -10,8 +10,8 @@
       "mape": 34.8429,
       "mean_residual": 190.2218,
       "residual_std": 1004.8826,
-      "train_time": 0.9385,
-      "pred_time": 0.187
+      "train_time": 0.3418,
+      "pred_time": 0.0503
     },
     "SARIMA": {
       "model": "SARIMA(0, 1, 0)x(0, 0, 0, 4)",
@@ -20,8 +20,8 @@
       "mape": 34.8429,
       "mean_residual": 190.2218,
       "residual_std": 1004.8826,
-      "train_time": 2.6171,
-      "pred_time": 0.198
+      "train_time": 0.7201,
+      "pred_time": 0.0506
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 4100.4397,
       "mean_residual": 71302.7445,
       "residual_std": 64386.8866,
-      "train_time": 0.3413,
-      "pred_time": 0.1276
+      "train_time": 0.2873,
+      "pred_time": 0.0446
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 34.6806,
       "mean_residual": 95.4685,
       "residual_std": 987.4909,
-      "train_time": 1.2015,
-      "pred_time": 0.0236
+      "train_time": 0.056,
+      "pred_time": 0.0055
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 926.0082,
-      "mae": 741.2253,
-      "mape": 29.0034,
-      "mean_residual": 505.6522,
-      "residual_std": 775.7622,
-      "train_time": 12.9013,
-      "pred_time": 3.138
+      "rmse": 1121.907,
+      "mae": 880.1461,
+      "mape": 32.0553,
+      "mean_residual": 810.7534,
+      "residual_std": 775.4704,
+      "train_time": 3.2649,
+      "pred_time": 0.8731
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 27.649,
       "mean_residual": 342.9475,
       "residual_std": 935.3457,
-      "train_time": 1.4799,
-      "pred_time": 0.239
+      "train_time": 0.31,
+      "pred_time": 0.0685
     },
     "Naive": {
       "model": "SeasonalNaive(m=52)",
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": 0.4432,
-      "p_value": 0.6576,
+      "dm_stat": -0.4272,
+      "p_value": 0.6692,
       "significant_bonferroni": false
     },
     "Hybrid": {

@@ -10,8 +10,8 @@
       "mape": 39.6438,
       "mean_residual": 402.078,
       "residual_std": 7141.7288,
-      "train_time": 2.1409,
-      "pred_time": 0.4878
+      "train_time": 0.5447,
+      "pred_time": 0.1267
     },
     "SARIMA": {
       "model": "SARIMA(0, 1, 1)x(0, 0, 0, 4)",
@@ -20,8 +20,8 @@
       "mape": 39.6438,
       "mean_residual": 402.078,
       "residual_std": 7141.7288,
-      "train_time": 5.0072,
-      "pred_time": 0.4627
+      "train_time": 1.3427,
+      "pred_time": 0.1288
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 1073.9402,
       "mean_residual": 124716.0891,
       "residual_std": 99768.5005,
-      "train_time": 0.4062,
-      "pred_time": 0.1479
+      "train_time": 0.313,
+      "pred_time": 0.0387
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 39.3299,
       "mean_residual": 1289.222,
       "residual_std": 6643.7335,
-      "train_time": 1.2149,
-      "pred_time": 0.0214
+      "train_time": 0.059,
+      "pred_time": 0.005
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 6614.748,
-      "mae": 5858.2892,
-      "mape": 47.6994,
-      "mean_residual": -1220.9873,
-      "residual_std": 6501.0831,
-      "train_time": 13.8208,
-      "pred_time": 3.1947
+      "rmse": 6528.5271,
+      "mae": 5554.3541,
+      "mape": 43.6205,
+      "mean_residual": -550.5246,
+      "residual_std": 6505.2739,
+      "train_time": 3.9319,
+      "pred_time": 0.8985
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 53.7021,
       "mean_residual": -2267.4254,
       "residual_std": 7683.2983,
-      "train_time": 2.5391,
-      "pred_time": 0.5791
+      "train_time": 0.5591,
+      "pred_time": 0.1761
     },
     "Naive": {
       "model": "SeasonalNaive(m=52)",
@@ -71,7 +71,7 @@
       "mean_residual": 6272.2778,
       "residual_std": 6224.6579,
       "train_time": 0.0,
-      "pred_time": 0.002
+      "pred_time": 0.0
     }
   },
   "dm_tests": {
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": 0.5585,
-      "p_value": 0.5765,
+      "dm_stat": 0.7862,
+      "p_value": 0.4317,
       "significant_bonferroni": false
     },
     "Hybrid": {

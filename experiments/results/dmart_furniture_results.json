@@ -10,8 +10,8 @@
       "mape": 1.5951,
       "mean_residual": 56.5814,
       "residual_std": 211.6248,
-      "train_time": 0.5534,
-      "pred_time": 0.599
+      "train_time": 0.6257,
+      "pred_time": 0.6575
     },
     "SARIMA": {
       "model": "SARIMA(1, 0, 0)x(0, 0, 0, 7)",
@@ -20,8 +20,8 @@
       "mape": 1.5951,
       "mean_residual": 56.5814,
       "residual_std": 211.6248,
-      "train_time": 1.7426,
-      "pred_time": 0.6414
+      "train_time": 1.6274,
+      "pred_time": 0.6696
     },
     "Prophet": {
       "model": "Prophet",
@@ -30,8 +30,8 @@
       "mape": 2.2129,
       "mean_residual": 69.7727,
       "residual_std": 279.2338,
-      "train_time": 0.2152,
-      "pred_time": 0.0553
+      "train_time": 0.2187,
+      "pred_time": 0.0534
     },
     "XGBoost": {
       "model": "XGBoost",
@@ -40,18 +40,18 @@
       "mape": 1.8426,
       "mean_residual": 60.2698,
       "residual_std": 248.6958,
-      "train_time": 0.0893,
+      "train_time": 0.1056,
       "pred_time": 0.014
     },
     "LSTM": {
       "model": "LSTM",
-      "rmse": 218.5891,
-      "mae": 167.8532,
-      "mape": 1.5961,
-      "mean_residual": 61.4155,
-      "residual_std": 209.784,
-      "train_time": 13.3023,
-      "pred_time": 2.4923
+      "rmse": 217.9522,
+      "mae": 167.1291,
+      "mape": 1.5895,
+      "mean_residual": 59.2128,
+      "residual_std": 209.7546,
+      "train_time": 14.8334,
+      "pred_time": 2.5531
     },
     "Hybrid": {
       "model": "Hybrid(ARIMA+XGB)",
@@ -60,8 +60,8 @@
       "mape": 2.0043,
       "mean_residual": 53.6369,
       "residual_std": 257.2832,
-      "train_time": 0.6219,
-      "pred_time": 0.9445
+      "train_time": 0.6006,
+      "pred_time": 0.913
     },
     "Naive": {
       "model": "SeasonalNaive(m=7)",
@@ -91,8 +91,8 @@
       "significant_bonferroni": false
     },
     "LSTM": {
-      "dm_stat": 0.0513,
-      "p_value": 0.9591,
+      "dm_stat": 0.1195,
+      "p_value": 0.9049,
       "significant_bonferroni": false
     },
     "Hybrid": {
