@@ -985,6 +985,8 @@ git add shortseq/models/_arima_utils.py shortseq/models/arima.py shortseq/models
 git commit -m "feat: port ARIMA and SARIMA baselines into shortseq.models"
 ```
 
+**Post-implementation correction (applied directly to code, not reflected in the code blocks above):** code review after Task 6 found that `predict_rolling` mutated the shared fitted `pmdarima` model in place via `.update()`, making repeated calls on the same fitted model silently non-idempotent (contaminated forecasts on the second call, no error). Fixed in both `arima.py` and `sarima.py` by deep-copying `self._model` before the rolling loop (`rolling_arima_forecast(copy.deepcopy(self._model), ...)`), with a regression test added to `tests/test_models_classical.py` proving idempotency. The same pattern was applied proactively to `HybridForecaster` in Task 8 (which has its own internal ARIMA model) before it shipped. See commit `36d2ddb` on `feature/shortseq-scaffold` for the actual fix.
+
 ---
 
 ### Task 7: ML baselines — XGBoost, LSTM
@@ -2264,7 +2266,13 @@ def build_models(config: dict, freq: str, season_length: int) -> dict:
             max_p=config["sarima"]["max_p"], max_q=config["sarima"]["max_q"],
             max_P=config["sarima"]["max_P"], max_Q=config["sarima"]["max_Q"],
         ),
-        "Prophet": ProphetForecaster(freq=freq),
+        "Prophet": ProphetForecaster(
+            freq=freq, yearly_seasonality=config["prophet"]["yearly_seasonality"],
+            weekly_seasonality=config["prophet"]["weekly_seasonality"],
+            daily_seasonality=config["prophet"]["daily_seasonality"],
+            seasonality_mode=config["prophet"]["seasonality_mode"],
+            interval_width=config["prophet"]["interval_width"],
+        ),
         "XGBoost": XGBoostForecaster(
             lags=config["xgboost"]["lag_window"], n_estimators=config["xgboost"]["n_estimators"],
             max_depth=config["xgboost"]["max_depth"], learning_rate=config["xgboost"]["learning_rate"],
@@ -2443,6 +2451,16 @@ git add experiments/configs experiments/scripts
 git commit -m "feat: add run_baselines.py and run_ablation.py experiment scripts"
 ```
 
+**Post-implementation additions (applied directly to code, not reflected in the code blocks above):**
+- Added `tests/test_experiment_scripts.py` (2 tests: `build_models()` construction check against the real yaml config; `run_dataset()`'s structural output contract on real D-Mart food data with LSTM epochs overridden to 3 for speed). The plan originally specified no test file for this task — added afterward since every other task has one and Task 15's verification is a statistical sweep, not a fast structural-contract test.
+- Fixed a Critical bug found in code review: `preds_by_model[model_name] = preds` was set before `compute_metrics()` validated the predictions, so a model producing non-finite (NaN) predictions ended up with a bogus DM-test entry (misreported as "not significant") while being silently absent from `metrics`. Fixed by only registering `preds_by_model`/`results` after `compute_metrics` succeeds.
+- Added a `"failed_models": {model_name: str(exc)}` field to `run_dataset()`'s output so per-model failures (including ARIMA failing, which previously zeroed out the whole dataset's `dm_tests` with no explanation) are visible in the saved JSON, not just stdout.
+- Wired the previously-dead `hyperparams.yaml` `evaluation:` block (`train_test_split`, `dm_test_h`, `significance_levels`) into `run_dataset()`/`diebold_mariano_test`/`bonferroni_correct` (behavior-preserving — confirmed the yaml's values match the prior hardcoded defaults exactly).
+- Added a `--datasets` CLI filter to `main()` for smoke-testing a subset before Task 15's full ~30-60 minute, 35-dataset sweep.
+- Added `tests/conftest.py` calling `matplotlib.use("Agg")` before test collection — an unrelated latent bug found during verification: `prophet`'s transitive `pyplot` import locks in whatever backend is active depending on test collection order, and `shortseq/visualization/figures.py`'s own backend guard correctly declines to override an already-resolved one, so the outcome was order-dependent before this fix.
+
+See commit `c95f0c0` on `feature/shortseq-scaffold` for the actual changes.
+
 ---
 
 ### Task 14: Repo reorganization and retiring `code/`
@@ -2500,12 +2518,16 @@ git commit -m "refactor: retire code/ scripts, reorganize results/paper/figures 
 - [ ] **Step 1: Run the full test suite**
 
 Run: `C:/venvs/shortseq/Scripts/python.exe -m pytest tests/ -v`
-Expected: all 51 tests pass (6 base + 9 datasets + 6 metrics + 2 classical models + 3 ML models + 2 hybrid/naive + 1 Prophet + 16 foundation stubs + 2 analysis stubs + 4 figures, from Tasks 3-12).
+Expected: all 64 tests pass (the count grew from the original 51 estimate as review fix-rounds added regression tests — e.g. idempotency tests for ARIMA/SARIMA/XGBoost/LSTM/Hybrid/Prophet, a foundation-stub default-name test, and Task 13's `test_experiment_scripts.py`). If the actual count differs from 64, that's fine as long as everything passes — don't treat a different-but-passing count as a failure.
 
 - [ ] **Step 2: Run the real baseline experiment end-to-end**
 
-Run: `C:/venvs/shortseq/Scripts/python.exe experiments/scripts/run_baselines.py`
-Expected: completes without crashing, prints RMSE per model per dataset, writes JSON files into `experiments/results/`.
+First smoke-test on one dataset using the `--datasets` filter added during Task 13's review:
+`C:/venvs/shortseq/Scripts/python.exe experiments/scripts/run_baselines.py --datasets dmart_food`
+Expected: completes in well under a minute, prints RMSE per model, writes `experiments/results/dmart_food_results.json`.
+
+Then run the full sweep (all 35 datasets — D-Mart×4, UCI×5, Walmart, M5, M4×24): `C:/venvs/shortseq/Scripts/python.exe experiments/scripts/run_baselines.py`
+Expected: completes without crashing, prints RMSE per model per dataset, writes JSON files into `experiments/results/`. **This is a genuinely long-running command** — Task 13's review benchmarked ~40s per dataset on real D-Mart data at the yaml's default LSTM `epochs=100`, so budget on the order of 30-60+ minutes for the full 35-dataset sweep (M5's larger series and M4's 24 series will add time). Run it with a long enough timeout / in the background rather than assuming it'll finish quickly, and don't interrupt it partway — there's no resume/skip-if-exists logic, so an interrupted run's already-completed datasets are fine (each is written immediately) but a restart will redo everything from scratch.
 
 - [ ] **Step 3: Sanity-check the D-Mart numbers against `paper/paper.pdf`**
 

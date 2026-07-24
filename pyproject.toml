@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shortseq"
+version = "0.1.0"
+description = "Benchmark for foundation model evaluation on short time series"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Aarav Shah", email = "ashah264@ucr.edu"}]
+requires-python = ">=3.10"
+dependencies = [
+    "statsmodels>=0.14.0",
+    "prophet>=1.1.5",
+    "scikit-learn>=1.3.0",
+    "xgboost>=2.0.0",
+    "tensorflow>=2.13.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "pmdarima>=2.0.4",
+    "scipy>=1.11.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4.0"]
+
+[tool.setuptools.packages.find]
+include = ["shortseq*"]
