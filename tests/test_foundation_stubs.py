@@ -1,6 +1,5 @@
 import pytest
 
-from shortseq.models.foundation.chronos import ChronosForecaster
 from shortseq.models.foundation.timesfm import TimesFMForecaster
 from shortseq.models.foundation.moirai import MoiraiForecaster
 from shortseq.models.foundation.moment import MomentForecaster
@@ -10,7 +9,7 @@ from shortseq.models.foundation.lag_llama import LagLlamaForecaster
 from shortseq.models.foundation.forecastpfn import ForecastPFNForecaster
 
 STUB_CLASSES = [
-    ChronosForecaster, TimesFMForecaster, MoiraiForecaster, MomentForecaster,
+    TimesFMForecaster, MoiraiForecaster, MomentForecaster,
     TimerForecaster, TTMForecaster, LagLlamaForecaster, ForecastPFNForecaster,
 ]
 
@@ -30,7 +29,6 @@ def test_foundation_stub_raises_not_implemented_on_predict(cls):
 
 
 def test_foundation_stub_default_names():
-    assert ChronosForecaster().name == "Chronos-small"
     assert TimesFMForecaster().name == "TimesFM-200m"
     assert MoiraiForecaster().name == "Moirai-small"
     assert MomentForecaster().name == "Moment-small"
