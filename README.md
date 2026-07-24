@@ -52,7 +52,7 @@ Linux/macOS contributors aren't affected and can use a normal in-repo `.venv` as
 
 ## Summary
 
-We benchmark six forecasting methods across **5 dataset sources, 3 countries, 34 time series**:
+We benchmark six forecasting methods across **5 dataset sources, 3 countries, 35 time series**:
 
 | Dataset | Source | Country | n | Real? |
 |:---|:---|:---|---:|:---|
@@ -119,7 +119,8 @@ git clone https://github.com/Aarav500/retail-forecasting-benchmark
 cd retail-forecasting-benchmark
 pip install -e .
 
-# Smoke-test on a single dataset first (finishes in well under a minute)
+# Smoke-test on a single dataset first (finishes in under ~2 minutes on CPU;
+# LSTM's default 100-epoch training dominates the runtime even for one dataset)
 python experiments/scripts/run_baselines.py --datasets dmart_food
 
 # Run the full baseline sweep: all 7 baselines x all 35 currently-loaded
@@ -221,12 +222,40 @@ docstring pointing at what has to happen first.
 - Practitioner-default hyperparameters throughout (`experiments/configs/hyperparams.yaml`)
 - CPU-only — no GPU required
 - All DM tests: two-sided, Newey-West variance, squared-error loss, p<0.001
-- ARIMA, SARIMA, XGBoost, and Hybrid are deterministic given the seed and
-  reproduce bit-for-bit across environments. **LSTM is not**: TensorFlow's
-  CPU kernels are not run-to-run deterministic even with a fixed seed, so
-  expect small (not gross) variation in LSTM's numbers between runs/machines
-  — this is inherited from the original implementation, not introduced by
-  the `shortseq` migration.
+- ARIMA, SARIMA, XGBoost, and Hybrid are deterministic given the seed
+  **within a fixed dependency environment**, but are not guaranteed
+  bit-for-bit across environments — e.g. an XGBoost major-version change
+  (2.0→2.x) can shift floating-point summation order in tree construction
+  even with a fixed `random_state`. Observed drift when re-running this
+  migration's own verification against newer dependency versions than
+  produced the original TMLR numbers: XGBoost ~1–2%. **LSTM is not
+  deterministic even within one environment**: TensorFlow's CPU kernels
+  are not run-to-run deterministic even with a fixed seed, so expect
+  variation (occasionally larger than "small" — see Known limitations
+  below) in LSTM's numbers between runs/machines — this is inherited from
+  the original implementation, not introduced by the `shortseq` migration.
+
+## Known limitations
+
+- **Prophet diverges severely on short, strongly-trending series** — most
+  visibly on all 5 UCI Online Retail series (RMSE 20–94x worse than
+  ARIMA; e.g. Store Total RMSE ≈1.95M vs. ARIMA's ≈97K). Root cause:
+  Prophet's default unconstrained linear-trend extrapolation runs away
+  on a 53-week series with a real trend and no saturation point — the
+  same failure mode `paper/paper.pdf` already documents for Prophet on
+  Walmart, just more severe here. This is a genuine result of the
+  benchmark's practitioner-default-hyperparameters methodology, not a
+  bug — tuning Prophet's changepoint/growth settings to avoid it would
+  contradict that methodology, so the numbers are left as-is and
+  reported honestly rather than excluded or hidden.
+- **LSTM's Walmart number diverges more than its usual run-to-run
+  noise** — this migration's verification run measured RMSE 411.59
+  vs. the paper's published 907.65 (a ~2.2x shift), larger than the
+  "small variation" LSTM ordinarily shows between runs. Most likely
+  cause: this environment's TensorFlow (2.21) is several major versions
+  newer than whatever produced the paper's original numbers, and
+  `requirements.txt`/`pyproject.toml` pin no upper bound. Flagged here
+  rather than silently accepted as ordinary noise.
 
 ---
 
