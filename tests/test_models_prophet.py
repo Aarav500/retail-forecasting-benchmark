@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 
 from shortseq.datasets.dmart import load_dmart
+from shortseq.datasets.m4 import load_m4
 from shortseq.models.prophet_model import ProphetForecaster
 
 
@@ -49,3 +50,15 @@ def test_prophet_predict_rolling_rejects_non_contiguous_test():
     model = ProphetForecaster(freq=ds.freq).fit(train)
     with pytest.raises(ValueError):
         model.predict_rolling(non_contiguous_test)
+
+
+def test_prophet_forecaster_fits_and_predicts_real_m4_monthly_series():
+    # M4's freq is "M", but its synthetic index (shortseq/datasets/m4.py) is
+    # month-*start*. pandas 3.x also dropped the 'M' offset alias outright,
+    # so this exercises both the alias translation and that it lands on the
+    # semantically correct replacement ('MS', not the mechanical 'ME').
+    ds = load_m4()["m4_M11368"]
+    train, test = _split(ds.series)
+    model = ProphetForecaster(freq=ds.freq).fit(train)
+    forecast = model.predict_rolling(test)
+    assert forecast.point.shape == (len(test),)

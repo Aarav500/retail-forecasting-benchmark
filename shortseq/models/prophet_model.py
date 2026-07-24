@@ -16,11 +16,19 @@ from .base import BaseForecaster, Forecast
 
 
 class ProphetForecaster(BaseForecaster):
+    # pandas 3.x removed the deprecated 'M' (month-end) offset alias that
+    # make_future_dataframe forwards straight into pd.date_range. ShortSeq's
+    # only freq="M" datasets (M4, see datasets/m4.py) use a month-*start*
+    # synthetic index, so the correct replacement is 'MS' -- not the
+    # mechanical 'M'->'ME' pandas' own error suggests, which produces
+    # month-*end* dates that fail the contiguity check in predict_rolling.
+    _FREQ_ALIASES = {"M": "MS"}
+
     def __init__(self, freq: str = "D", yearly_seasonality: bool = True,
                  weekly_seasonality: bool = True, daily_seasonality: bool = False,
                  seasonality_mode: str = "additive", interval_width: float = 0.95):
         super().__init__()
-        self.freq = freq
+        self.freq = self._FREQ_ALIASES.get(freq, freq)
         self.yearly_seasonality = yearly_seasonality
         self.weekly_seasonality = weekly_seasonality
         self.daily_seasonality = daily_seasonality
