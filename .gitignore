@@ -14,3 +14,10 @@ venv/
 *.egg-info/
 build/
 dist/
+
+# Raw Kaggle downloads (large; derived series live in data/derived/)
+data/rossmann-store-sales/
+data/store-sales-time-series-forecasting/
+data/walmart-recruiting-store-sales-forecasting/
+data/_m4_cache/
+data/_m3_cache/
