@@ -45,9 +45,56 @@ def test_load_m4_returns_24_series():
         assert 60 <= ds.n <= 200
 
 
+# Every implemented source, keyed by the label its series names carry, with
+# the number of series it must contribute. Listing them per-source rather
+# than as one total is deliberate — a bare count would still pass if one
+# source vanished while another grew, which is exactly the silent registry
+# breakage this test exists to catch.
+#
+# `walmart` and `m5` are whole keys (single-series sources), not prefixes;
+# they are matched exactly so that `walmart_real_*` is not swallowed by
+# `walmart`. The remaining prefixes are mutually exclusive (note `m4w_`
+# does not start with `m4_`).
+EXPECTED_SOURCE_SERIES = {
+    "dmart_": 4,
+    "uci_": 5,
+    "walmart": 1,  # the older calibrated single series
+    "m5": 1,
+    "m4_": 24,
+    "m4w_": 50,
+    "m3m_": 100,
+    "rossmann_store_": 50,
+    "walmart_real_": 50,
+    "favorita_store_item_": 50,
+    "favorita_family_": 33,
+}
+EXACT_KEY_SOURCES = {"walmart", "m5"}
+
+
+def _classify(key: str) -> str:
+    if key in EXACT_KEY_SOURCES:
+        return key
+    matches = [
+        p
+        for p in EXPECTED_SOURCE_SERIES
+        if p not in EXACT_KEY_SOURCES and key.startswith(p)
+    ]
+    assert len(matches) == 1, f"{key!r} matched {matches}"
+    return matches[0]
+
+
 def test_load_all_combines_every_implemented_source():
     datasets = load_all()
-    assert len(datasets) == 4 + 5 + 1 + 1 + 24
+
+    counts: dict[str, int] = {}
+    for key in datasets:
+        label = _classify(key)
+        counts[label] = counts.get(label, 0) + 1
+
+    assert counts == EXPECTED_SOURCE_SERIES
+    # 368 = the original 35 plus the 333 added in Phase B. `load_all` itself
+    # raises on a duplicate key, so an equal total also means no collisions.
+    assert len(datasets) == sum(EXPECTED_SOURCE_SERIES.values()) == 368
 
 
 def test_load_regime_filters_by_cv():
@@ -57,8 +104,32 @@ def test_load_regime_filters_by_cv():
 
 
 def test_load_source_raises_for_planned_but_unimplemented():
+    # Tourism is the only source still unimplemented (it needs R/tsibbledata).
     with pytest.raises(NotImplementedError):
-        load_source("favorita")
+        load_source("tourism")
+
+
+def test_load_source_returns_data_for_newly_implemented_sources():
+    assert len(load_source("m4_weekly")) == 50
+    assert len(load_source("m3_monthly")) == 100
+    assert len(load_source("rossmann")) == 50
+    assert len(load_source("walmart_real")) == 50
+
+
+def test_favorita_is_one_source_with_two_views():
+    # The plan listed favorita / corporacion_favorita / storesales as three
+    # sources; they are one Kaggle dump, so the legacy names are aliases and
+    # the single source key yields both aggregation views.
+    favorita = load_source("favorita")
+    assert len(favorita) == 50 + 33
+    assert sum(k.startswith("favorita_store_item_") for k in favorita) == 50
+    assert sum(k.startswith("favorita_family_") for k in favorita) == 33
+    assert set(load_source("corporacion_favorita")) == set(favorita)
+    assert set(load_source("storesales")) == set(favorita)
+
+
+def test_real_walmart_is_an_alias_for_walmart_real():
+    assert set(load_source("real_walmart")) == set(load_source("walmart_real"))
 
 
 def test_load_source_raises_for_unknown_name():
