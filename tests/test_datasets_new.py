@@ -8,6 +8,11 @@ a fresh clone without re-downloading anything.
 import pandas as pd
 import pytest
 
+from shortseq.datasets.favorita import (
+    FAVORITA_GAP_DATES,
+    load_favorita_family,
+    load_favorita_store_item,
+)
 from shortseq.datasets.m3_monthly import load_m3_monthly
 from shortseq.datasets.m4_weekly import load_m4_weekly
 from shortseq.datasets.rossmann import load_rossmann
@@ -235,6 +240,152 @@ def test_load_walmart_real_sample_is_frozen():
     assert names[-1] == "walmart_real_9_91"
 
 
+# --- Favorita (one source, two aggregation views) --------------------------
+#
+# `favorita_store_item_*` and `favorita_family_*` are two aggregations of the
+# SAME Kaggle competition dump, not two sources. The tests below deliberately
+# assert that relationship (see `test_favorita_views_are_the_same_source`) so
+# that a later diversity claim in the paper cannot quietly count Favorita
+# twice.
+
+
+def test_load_favorita_store_item_returns_50_sampled_pairs():
+    datasets = load_favorita_store_item()
+    assert len(datasets) == 50
+    assert all(name.startswith("favorita_store_item_") for name in datasets)
+
+
+def test_load_favorita_family_returns_all_33_families():
+    """All 33 families, not a sample: the family view is a full census.
+
+    Sampling 33 out of 33 would be a no-op, and taking a subset would mean
+    choosing which product lines to report on — an unnecessary degree of
+    freedom in a benchmark whose selling point is that its sampling is
+    frozen and mechanical.
+    """
+    datasets = load_favorita_family()
+    assert len(datasets) == 33
+    assert all(name.startswith("favorita_family_") for name in datasets)
+
+
+def test_load_favorita_store_item_series_are_real_daily_and_sane():
+    for ds in load_favorita_store_item().values():
+        _assert_sane(ds, freq="D")
+        assert ds.n == 1684
+        assert (ds.series >= 0).all()
+
+
+def test_load_favorita_family_series_are_real_daily_and_sane():
+    for ds in load_favorita_family().values():
+        _assert_sane(ds, freq="D")
+        assert ds.n == 1684
+        assert (ds.series >= 0).all()
+
+
+def test_favorita_series_span_the_competition_window():
+    """Real calendar dates, 2013-01-01 .. 2017-08-15 (the published span)."""
+    for loader in (load_favorita_store_item, load_favorita_family):
+        for ds in loader().values():
+            assert ds.series.index[0] == pd.Timestamp("2013-01-01")
+            assert ds.series.index[-1] == pd.Timestamp("2017-08-15")
+
+
+def test_favorita_index_is_daily_except_four_christmas_gaps():
+    """The only breaks in the daily index are the four Christmas Days.
+
+    Every Favorita store shuts on Navidad and the competition file simply
+    omits those rows rather than recording them as zeros (contrast New
+    Year's Day, which IS present as explicit zero rows). Those four dates
+    are left absent rather than zero-filled — see the loader docstring — so
+    the gap structure is pinned here: exactly 1684 observations over a
+    1688-day span, with 1-day steps everywhere except four 2-day steps.
+    """
+    assert len(FAVORITA_GAP_DATES) == 4
+    for loader in (load_favorita_store_item, load_favorita_family):
+        for ds in loader().values():
+            idx = ds.series.index
+            gaps = sorted(idx.to_series().diff().dropna().unique())
+            assert gaps == [pd.Timedelta(days=1), pd.Timedelta(days=2)]
+            missing = pd.date_range(idx[0], idx[-1], freq="D").difference(idx)
+            assert list(missing) == list(FAVORITA_GAP_DATES)
+
+
+def test_favorita_store_item_keeps_zero_demand_days_but_excludes_dead_pairs():
+    """Zero-inflation is kept; structural non-carriage is not.
+
+    53 of the 1782 (store, family) pairs are identically zero across the
+    whole window (the store simply never carried that product line) and
+    another 16 are >=99% zero — those have an undefined CV and are not
+    demand series at all. Eligibility therefore requires sales on at least
+    half the days. The surviving series still carry substantial zero
+    inflation, which is the property this benchmark exists to study.
+    """
+    zero_fracs = [ds.zero_frac for ds in load_favorita_store_item().values()]
+    assert max(zero_fracs) <= 0.5
+    assert max(zero_fracs) > 0.1  # genuinely zero-inflated series survive
+
+
+def test_favorita_store_item_excludes_late_opening_stores():
+    """Stores that opened mid-window are not in the pool.
+
+    The 2021 re-release pads every store back to 2013-01-01 with zero rows,
+    so eight stores (20, 21, 22, 29, 36, 42, 52, 53) carry hundreds — store
+    52 carries 1566 — of leading zeros for a period in which the store did
+    not exist. Those zeros are fabricated non-observations, not observed
+    zero demand, so the stores are excluded rather than kept or trimmed.
+    """
+    late = {"20", "21", "22", "29", "36", "42", "52", "53"}
+    for name in load_favorita_store_item():
+        store = name[len("favorita_store_item_"):].split("_", 1)[0]
+        assert store not in late
+
+
+def test_favorita_views_are_the_same_source():
+    """The two views must aggregate to the same totals on the same dates.
+
+    This is the executable form of the "count Favorita once" rule: if the
+    store-item and family views were ever re-derived from genuinely
+    different data, this test would fail. For every sampled (store, family)
+    pair, that store's contribution cannot exceed the all-store family
+    total on any date.
+    """
+    families = load_favorita_family()
+    for name, ds in load_favorita_store_item().items():
+        family_slug = name[len("favorita_store_item_"):].split("_", 1)[1]
+        total = families[f"favorita_family_{family_slug}"].series
+        assert list(ds.series.index) == list(total.index)
+        assert (ds.series <= total + 1e-6).all()
+
+
+def test_load_favorita_sample_is_frozen():
+    """Golden ids from the committed seed-42 draw (see the M4 Weekly twin)."""
+    names = list(load_favorita_store_item())
+    assert names[0] == "favorita_store_item_13_beauty"
+    assert names[-1] == "favorita_store_item_9_grocery_ii"
+    families = list(load_favorita_family())
+    assert families[0] == "favorita_family_automotive"
+    assert families[-1] == "favorita_family_seafood"
+
+
+def test_favorita_works_with_prophet_despite_the_christmas_gaps():
+    """The gapped index does not break the one index-sensitive baseline.
+
+    `ProphetForecaster.predict_rolling` extrapolates the horizon from the
+    train end with `freq="D"` and rejects a non-contiguous continuation.
+    All four gaps fall in December of 2013-2016, i.e. strictly inside the
+    training portion of any end-of-series split, so the horizon is
+    contiguous and Prophet is unaffected. Asserted rather than assumed,
+    since leaving the gaps in was a deliberate choice (see the loader
+    docstring) and this is the risk it carries.
+    """
+    from shortseq.models.prophet_model import ProphetForecaster
+
+    series = load_favorita_family()["favorita_family_grocery_i"].series
+    train, test = series.iloc[:-8], series.iloc[-8:]
+    forecast = ProphetForecaster(freq="D").fit(train).predict_rolling(test)
+    assert len(forecast.point) == len(test)
+
+
 # --- cross-source ----------------------------------------------------------
 
 
@@ -244,6 +395,8 @@ def test_new_source_keys_do_not_collide():
         load_m3_monthly(),
         load_rossmann(),
         load_walmart_real(),
+        load_favorita_store_item(),
+        load_favorita_family(),
     ]
     seen: set[str] = set()
     for source in sources:

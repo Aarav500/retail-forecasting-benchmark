@@ -20,6 +20,7 @@ Usage::
 See `docs/superpowers/specs/2026-07-28-new-datasets-design.md`.
 """
 import argparse
+import re
 from pathlib import Path
 
 import numpy as np
@@ -41,6 +42,22 @@ N_WALMART_REAL = 50
 # 100 weeks keeps the sample comfortably longer than any evaluation horizon
 # while still admitting the handful of genuinely shorter-lived departments.
 MIN_WALMART_WEEKS = 100
+
+N_FAVORITA_STORE_ITEM = 50
+
+# A (store, family) pair must sell on at least half the days to count as a
+# demand series. 53 of the 1782 pairs are identically zero over the whole
+# window and 69 are >=99% zero — a store that never carried a product line,
+# not a series with intermittent demand. See `prepare_favorita`.
+MAX_FAVORITA_ZERO_FRAC = 0.5
+
+# A store whose first non-zero sale comes this many days after 2013-01-01 is
+# treated as having opened mid-window: its leading zeros are padding added by
+# the re-release, not observed demand. Eight stores exceed it (by 128 days at
+# the least); every other store's first non-zero day is 2013-01-01 or -02
+# (New Year's Day is a genuine chain-wide closure), so the threshold sits in
+# a wide empty gap and is not a tuned knob.
+MAX_FAVORITA_LEADING_ZERO_DAYS = 30
 
 
 def _sample_ids(all_ids, k: int) -> list[str]:
@@ -238,14 +255,140 @@ def prepare_walmart_real() -> int:
     return len(ids)
 
 
-# A later Phase B task adds the remaining Kaggle-derived source (favorita)
-# here; each entry is a zero-argument callable returning the number of series
-# it wrote.
+def _family_slug(family: str) -> str:
+    """Key-safe slug for a Favorita product family.
+
+    Family labels are upper-case free text with spaces, slashes and commas
+    (`BREAD/BAKERY`, `LIQUOR,WINE,BEER`), none of which belong in a registry
+    key or a filename. All 33 slugs are distinct, which
+    `prepare_favorita` asserts rather than trusts.
+    """
+    return re.sub(r"[^a-z0-9]+", "_", family.lower()).strip("_")
+
+
+def prepare_favorita() -> int:
+    """Write BOTH Favorita aggregation views under `data/derived/`.
+
+    **One source, two views.** The Kaggle `store-sales-time-series-forecasting`
+    dump (itself a re-release of `favorita-grocery-sales-forecasting`) is the
+    single origin of everything written here. The execution plan's separate
+    "Favorita", "Corporación Favorita" and "StoreSales" rows are the same
+    competition data at different aggregations; they are implemented as two
+    documented views of one source so that no diversity claim counts it more
+    than once. This is why there is a single `prepare_favorita` rather than
+    one preparer per view.
+
+    Source shape: 3,000,888 rows of `date,store_nbr,family,sales`, a complete
+    54-store x 33-family x 1684-date rectangle spanning
+    2013-01-01..2017-08-15.
+
+    View A — store-item (`data/derived/favorita_store_item/`,
+    `N_FAVORITA_STORE_ITEM` sampled pairs, keyed `<store>_<family_slug>`).
+    Two eligibility filters, both there to exclude non-observations rather
+    than to flatter the data:
+
+    1. **Late-opening stores are dropped.** The re-release pads every store
+       back to 2013-01-01 with zero rows, so stores 20, 21, 22, 29, 36, 42,
+       52 and 53 carry between 128 and 1566 leading zeros covering a period
+       in which the store did not trade. That is fabricated absence wearing
+       the costume of zero demand — the same call Task 2 made when it
+       excluded the 180 refurbished Rossmann stores instead of zero-filling
+       their six-month hole. Trimming each series to its store's opening date
+       was the alternative; it was rejected because it silently swaps a
+       uniform-length view for eight ragged ones. 46 stores remain.
+
+    2. **A pair must sell on more than half the days**
+       (`MAX_FAVORITA_ZERO_FRAC`). 53 pairs are identically zero over the
+       whole window and 69 are >=99% zero: a store that does not stock a
+       product line yields a flat zero column with an undefined CV, not an
+       intermittent-demand series. The filter is deliberately loose enough
+       to keep heavy zero inflation — surviving pairs reach ~50% zero days,
+       comfortably above the ~32.9% that makes the M5 source interesting
+       (`shortseq/datasets/m5.py`) — so it removes structural non-carriage
+       without removing the phenomenon.
+
+    View B — product family (`data/derived/favorita_family/`, all 33
+    families, keyed `<family_slug>`): daily sales summed across all 54
+    stores. No sampling (33 of 33) and no store filter here: at the family
+    level a not-yet-opened store contributes exactly 0 to the sum, which is
+    the arithmetically correct treatment, so the aggregate is the real
+    chain-wide total on every date. The chain's growth from 46 to 54 stores
+    is therefore a genuine trend in these series, not an artefact.
+
+    Common to both views: the four Christmas Days (2013-2016-12-25) are
+    absent from the source and are left absent, not zero-filled. See
+    `shortseq/datasets/favorita.py` for that decision.
+    """
+    raw = DATA_DIR / "store-sales-time-series-forecasting" / "train.csv"
+    df = pd.read_csv(
+        raw,
+        usecols=["date", "store_nbr", "family", "sales"],
+        dtype={"store_nbr": "int16", "family": "category", "sales": "float64"},
+        parse_dates=["date"],
+    )
+
+    slugs = {f: _family_slug(f) for f in df["family"].cat.categories}
+    if len(set(slugs.values())) != len(slugs):
+        raise ValueError("family slugs are not unique")
+
+    # --- View B: family totals across all stores ---------------------------
+    family_dir = DERIVED_DIR / "favorita_family"
+    family_dir.mkdir(parents=True, exist_ok=True)
+    family_totals = (
+        df.groupby(["family", "date"], observed=True)["sales"].sum().reset_index()
+    )
+    family_ids = sorted(slugs.values())
+    for family, group in family_totals.groupby("family", observed=True):
+        out = pd.DataFrame(
+            {"ds": group["date"], "y": group["sales"].astype(float)}
+        ).sort_values("ds")
+        out.to_csv(family_dir / f"{slugs[family]}.csv", index=False)
+    _write_manifest("favorita_family", family_ids)
+
+    # --- View A: sampled store-item pairs ----------------------------------
+    # Leading zero run per store, measured on the store's chain-wide daily
+    # total: a store that has not opened sells nothing in any family.
+    store_day = df.groupby(["store_nbr", "date"], observed=True)["sales"].sum()
+    store_day = store_day.unstack("store_nbr").sort_index()
+    first_sale = store_day.gt(0).idxmax()  # NaT-free: every store trades eventually
+    lead_days = (first_sale - store_day.index[0]).dt.days
+    open_stores = set(lead_days.index[lead_days <= MAX_FAVORITA_LEADING_ZERO_DAYS])
+
+    by_pair = df.groupby(["store_nbr", "family"], observed=True)["sales"]
+    zero_frac = by_pair.apply(lambda s: float((s == 0).mean()))
+    eligible = [
+        f"{store}_{slugs[family]}"
+        for (store, family), zf in zero_frac.items()
+        if store in open_stores and zf <= MAX_FAVORITA_ZERO_FRAC
+    ]
+    ids = _sample_ids(eligible, N_FAVORITA_STORE_ITEM)
+
+    pair_dir = DERIVED_DIR / "favorita_store_item"
+    pair_dir.mkdir(parents=True, exist_ok=True)
+    df["pair"] = (
+        df["store_nbr"].astype(str)
+        + "_"
+        + df["family"].map(slugs).astype(str)
+    )
+    for pair_id, group in df[df["pair"].isin(ids)].groupby("pair"):
+        out = pd.DataFrame(
+            {"ds": group["date"], "y": group["sales"].astype(float)}
+        ).sort_values("ds")
+        out.to_csv(pair_dir / f"{pair_id}.csv", index=False)
+    _write_manifest("favorita_store_item", ids)
+
+    return len(ids) + len(family_ids)
+
+
+# Each entry is a zero-argument callable returning the number of series it
+# wrote. `favorita` writes two aggregation *views* of one source (see
+# `prepare_favorita`) and is therefore one entry, not two.
 PREPARERS = {
     "m4_weekly": prepare_m4_weekly,
     "m3_monthly": prepare_m3_monthly,
     "rossmann": prepare_rossmann,
     "walmart_real": prepare_walmart_real,
+    "favorita": prepare_favorita,
 }
 
 
