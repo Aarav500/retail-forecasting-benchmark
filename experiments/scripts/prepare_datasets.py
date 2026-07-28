@@ -1,7 +1,7 @@
 """One-time raw -> derived conversion for the Phase B dataset sources.
 
-Large raw inputs (the `datasetsforecast` downloads here, the local Kaggle
-dumps in later sources) are gitignored. This script reads them, samples
+Large raw inputs (the `datasetsforecast` downloads and the local Kaggle
+dumps under `data/<competition>/`) are gitignored. This script reads them, samples
 the subset the design calls for, and writes small per-series CSVs into
 `data/derived/`, which ARE committed. The loaders in `shortseq/datasets/`
 read only from `data/derived/`, so a fresh clone reproduces the exact
@@ -32,6 +32,15 @@ DERIVED_DIR = DATA_DIR / "derived"
 SEED = 42
 N_M4_WEEKLY = 50
 N_M3_MONTHLY = 100
+N_ROSSMANN = 50
+N_WALMART_REAL = 50
+
+# Minimum usable history for a Walmart store-dept pair. The competition's
+# full history is 143 weeks, but 660 of the 3331 pairs are departments that
+# opened, closed or churned mid-window — some with a single observation.
+# 100 weeks keeps the sample comfortably longer than any evaluation horizon
+# while still admitting the handful of genuinely shorter-lived departments.
+MIN_WALMART_WEEKS = 100
 
 
 def _sample_ids(all_ids, k: int) -> list[str]:
@@ -113,12 +122,130 @@ def prepare_m3_monthly() -> int:
     return len(ids)
 
 
-# Later Phase B tasks add the Kaggle-derived sources (rossmann, walmart_real,
-# favorita) here; each entry is a zero-argument callable returning the number
-# of series it wrote.
+def _contiguous_ids(index_counts: pd.Series, spans: pd.Series) -> pd.Index:
+    """Ids whose observation count equals their calendar span.
+
+    Equality means every period between first and last observation is
+    present, i.e. a gap-free index. Cheaper and clearer than diffing every
+    id's index individually.
+    """
+    return index_counts.index[index_counts == spans]
+
+
+def prepare_rossmann() -> int:
+    """Sample 50 Rossmann stores into `data/derived/rossmann/`.
+
+    Source: the Kaggle `rossmann-store-sales` train.csv (real German drug
+    store daily sales, 2013-01-01..2015-07-31, 1115 stores). One series per
+    store: `Sales` over `Date`.
+
+    Two shaping decisions, both deliberate:
+
+    1. **Closed-day zero rows are KEPT.** Rossmann stores are shut on most
+       Sundays, which upstream is a real row with `Open=0, Sales=0` (plus 54
+       rows that are open with genuinely zero sales). Dropping them would
+       leave a 6-days-a-week index that is neither daily nor weekly, and
+       would discard exactly the zero-inflated demand this benchmark exists
+       to study — cf. the M5 loader, whose selling point is its ~32.9%
+       zero-demand days. Keeping them yields a true daily index at ~17%
+       zeros.
+
+    2. **The pool is restricted to stores with a gap-free daily index.** 180
+       of the 1115 stores were closed for refurbishment for roughly the
+       second half of 2014 and are simply absent from the file for that
+       window (758 rows instead of 942). Those are excluded rather than
+       zero-filled: the gap is missing data, not observed zero demand, and
+       fabricating six months of zeros would be a much bigger lie than
+       dropping the store. 935 stores remain eligible.
+    """
+    raw = DATA_DIR / "rossmann-store-sales" / "train.csv"
+    df = pd.read_csv(
+        raw, usecols=["Store", "Date", "Sales"], parse_dates=["Date"]
+    )
+
+    by_store = df.groupby("Store")["Date"]
+    counts = by_store.size()
+    spans = (by_store.max() - by_store.min()).dt.days + 1
+    eligible = _contiguous_ids(counts, spans)
+    ids = _sample_ids(eligible, N_ROSSMANN)
+
+    out_dir = DERIVED_DIR / "rossmann"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    df = df[df["Store"].astype(str).isin(ids)]
+    for store_id, group in df.groupby(df["Store"].astype(str)):
+        out = pd.DataFrame(
+            {"ds": group["Date"], "y": group["Sales"].astype(float)}
+        ).sort_values("ds")
+        out.to_csv(out_dir / f"{store_id}.csv", index=False)
+
+    _write_manifest("rossmann", ids)
+    return len(ids)
+
+
+def prepare_walmart_real() -> int:
+    """Sample 50 Walmart store-dept pairs into `data/derived/walmart_real/`.
+
+    Source: the Kaggle `walmart-recruiting-store-sales-forecasting`
+    train.csv.zip (real US weekly sales, 45 stores x 81 departments,
+    2010-02-05..2012-10-26). `pandas.read_csv` reads the .zip directly, so
+    the archive is never unpacked to disk.
+
+    One series per `(Store, Dept)` pair, keyed `<store>_<dept>`. Shaping
+    decisions:
+
+    1. **Eligible pairs need a gap-free weekly index of >= 100 weeks.** Only
+       2660 of the 3331 pairs carry the full 143-week history; the rest are
+       departments that opened or closed mid-window, some with a single
+       observation. Sampling unfiltered would produce degenerate 1-3 point
+       "series". 100 weeks (`MIN_WALMART_WEEKS`) leaves 2671 eligible pairs.
+
+    2. **The real Friday dates are kept as-is.** These are genuine
+       week-ending Fridays, unlike every other weekly source in this repo,
+       which is Sunday-anchored. They are NOT shifted to Sundays: that would
+       corrupt real calendar data for cosmetic consistency. See the loader
+       docstring for the one downstream consequence.
+
+    Negative `Weekly_Sales` values (net returns in a week) are left in — they
+    are real observations, and no eligible pair has a non-positive mean.
+    """
+    raw = (
+        DATA_DIR
+        / "walmart-recruiting-store-sales-forecasting"
+        / "train.csv.zip"
+    )
+    df = pd.read_csv(
+        raw, usecols=["Store", "Dept", "Date", "Weekly_Sales"], parse_dates=["Date"]
+    )
+    df["pair"] = df["Store"].astype(str) + "_" + df["Dept"].astype(str)
+
+    by_pair = df.groupby("pair")["Date"]
+    counts = by_pair.size()
+    spans = (by_pair.max() - by_pair.min()).dt.days // 7 + 1
+    eligible = _contiguous_ids(counts, spans)
+    eligible = eligible[counts[eligible] >= MIN_WALMART_WEEKS]
+    ids = _sample_ids(eligible, N_WALMART_REAL)
+
+    out_dir = DERIVED_DIR / "walmart_real"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    df = df[df["pair"].isin(ids)]
+    for pair_id, group in df.groupby("pair"):
+        out = pd.DataFrame(
+            {"ds": group["Date"], "y": group["Weekly_Sales"].astype(float)}
+        ).sort_values("ds")
+        out.to_csv(out_dir / f"{pair_id}.csv", index=False)
+
+    _write_manifest("walmart_real", ids)
+    return len(ids)
+
+
+# A later Phase B task adds the remaining Kaggle-derived source (favorita)
+# here; each entry is a zero-argument callable returning the number of series
+# it wrote.
 PREPARERS = {
     "m4_weekly": prepare_m4_weekly,
     "m3_monthly": prepare_m3_monthly,
+    "rossmann": prepare_rossmann,
+    "walmart_real": prepare_walmart_real,
 }
 
 
