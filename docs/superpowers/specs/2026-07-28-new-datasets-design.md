@@ -148,3 +148,29 @@ Weekly. The other six baselines are index-blind and unaffected.
 Note also that Rossmann series are n=942 and Walmart-real n=143 — the
 former reinforces the length-stratification requirement in the previous
 addendum.
+
+### Sharpening (post-Task 4): `SeriesDataset.freq` is NOT sufficient for Prophet
+
+Verified after registry wiring: `walmart_real_*` series carry
+`SeriesDataset.freq == "W"` — identical to the Sunday-anchored UCI /
+calibrated-`walmart` / M4-Weekly series, despite being Friday-anchored.
+
+So a Phase C runner that does the obvious thing —
+`ProphetForecaster(freq=ds.freq)` — will get `"W"` for `walmart_real`
+and fail with the contiguity `ValueError` on all 50 of those series.
+Reading `ds.freq` is NOT enough; the anchor must come from a per-source
+mapping keyed on the `walmart_real_` name prefix (or `walmart_real.py`
+must be changed to set `freq="W-FRI"`, which requires re-checking the
+`_FREQ_ALIASES` interaction in `prophet_model.py` first).
+
+No such mapping was added in Phase B deliberately — Phase C should
+shape that API as it needs, rather than inheriting a guess.
+
+### Final Phase B counts
+
+368 series total across 10 registered sources (35 pre-existing + 333
+new): dmart 4, uci 5, walmart 1, m5 1, m4 24, m4_weekly 50,
+m3_monthly 100, rossmann 50, walmart_real 50, favorita 83 (50
+store-item + 33 family). Length split: 199 short (n<200) / 169 long
+(n>=200) — near-balanced, which makes the stratification requirement
+above materially important rather than a formality.
