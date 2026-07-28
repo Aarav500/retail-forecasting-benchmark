@@ -119,3 +119,32 @@ stratified by series length — at minimum short (n < 200) vs. long
 (n >= 200) — never pooled across the full registry. The existing 35
 series are almost entirely n <= 197, so an unstratified pooled number
 would silently mix two regimes with opposite expected outcomes.
+
+## Addendum (2026-07-28): per-source Prophet frequency anchors
+
+Task 2 found that the real Kaggle Walmart data is **Friday**-anchored
+(`index.dayofweek == 4`), unlike every other weekly source in this repo
+(UCI, the calibrated `walmart`, M4 Weekly), which are Sunday-anchored.
+
+Consequence, verified empirically (not assumed):
+`ProphetForecaster(freq="W")` **fails** on `walmart_real_*` with the
+contiguity `ValueError` — Prophet's `make_future_dataframe` resolves a
+bare `"W"` to pandas' `W-SUN` default, and the extrapolated Sundays
+don't line up with the real Friday index.
+`ProphetForecaster(freq="W-FRI")` succeeds.
+
+The real Friday dates were deliberately **not** shifted to fake Sundays;
+real calendar data wins over internal convention. The behaviour is
+pinned by `test_walmart_real_needs_w_fri_for_prophet`, which asserts
+both directions.
+
+Binding requirement for Task 4 and Phase C: whatever wires datasets into
+the model runners MUST pass a per-source frequency anchor to Prophet —
+`freq="W-FRI"` for `walmart_real_*`, plain `"W"` for the Sunday-anchored
+weekly sources. A global `_FREQ_ALIASES` fix is NOT viable: mapping
+`"W" -> "W-FRI"` would break UCI, the calibrated `walmart`, and M4
+Weekly. The other six baselines are index-blind and unaffected.
+
+Note also that Rossmann series are n=942 and Walmart-real n=143 — the
+former reinforces the length-stratification requirement in the previous
+addendum.
