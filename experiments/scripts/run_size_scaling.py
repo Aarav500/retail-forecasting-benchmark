@@ -20,7 +20,6 @@ from pathlib import Path
 
 from shortseq.datasets.registry import load_all
 from shortseq.evaluation.metrics import compute_metrics
-from shortseq.models.foundation.chronos import ChronosForecaster
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BASELINE_DIR = REPO_ROOT / "experiments" / "results"
@@ -50,6 +49,11 @@ def result_path(dataset_name: str, size: str) -> Path:
 
 def run_one(dataset_name: str, dataset, size: str, split: float = 0.8) -> dict:
     """Run one (dataset, size) pair. Returns the result dict it wrote."""
+    # Imported lazily so the pure-Python summary/stratification helpers in
+    # this module can be imported and tested on a CPU-only machine, where
+    # torch/chronos-forecasting are deliberately absent.
+    from shortseq.models.foundation.chronos import ChronosForecaster
+
     series = dataset.series
     split_idx = int(len(series) * split)
     train, test = series.iloc[:split_idx], series.iloc[split_idx:]
