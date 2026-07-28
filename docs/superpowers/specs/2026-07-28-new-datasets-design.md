@@ -99,3 +99,23 @@ reproducible, not re-drawn per run.
 - New loader tests pass; existing 63-test suite still passes unchanged.
 - `load_all()` returns 35 + new series, with no key collisions (note
   the existing calibrated `walmart` key vs. new `walmart_real_*`).
+
+## Addendum (2026-07-28): series-length stratification
+
+Task 1's M4 Weekly sample came back with median n=837, max n=2296 —
+long series, in a benchmark whose thesis is the short-series regime
+(n < 200). Decision (user, 2026-07-28): **keep the long series, but
+require length-stratified reporting.**
+
+Rationale: long series are the necessary contrast case — they are
+precisely where foundation models are expected to win, so they make the
+short-series finding meaningful rather than diluting it. Pooling them
+into a single headline number, however, would obscure exactly the
+effect this benchmark exists to measure.
+
+Binding requirement for Phase C/D: any aggregate result (ranking,
+boundary map, win/loss counts, mean RMSE ratios) MUST be reported
+stratified by series length — at minimum short (n < 200) vs. long
+(n >= 200) — never pooled across the full registry. The existing 35
+series are almost entirely n <= 197, so an unstratified pooled number
+would silently mix two regimes with opposite expected outcomes.
