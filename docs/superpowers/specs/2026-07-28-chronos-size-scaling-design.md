@@ -148,3 +148,42 @@ downward RMSE trend on the long stratum. **If the data shows otherwise
 result, and it gets reported as such.** The prior Chronos-small run
 already produced a genuinely mixed picture (16 wins / 19 losses vs.
 ARIMA), so an unambiguous outcome should not be assumed.
+
+## Addendum (2026-07-28, mid-run): baseline coverage gap + required post-processing
+
+**Gap found during the sweep.** This spec assumed ARIMA baselines existed
+for the whole registry ("loads ARIMA's RMSE from the committed baseline
+results"). They did not: `experiments/results/` covered only the
+original 35 series, because `run_baselines.py` was last run before
+Phase B added 333 more. The sweep therefore recorded
+`arima_rmse: null` for 333/368 series, and `summarize()` counted them
+under `no_baseline` — visible only because the script reports missing
+baselines as a distinct category instead of silently dropping them.
+Had it dropped them, the summary would have looked healthy while
+answering the campaign's question on 10% of the benchmark.
+
+**Remediation in progress:** a full 7-baseline backfill over the 333
+new series is running locally on CPU, in parallel with the GPU sweep
+(no contention — different machines, different resources).
+
+**REQUIRED post-processing step before any finding is reported:**
+the scaling JSONs already written on the GPU instance have
+`arima_rmse: null` baked in at write time. `summarize()` reads that
+stored field rather than recomputing it, so re-running the summary
+alone will NOT pick up the backfilled baselines. After both jobs
+complete:
+
+1. Copy the scaling results back from the instance.
+2. Re-populate each scaling JSON's `arima_rmse` from the now-complete
+   local `experiments/results/{dataset}_results.json`.
+3. Then run `--summary-only`.
+
+The expensive Chronos RMSEs are unaffected and must not be recomputed —
+only the `arima_rmse` field is being filled in.
+
+**Cost note:** the ~5 GPU-hour / ~$3 estimate in this spec proved
+optimistic. It extrapolated from Chronos-small throughput and
+underestimated how much slower the large models are on the long series
+(Favorita n=1684, Rossmann n=942). Observed cost is closer to $12-15
+over most of a day. User was informed mid-run and elected to run the
+full matrix.
