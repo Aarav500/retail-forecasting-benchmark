@@ -80,9 +80,11 @@ N_TEST = N_POINTS - int(N_POINTS * 0.8)  # both scripts split 0.8 by default
 def _series(n: int = N_POINTS) -> pd.Series:
     """A short, strictly positive daily series.
 
-    Positive because `compute_metrics` divides by `actual` for MAPE;
-    a zero would make the metric NaN and json.dump would then emit a
-    bare `NaN` literal, failing for a reason unrelated to residuals.
+    Positive because `compute_metrics` divides by `actual` for MAPE; an
+    all-zero window would make the metric NaN and the strict-JSON write
+    would then refuse the payload, failing for a reason unrelated to
+    residuals. That refusal is covered on purpose in
+    tests/test_strict_json_writes.py.
     """
     idx = pd.date_range("2020-01-01", periods=n, freq="D")
     return pd.Series(100.0 + np.arange(n, dtype=float), index=idx)

@@ -30,6 +30,7 @@ from pathlib import Path
 from shortseq.constants import CHRONOS_SIZES
 from shortseq.datasets.registry import load_all
 from shortseq.evaluation.metrics import compute_metrics, without_residuals
+from shortseq.results_io import ResultWriteError, print_write_failures, write_result_json
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BASELINE_DIR = REPO_ROOT / "experiments" / "results"
@@ -104,8 +105,10 @@ def run_one(dataset_name: str, dataset, size: str, split: float = 0.8,
         "failed_models": failed_models,
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    with open(result_path(dataset_name, size), "w") as f:
-        json.dump(output, f, indent=2, allow_nan=False)
+    # Raises ResultWriteError (naming the offending metric) rather than
+    # writing a bare `NaN` literal, which is invalid strict JSON. main()
+    # catches it per run so one unwritable payload does not abort the sweep.
+    write_result_json(result_path(dataset_name, size), output)
     return output
 
 
@@ -216,6 +219,12 @@ def main():
     print(f"Size-scaling sweep: {len(datasets)} datasets x {len(args.sizes)} sizes = {total} runs")
 
     done = 0
+    # Same shape as the per-size `failed` counting in summarize(): a run
+    # whose result cannot be serialised is recorded and skipped rather than
+    # aborting the remaining runs. This sweep IS resumable, so an abort
+    # costs only the current file -- but there is no reason to make the
+    # operator re-invoke, and the diagnostic below is worth having either way.
+    write_failures = {}
     for size in args.sizes:
         for name, dataset in datasets.items():
             done += 1
@@ -223,10 +232,18 @@ def main():
                 print(f"[{done}/{total}] {name} @ {size}: cached, skipping")
                 continue
             print(f"[{done}/{total}] {name} | n={dataset.n} | size={size}")
-            run_one(name, dataset, size, keep_residuals=args.keep_residuals)
+            try:
+                run_one(name, dataset, size, keep_residuals=args.keep_residuals)
+            except ResultWriteError as exc:
+                write_failures[f"{name} @ {size}"] = exc
+                print(f"  [{name}/{size}] {exc}")
 
     print_summary(summarize())
     print(f"\nDone. Results in {RESULTS_DIR}")
+    # After print_summary, and last: summarize() reads the files on disk, so
+    # a run that never produced one is invisible to it -- neither counted in
+    # `failed` nor in any stratum. This block is the only place it shows up.
+    print_write_failures(write_failures)
 
 
 if __name__ == "__main__":

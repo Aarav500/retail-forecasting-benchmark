@@ -25,12 +25,12 @@ docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
 "Why not DM tests".
 """
 import argparse
-import json
 from pathlib import Path
 
 from shortseq.datasets.registry import load_all
 from shortseq.evaluation.metrics import compute_metrics, without_residuals
 from shortseq.models.arima import ARIMAForecaster
+from shortseq.results_io import ResultWriteError, print_write_failures, write_result_json
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = REPO_ROOT / "experiments" / "results"
@@ -68,8 +68,11 @@ def run_dataset(name: str, dataset, split: float = 0.8,
         "partial": "ARIMA-only backfill; other classical baselines not run",
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    with open(RESULTS_DIR / f"{name}_results.json", "w") as f:
-        json.dump(output, f, indent=2, allow_nan=False)
+    # Raises ResultWriteError (naming the offending metric) rather than
+    # writing a bare `NaN` literal, which is invalid strict JSON. main()
+    # catches it per dataset so one unwritable payload does not abort the
+    # backfill.
+    write_result_json(RESULTS_DIR / f"{name}_results.json", output)
     return output
 
 
@@ -103,11 +106,23 @@ def main():
           f"(shortest first; n range {todo[0][1].n}-{todo[-1][1].n})" if todo
           else "ARIMA-only backfill: nothing to do", flush=True)
 
+    # Mirrors run_dataset's own `failed_models` convention one level up: a
+    # dataset whose result cannot be serialised is recorded and skipped, not
+    # allowed to kill the backfill.
+    unwritten = {}
     for i, (name, ds) in enumerate(todo, 1):
         print(f"[{i}/{len(todo)}] {name} | n={ds.n} | freq={ds.freq}", flush=True)
-        run_dataset(name, ds, keep_residuals=args.keep_residuals)
+        try:
+            run_dataset(name, ds, keep_residuals=args.keep_residuals)
+        except ResultWriteError as exc:
+            unwritten[name] = exc
+            print(f"  [{name}] {exc}", flush=True)
 
     print(f"\nDone. Results in {RESULTS_DIR}", flush=True)
+    # Last, so it cannot scroll past. It matters here even though the job is
+    # resumable: these datasets stay in `todo` on the next invocation and
+    # will fail again, so the operator needs to know why now.
+    print_write_failures(unwritten)
 
 
 if __name__ == "__main__":

@@ -19,7 +19,6 @@ docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
 "Why not DM tests".
 """
 import argparse
-import json
 from pathlib import Path
 
 from shortseq.datasets.registry import load_all
@@ -27,6 +26,7 @@ from shortseq.evaluation.dm_test import bonferroni_correct, diebold_mariano_test
 from shortseq.evaluation.metrics import compute_metrics, without_residuals
 from shortseq.models.arima import ARIMAForecaster
 from shortseq.models.foundation.chronos import ChronosForecaster
+from shortseq.results_io import ResultWriteError, print_write_failures, write_result_json
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = REPO_ROOT / "experiments" / "results" / "foundation"
@@ -74,8 +74,11 @@ def run_dataset(name: str, dataset, size: str, split: float = 0.8,
         "failed_models": failed_models,
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    with open(RESULTS_DIR / f"{name}_chronos_{size}_results.json", "w") as f:
-        json.dump(output, f, indent=2, allow_nan=False)
+    # Raises ResultWriteError (naming the offending metric) rather than
+    # writing a bare `NaN` literal, which is invalid strict JSON. main()
+    # catches it per dataset so one unwritable payload does not abort the
+    # sweep -- this script has no skip-existing, so an abort loses the run.
+    write_result_json(RESULTS_DIR / f"{name}_chronos_{size}_results.json", output)
     return output
 
 
@@ -98,10 +101,22 @@ def main():
         datasets = {k: v for k, v in datasets.items() if k in args.datasets}
 
     print(f"Running ARIMA vs Chronos-{args.size} on {len(datasets)} datasets...")
+    # Mirrors run_dataset's own `failed_models` convention one level up: a
+    # dataset whose result cannot be serialised is recorded and skipped, not
+    # allowed to kill the sweep. Like run_baselines.py this script re-runs
+    # every dataset on every invocation, so an abort part-way discards every
+    # dataset already completed -- on GPU time.
+    unwritten = {}
     for name, dataset in datasets.items():
         print(f"\n{'=' * 60}\n{name} | n={dataset.n} | freq={dataset.freq}\n{'=' * 60}")
-        run_dataset(name, dataset, args.size, keep_residuals=args.keep_residuals)
+        try:
+            run_dataset(name, dataset, args.size, keep_residuals=args.keep_residuals)
+        except ResultWriteError as exc:
+            unwritten[name] = exc
+            print(f"  [{name}] {exc}")
     print(f"\nDone. Results saved to {RESULTS_DIR}")
+    # Last, so it cannot scroll past.
+    print_write_failures(unwritten)
 
 
 if __name__ == "__main__":

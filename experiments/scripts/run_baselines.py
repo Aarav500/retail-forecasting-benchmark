@@ -30,7 +30,6 @@ docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
 "Why not DM tests".
 """
 import argparse
-import json
 from pathlib import Path
 
 import yaml
@@ -45,6 +44,7 @@ from shortseq.models.naive import SeasonalNaiveForecaster
 from shortseq.models.prophet_model import ProphetForecaster
 from shortseq.models.sarima import SARIMAForecaster
 from shortseq.models.xgboost_model import XGBoostForecaster
+from shortseq.results_io import ResultWriteError, print_write_failures, write_result_json
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / "experiments" / "configs" / "hyperparams.yaml"
@@ -163,8 +163,11 @@ def run_dataset(name: str, dataset, config: dict, split: float = None,
         "failed_models": failed_models,
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    with open(RESULTS_DIR / f"{name}_results.json", "w") as f:
-        json.dump(output, f, indent=2, allow_nan=False)
+    # Raises ResultWriteError (naming the offending metric) rather than
+    # writing a bare `NaN` literal, which is invalid strict JSON. main()
+    # catches it per dataset so one unwritable payload does not abort the
+    # sweep; a caller invoking run_dataset directly still sees the failure.
+    write_result_json(RESULTS_DIR / f"{name}_results.json", output)
     return output
 
 
@@ -195,10 +198,23 @@ def main():
     if args.datasets:
         datasets = {k: v for k, v in datasets.items() if k in args.datasets}
     print(f"Running baselines on {len(datasets)} datasets...")
+    # Mirrors run_dataset's own `failed_models` convention one level up: a
+    # dataset whose result cannot be serialised is recorded and skipped,
+    # not allowed to kill the sweep. This script re-runs every dataset from
+    # scratch on every invocation (there is no --force/skip-existing), so an
+    # abort at dataset 20 of 35 would throw away the 19 already finished.
+    unwritten = {}
     for name, dataset in datasets.items():
         print(f"\n{'=' * 60}\n{name} | n={dataset.n} | freq={dataset.freq}\n{'=' * 60}")
-        run_dataset(name, dataset, config, keep_residuals=args.keep_residuals)
+        try:
+            run_dataset(name, dataset, config, keep_residuals=args.keep_residuals)
+        except ResultWriteError as exc:
+            unwritten[name] = exc
+            print(f"  [{name}] {exc}")
     print(f"\nDone. Results saved to {RESULTS_DIR}")
+    # Last, so it cannot scroll past: "Done." above is true but incomplete
+    # when some datasets have no file.
+    print_write_failures(unwritten)
 
 
 if __name__ == "__main__":
