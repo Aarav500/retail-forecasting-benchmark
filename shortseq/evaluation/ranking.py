@@ -81,6 +81,14 @@ def friedman_nemenyi(results: pd.DataFrame, alpha: float = 0.05) -> dict:
         raise ValueError(f"Friedman needs at least 3 models, got {k}")
     if n < 1:
         raise ValueError(f"need at least 1 series, got {n}")
+    # Checked here as well as in nemenyi_critical_difference, so that all
+    # argument validation happens up front rather than part-way through, after
+    # `p_value < alpha` has already been evaluated against a nonsense alpha.
+    # The message is deliberately identical, so callers see no behaviour change;
+    # the duplicate stays in the callee because that function is public and is
+    # imported directly, so it must defend itself independently.
+    if not 0.0 < alpha < 1.0:
+        raise ValueError(f"alpha must be in (0, 1), got {alpha} - did you pass a percentage?")
 
     # Rank WITHIN each series, ascending so rank 1 = lowest error = best.
     # Ties get average ranks.

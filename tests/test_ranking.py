@@ -29,13 +29,22 @@ def test_cd_matches_independently_verified_value():
 
 
 def test_cd_at_alpha_010():
-    # Anchored to the published table, not generated from this implementation:
-    # Demsar (2006) Table 5 gives q_0.10(k=5) = 2.459 (already divided by
-    # sqrt(2)), so CD = 2.459 * sqrt(5*6 / (6*199)) = 0.38978, which agrees
-    # with the runtime-computed value to the table's precision.
+    # A regression constant, recorded from this implementation - not an
+    # independent anchor. Demsar (2006) Table 5 gives q_0.10(k=5) = 2.459
+    # (already divided by sqrt(2)), so CD = 2.459 * sqrt(5*6 / (6*199)) =
+    # 0.38978, which corroborates the runtime value to the table's 4 s.f.
+    # It does NOT corroborate it at abs=1e-6: substituting the table-derived
+    # value here fails, because the table's own rounding to 4 s.f. moves CD by
+    # ~8e-05. The independent check against the table follows below, at a
+    # tolerance the table can actually meet.
     assert nemenyi_critical_difference(k=5, n_blocks=199, alpha=0.10) == pytest.approx(
         0.3898595, abs=1e-6
     )
+    # Genuinely independent of this implementation: the only inputs are the
+    # published q and the CD formula.
+    assert nemenyi_critical_difference(k=5, n_blocks=199, alpha=0.10) == pytest.approx(
+        2.459 * np.sqrt(5 * 6 / (6 * 199)), abs=1e-4
+    )  # Demsar (2006) Table 5, table precision
 
 
 def test_cd_is_not_off_by_sqrt2():
@@ -204,3 +213,10 @@ def test_cd_rejects_alpha_outside_the_unit_interval(bad_alpha):
     # p_value < 5 test fires - a coherent-looking, entirely wrong table.
     with pytest.raises(ValueError, match="alpha must be in"):
         nemenyi_critical_difference(k=5, n_blocks=199, alpha=bad_alpha)
+    # The comment above reasons about friedman_nemenyi, so exercise that path
+    # too rather than trusting it to reach the helper. The grid is valid and
+    # 3 models wide, so the rejection is unambiguously about alpha and not
+    # about the shape of the input.
+    df = pd.DataFrame({"a": [1.0, 2.0, 3.0], "b": [2.0, 3.0, 1.0], "c": [3.0, 1.0, 2.0]})
+    with pytest.raises(ValueError, match="alpha must be in"):
+        friedman_nemenyi(df, alpha=bad_alpha)
