@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 import pytest
 
 import experiments.scripts.run_ranking as rr
-import experiments.scripts.run_size_scaling as rss
+import shortseq.constants as sc
 from shortseq.evaluation.ranking import nemenyi_critical_difference
 
 
@@ -122,11 +122,22 @@ def test_analyse_stratum_returns_ranking_payload(tmp_path, monkeypatch):
         )
 
 
-def test_size_order_is_the_campaign_size_list():
+def test_size_order_is_the_shared_constant():
     # Not a copy that has to be kept in sync by hand: a size added to the
     # campaign but missing here is silently dropped by the column filter
     # in build_matrices(), and the paper ranks a subset without saying so.
-    assert rr.SIZE_ORDER == rss.SIZES
+    #
+    # Asserted by IDENTITY, not equality. An `==` against a hand-written
+    # copy of the same five strings passes, so it only catches drift after
+    # the two lists have already diverged; `is` catches the copy itself,
+    # which is the moment the invariant is actually broken.
+    #
+    # test_size_scaling.py holds the matching assertion for the campaign
+    # script, so neither test has to import the other script - importing
+    # run_size_scaling here would drag the dataset registry and the metrics
+    # layer (statsmodels, sklearn) into a test module for a script whose
+    # stated contract is that it runs no models.
+    assert rr.SIZE_ORDER is sc.CHRONOS_SIZES
 
 
 def test_build_matrices_hard_fails_when_a_size_is_wholly_unusable(tmp_path, monkeypatch):
@@ -242,7 +253,13 @@ def test_report_marks_pairwise_significance(capsys):
         "alpha": 0.05,
         "mean_ranks": {"tiny": 2.6, "small": 2.0, "large": 1.4},
         "friedman_statistic": 14.4,
-        "friedman_p_value": 0.00075,
+        # A 4-decimal value, so it sits at the centre of its own .4f
+        # rounding bucket - 5e-5 from either boundary, the widest margin a
+        # .4f assertion can have. The previous 0.00075 sat exactly ON the
+        # 0.0007/0.0008 boundary and passed only because its binary
+        # representation lands a hair above it; 0.00065 rounds the other
+        # way, so the assertion was testing float repr, not formatting.
+        "friedman_p_value": 0.0012,
         "friedman_significant": True,
         "critical_difference": 0.7,
         "pairwise": {
@@ -266,7 +283,7 @@ def test_report_marks_pairwise_significance(capsys):
         "tiny_vs_large": "YES",
         "small_vs_large": "no",
     }
-    assert "p = 0.0008" in out
+    assert "p = 0.0012" in out
 
 
 def test_report_p_value_is_readable_against_alpha():
@@ -320,6 +337,54 @@ def test_report_suppresses_verdicts_when_omnibus_fails(tmp_path, monkeypatch, ca
     assert out.count("sig=n/a") == len(payload["pairwise"])
 
 
+def test_report_warns_when_a_stratum_is_too_small(tmp_path, monkeypatch, capsys):
+    # The hard guard in build_matrices() fires only at ZERO usable results,
+    # so a stratum can legitimately collapse to a handful of series and
+    # still be ranked: dropna() leaves a complete grid, and
+    # friedman_nemenyi accepts anything with n >= 1. Friedman's chi-square
+    # approximation is asymptotic, so the p-value it reports there is not
+    # trustworthy - and the report says so, loudly.
+    monkeypatch.setattr(rr, "SCALING_DIR", tmp_path)
+    _write_grid(tmp_path, [f"s{i}" for i in range(3)], ["tiny", "small", "large"])
+
+    payload = rr.analyse(rr.build_matrices()["short"])
+    capsys.readouterr()  # discard build_matrices' own output
+    rr.print_report("short", payload)
+    out = capsys.readouterr().out
+
+    assert payload["n_series"] == 3
+    assert "only 3 series" in out
+    assert "chi-square approximation is unreliable" in out
+    assert "do NOT report" in out
+    # A warning, not a failure: the ranking still runs and still prints, so
+    # a deliberately narrowed campaign remains usable for diagnosis.
+    assert "mean ranks (1 = best):" in out
+
+
+def test_report_does_not_warn_at_the_reporting_threshold(tmp_path, monkeypatch, capsys):
+    # The other side of the boundary. A warning printed over every stratum
+    # - including the real 199/169 ones - is one nobody reads.
+    monkeypatch.setattr(rr, "SCALING_DIR", tmp_path)
+    _write_grid(
+        tmp_path,
+        [f"s{i}" for i in range(rr.MIN_SERIES_FOR_REPORT)],
+        ["tiny", "small", "large"],
+    )
+
+    payload = rr.analyse(rr.build_matrices()["short"])
+    capsys.readouterr()
+    rr.print_report("short", payload)
+
+    assert payload["n_series"] == rr.MIN_SERIES_FOR_REPORT
+    assert "unreliable" not in capsys.readouterr().out
+
+
+# The all-identical grid below is exactly the degenerate case scipy warns
+# about while computing nan; the nan IS the point of the test, so the
+# warning is noise. Same marker, same reason as test_ranking.py's
+# test_friedman_does_not_fire_on_identical_models - and confined to the
+# tests, never to a module under experiments/ or shortseq/.
+@pytest.mark.filterwarnings("ignore:invalid value encountered")
 def test_main_writes_strict_json(tmp_path, monkeypatch):
     # Every size identical on every series makes the Friedman statistic
     # and p-value nan. json.dump would emit a bare `NaN` literal, which is
@@ -374,6 +439,27 @@ def test_main_alpha_flag_reaches_the_analysis(tmp_path, monkeypatch):
         nemenyi_critical_difference(3, 6, 0.01)
     )
     assert payload["critical_difference"] > nemenyi_critical_difference(3, 6, 0.05)
+
+
+def test_main_rejects_a_percentage_alpha(tmp_path, monkeypatch):
+    # `--alpha 5` is the obvious way to mean "5%", and argparse takes it
+    # happily - 5 is a valid float. Nothing downstream would raise either:
+    # `p_value < 5` is True for every p, so the run would write an artifact
+    # declaring every stratum significant at a nonsense alpha. The only
+    # thing standing in the way is friedman_nemenyi's up-front guard, which
+    # predates this CLI; this pins that it is actually reachable from it.
+    scaling, out_dir = tmp_path / "scaling", tmp_path / "ranking"
+    scaling.mkdir()
+    monkeypatch.setattr(rr, "SCALING_DIR", scaling)
+    monkeypatch.setattr(rr, "OUT_DIR", out_dir)
+    _write_grid(scaling, [f"s{i}" for i in range(6)], ["tiny", "small", "large"])
+
+    with pytest.raises(ValueError, match=r"alpha must be in \(0, 1\), got 5"):
+        _run_main(monkeypatch, "--alpha", "5")
+
+    # It must fail BEFORE writing, not after: a half-written ranking
+    # directory is worse than none, because the files look current.
+    assert not list(out_dir.glob("*.json"))
 
 
 def test_main_does_not_claim_success_when_nothing_was_written(

@@ -28,11 +28,13 @@ import pandas as pd
 # diverges the moment a size is added to the campaign, and the column
 # filter in build_matrices() then drops that size's perfectly valid
 # results without a word - the paper would rank a subset and say nothing.
-# Verified CPU-safe: run_size_scaling imports torch/chronos lazily inside
-# run_one(), so importing the module pulls in no GPU dependency (the
-# CPU-only tests/test_size_scaling.py already imports it the same way).
-# SIZES is in parameter-count order, so reports read smallest -> largest.
-from experiments.scripts.run_size_scaling import SIZES as SIZE_ORDER
+# Taken from shortseq.constants rather than from run_size_scaling: that
+# module imports the dataset registry and the metrics layer at module
+# level, so routing the constant through it pulled statsmodels and
+# sklearn into a script whose contract (above) is that it runs no models.
+# CHRONOS_SIZES is in parameter-count order, so reports read smallest ->
+# largest.
+from shortseq.constants import CHRONOS_SIZES as SIZE_ORDER
 from shortseq.evaluation.ranking import friedman_nemenyi
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -42,6 +44,23 @@ OUT_DIR = REPO_ROOT / "experiments" / "results" / "ranking"
 # Shared by build_matrices() and main()'s provenance count so the two can
 # never disagree about which files constitute "the input".
 SCALING_GLOB = "*_chronos_*.json"
+
+# Below this many series in a stratum, the ranking is printed but must not
+# be reported. Friedman's statistic is only ASYMPTOTICALLY chi-square
+# distributed, so at tiny N the p-value - and the significance flag and
+# Nemenyi CD that hang off it - are not trustworthy.
+#
+# The hard `dead` guard below fires only at ZERO usable results, which
+# leaves a real gap: at 367/368 unusable the grid survives dropna() as a
+# single series and friedman_nemenyi accepts it (its guard is n < 1),
+# yielding a confident-looking "1 series x 5 sizes" ranking.
+#
+# This is a REPORTING threshold, not a statistical precondition - the
+# arithmetic is well-defined at any N >= 1 - so it warns rather than
+# aborting, and it lives here rather than in shortseq/evaluation/ranking.py,
+# which is a general-purpose library with no stake in how its callers
+# publish. Deliberately narrow campaigns are legitimate and must still run.
+MIN_SERIES_FOR_REPORT = 10
 
 
 def scaling_paths() -> list[Path]:
@@ -149,6 +168,14 @@ def print_report(stratum: str, payload: dict) -> None:
     print(f"\n{'=' * 66}")
     print(f"{label}  |  {payload['n_series']} series x {payload['n_models']} sizes")
     print(f"{'=' * 66}")
+    if payload["n_series"] < MIN_SERIES_FOR_REPORT:
+        print(
+            f"  WARNING: only {payload['n_series']} series in this stratum "
+            f"(< {MIN_SERIES_FOR_REPORT}). Friedman's chi-square approximation is "
+            f"unreliable at this N, so the p-value, the significance flag and the "
+            f"critical difference below are all untrustworthy. Diagnose the missing "
+            f"series; do NOT report any of this as a finding."
+        )
     print(f"Friedman chi2 = {payload['friedman_statistic']:.4f}, "
           f"p = {_format_p(payload['friedman_p_value'])}, "
           f"significant = {payload['friedman_significant']}")

@@ -18,6 +18,7 @@ import argparse
 import json
 from pathlib import Path
 
+from shortseq.constants import CHRONOS_SIZES
 from shortseq.datasets.registry import load_all
 from shortseq.evaluation.metrics import compute_metrics
 
@@ -25,7 +26,11 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 BASELINE_DIR = REPO_ROOT / "experiments" / "results"
 RESULTS_DIR = REPO_ROOT / "experiments" / "results" / "scaling"
 
-SIZES = ["tiny", "mini", "small", "base", "large"]
+# Re-exported under this module's long-standing public name. The canonical
+# list lives in shortseq.constants so run_ranking.py can read it without
+# importing this module - and with it the whole modelling stack it needs
+# for the sweep but that a data-only ranking script does not.
+SIZES = CHRONOS_SIZES
 SHORT_MAX_N = 200  # series with n < SHORT_MAX_N are the "short" stratum
 
 

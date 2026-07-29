@@ -13,6 +13,7 @@ import json
 import pytest
 
 import experiments.scripts.run_size_scaling as rss
+import shortseq.constants as sc
 
 
 def _write_result(tmp_path, dataset, size, n, rmse, arima_rmse):
@@ -112,3 +113,18 @@ def test_short_max_n_matches_phase_b_stratification_decision():
     # at n < 200. Changing it silently would invalidate cross-campaign
     # comparisons.
     assert rss.SHORT_MAX_N == 200
+
+
+def test_sizes_is_the_shared_constant():
+    # `SIZES` stays this module's public name (--sizes' default and its
+    # argparse `choices=` both point at it), but the canonical list lives
+    # in shortseq.constants so run_ranking.py can share it without
+    # importing this module and, with it, the whole modelling stack.
+    #
+    # Asserted by IDENTITY: an `==` against a re-declared literal of the
+    # same five strings passes, and would only start failing once the two
+    # copies had already drifted - by which point run_ranking's column
+    # filter has been silently dropping a size. `is` fails at the copy.
+    # The matching assertion for the ranking script is in
+    # tests/test_run_ranking.py::test_size_order_is_the_shared_constant.
+    assert rss.SIZES is sc.CHRONOS_SIZES
