@@ -37,6 +37,12 @@ def nemenyi_critical_difference(k: int, n_blocks: int, alpha: float = 0.05) -> f
         raise ValueError(f"need at least 2 models, got {k}")
     if n_blocks < 1:
         raise ValueError(f"need at least 1 block, got {n_blocks}")
+    if not 0.0 < alpha < 1.0:
+        raise ValueError(f"alpha must be in (0, 1), got {alpha} - did you pass a percentage?")
+    # q_alpha is the studentized range DIVIDED BY sqrt(2). Do not remove this
+    # divisor: pairing raw q with the 6*N denominator inflates CD by 1.414x
+    # (0.4324 -> 0.6115 at k=5, N=199). See module docstring; Demsar (2006) Table 5
+    # publishes q ALREADY divided by sqrt(2). Guarded by test_cd_is_not_off_by_sqrt2.
     q = studentized_range.ppf(1.0 - alpha, k, np.inf) / np.sqrt(2.0)
     return float(q * np.sqrt(k * (k + 1) / (6.0 * n_blocks)))
 
@@ -73,6 +79,8 @@ def friedman_nemenyi(results: pd.DataFrame, alpha: float = 0.05) -> dict:
     n = results.shape[0]
     if k < 3:
         raise ValueError(f"Friedman needs at least 3 models, got {k}")
+    if n < 1:
+        raise ValueError(f"need at least 1 series, got {n}")
 
     # Rank WITHIN each series, ascending so rank 1 = lowest error = best.
     # Ties get average ranks.
@@ -90,7 +98,7 @@ def friedman_nemenyi(results: pd.DataFrame, alpha: float = 0.05) -> dict:
     for a, b in itertools.combinations(results.columns, 2):
         diff = abs(mean_ranks[a] - mean_ranks[b])
         pairwise[f"{a}_vs_{b}"] = {
-            "rank_difference": round(diff, 6),
+            "rank_difference": round(diff, 4),
             "significant": bool(diff >= cd),
         }
 
