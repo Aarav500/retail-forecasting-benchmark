@@ -13,6 +13,15 @@ baseline results instead.
 
 Only runs on a GPU instance (imports torch via ChronosForecaster); see
 requirements-gpu.txt.
+
+Per-timestep residuals are stripped from the output by default. Diebold-
+Mariano testing needs them (a DM test compares two error series point-by-
+point; RMSE cannot reconstruct them), so pass --keep-residuals when the
+run is intended to support DM analysis. NOTE: the committed results under
+experiments/results/scaling/ were produced WITHOUT it, so DM tests on that
+corpus require re-running the sweep on a GPU instance. Rationale:
+docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
+"Why not DM tests".
 """
 import argparse
 import json
@@ -20,7 +29,7 @@ from pathlib import Path
 
 from shortseq.constants import CHRONOS_SIZES
 from shortseq.datasets.registry import load_all
-from shortseq.evaluation.metrics import compute_metrics
+from shortseq.evaluation.metrics import compute_metrics, without_residuals
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BASELINE_DIR = REPO_ROOT / "experiments" / "results"
@@ -76,10 +85,7 @@ def run_one(dataset_name: str, dataset, size: str, split: float = 0.8,
         m = compute_metrics(
             test.values, preds, model.name, model.train_time_, model.pred_time_
         )
-        metrics[model_key] = (
-            dict(m) if keep_residuals
-            else {k: v for k, v in m.items() if k != "residuals"}
-        )
+        metrics[model_key] = dict(m) if keep_residuals else without_residuals(m)
         print(f"  {model_key}: RMSE={m['rmse']:.2f}")
     except Exception as exc:
         failed_models[model_key] = f"{type(exc).__name__}: {exc}"
@@ -99,7 +105,7 @@ def run_one(dataset_name: str, dataset, size: str, split: float = 0.8,
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     with open(result_path(dataset_name, size), "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, allow_nan=False)
     return output
 
 
@@ -192,7 +198,9 @@ def main():
         "--keep-residuals", action="store_true",
         help="Retain per-timestep residuals in the output JSON. Needed for "
              "Diebold-Mariano tests; off by default because residuals "
-             "substantially inflate result files.",
+             "inflate result files roughly 7-10x (measured: the committed "
+             "1,840-file scaling sweep would grow from ~0.8 MB to ~8 MB, and "
+             "results are git-tracked, so that growth is permanent in history).",
     )
     args = parser.parse_args()
 

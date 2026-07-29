@@ -19,6 +19,15 @@ across each dataset's family of pairwise DM tests (every non-ARIMA model
 vs. ARIMA, on that one dataset) — see the comment at the correction call
 site for why datasets are treated as separate families rather than
 correcting globally across all datasets.
+
+Per-timestep residuals are stripped from the output by default. Post-hoc
+Diebold-Mariano testing needs them (a DM test compares two error series
+point-by-point; RMSE cannot reconstruct them), so pass --keep-residuals
+when the run is intended to support DM analysis. NOTE: the committed
+results under experiments/results/ were produced WITHOUT it, so post-hoc
+DM tests on that corpus require re-running the sweep. Rationale:
+docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
+"Why not DM tests".
 """
 import argparse
 import json
@@ -28,7 +37,7 @@ import yaml
 
 from shortseq.datasets.registry import load_all
 from shortseq.evaluation.dm_test import bonferroni_correct, diebold_mariano_test
-from shortseq.evaluation.metrics import compute_metrics
+from shortseq.evaluation.metrics import compute_metrics, without_residuals
 from shortseq.models.arima import ARIMAForecaster
 from shortseq.models.hybrid import HybridForecaster
 from shortseq.models.lstm_model import LSTMForecaster
@@ -147,8 +156,7 @@ def run_dataset(name: str, dataset, config: dict, split: float = None,
         "n_train": split_idx,
         "n_test": len(test),
         "metrics": {
-            k: (dict(v) if keep_residuals
-                else {mk: mv for mk, mv in v.items() if mk != "residuals"})
+            k: (dict(v) if keep_residuals else without_residuals(v))
             for k, v in results.items()
         },
         "dm_tests": dm_tests,
@@ -156,7 +164,7 @@ def run_dataset(name: str, dataset, config: dict, split: float = None,
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     with open(RESULTS_DIR / f"{name}_results.json", "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, allow_nan=False)
     return output
 
 
@@ -174,7 +182,9 @@ def main():
         "--keep-residuals", action="store_true",
         help="Retain per-timestep residuals in the output JSON. Needed for "
              "Diebold-Mariano tests; off by default because residuals "
-             "substantially inflate result files.",
+             "inflate result files roughly 7-10x (measured: the committed "
+             "1,840-file scaling sweep would grow from ~0.8 MB to ~8 MB, and "
+             "results are git-tracked, so that growth is permanent in history).",
     )
     args = parser.parse_args()
 

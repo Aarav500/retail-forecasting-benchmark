@@ -14,20 +14,30 @@ are skipped, so the job is resumable.
 The output deliberately records ONLY ARIMA under "metrics". A later job
 can add the remaining classical baselines; because this writes the same
 schema, that job can merge into these files rather than replacing them.
+
+Per-timestep residuals are stripped from the output by default. Diebold-
+Mariano testing needs them (a DM test compares two error series point-by-
+point; RMSE cannot reconstruct them), so pass --keep-residuals when the
+run is intended to support DM analysis. NOTE: the committed results under
+experiments/results/ were produced WITHOUT it, so DM tests against this
+ARIMA reference require re-running the backfill. Rationale:
+docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
+"Why not DM tests".
 """
 import argparse
 import json
 from pathlib import Path
 
 from shortseq.datasets.registry import load_all
-from shortseq.evaluation.metrics import compute_metrics
+from shortseq.evaluation.metrics import compute_metrics, without_residuals
 from shortseq.models.arima import ARIMAForecaster
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = REPO_ROOT / "experiments" / "results"
 
 
-def run_dataset(name: str, dataset, split: float = 0.8) -> dict:
+def run_dataset(name: str, dataset, split: float = 0.8,
+                keep_residuals: bool = False) -> dict:
     series = dataset.series
     split_idx = int(len(series) * split)
     train, test = series.iloc[:split_idx], series.iloc[split_idx:]
@@ -42,7 +52,7 @@ def run_dataset(name: str, dataset, split: float = 0.8) -> dict:
         m = compute_metrics(
             test.values, preds, model.name, model.train_time_, model.pred_time_
         )
-        metrics["ARIMA"] = {k: v for k, v in m.items() if k != "residuals"}
+        metrics["ARIMA"] = dict(m) if keep_residuals else without_residuals(m)
         print(f"  ARIMA: RMSE={m['rmse']:.2f}", flush=True)
     except Exception as exc:
         failed_models["ARIMA"] = f"{type(exc).__name__}: {exc}"
@@ -59,7 +69,7 @@ def run_dataset(name: str, dataset, split: float = 0.8) -> dict:
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     with open(RESULTS_DIR / f"{name}_results.json", "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, allow_nan=False)
     return output
 
 
@@ -67,6 +77,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--force", action="store_true",
                         help="Re-run even if a result file already exists")
+    parser.add_argument(
+        "--keep-residuals", action="store_true",
+        help="Retain per-timestep residuals in the output JSON. Needed for "
+             "Diebold-Mariano tests; off by default because residuals "
+             "inflate result files roughly 7-10x (measured: the committed "
+             "1,840-file scaling sweep would grow from ~0.8 MB to ~8 MB, and "
+             "results are git-tracked, so that growth is permanent in history).",
+    )
     args = parser.parse_args()
 
     datasets = load_all()
@@ -87,7 +105,7 @@ def main():
 
     for i, (name, ds) in enumerate(todo, 1):
         print(f"[{i}/{len(todo)}] {name} | n={ds.n} | freq={ds.freq}", flush=True)
-        run_dataset(name, ds)
+        run_dataset(name, ds, keep_residuals=args.keep_residuals)
 
     print(f"\nDone. Results in {RESULTS_DIR}", flush=True)
 

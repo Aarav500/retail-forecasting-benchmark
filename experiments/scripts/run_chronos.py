@@ -6,6 +6,17 @@ Kept separate from run_baselines.py so the CPU-only orchestration script
 never needs torch/chronos-forecasting as a dependency — this script only
 runs on the GPU instance, where those are installed (see
 requirements-gpu.txt).
+
+Per-timestep residuals are stripped from the output by default. Diebold-
+Mariano testing needs them (a DM test compares two error series point-by-
+point; RMSE cannot reconstruct them), so pass --keep-residuals when the
+run is intended to support DM analysis. NOTE: the committed results under
+experiments/results/foundation/ were produced WITHOUT it, so post-hoc DM
+tests on that corpus require re-running the sweep on a GPU instance — the
+`dm_tests` block written inline below is computed from live predictions
+and does not survive into the file as a reusable error series. Rationale:
+docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
+"Why not DM tests".
 """
 import argparse
 import json
@@ -13,7 +24,7 @@ from pathlib import Path
 
 from shortseq.datasets.registry import load_all
 from shortseq.evaluation.dm_test import bonferroni_correct, diebold_mariano_test
-from shortseq.evaluation.metrics import compute_metrics
+from shortseq.evaluation.metrics import compute_metrics, without_residuals
 from shortseq.models.arima import ARIMAForecaster
 from shortseq.models.foundation.chronos import ChronosForecaster
 
@@ -21,7 +32,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = REPO_ROOT / "experiments" / "results" / "foundation"
 
 
-def run_dataset(name: str, dataset, size: str, split: float = 0.8) -> dict:
+def run_dataset(name: str, dataset, size: str, split: float = 0.8,
+                keep_residuals: bool = False) -> dict:
     series = dataset.series
     split_idx = int(len(series) * split)
     train, test = series.iloc[:split_idx], series.iloc[split_idx:]
@@ -54,13 +66,16 @@ def run_dataset(name: str, dataset, size: str, split: float = 0.8) -> dict:
         "dataset": name,
         "n_train": split_idx,
         "n_test": len(test),
-        "metrics": {k: {mk: mv for mk, mv in v.items() if mk != "residuals"} for k, v in results.items()},
+        "metrics": {
+            k: (dict(v) if keep_residuals else without_residuals(v))
+            for k, v in results.items()
+        },
         "dm_tests": dm_tests,
         "failed_models": failed_models,
     }
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     with open(RESULTS_DIR / f"{name}_chronos_{size}_results.json", "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, allow_nan=False)
     return output
 
 
@@ -68,6 +83,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--size", default="small", choices=["tiny", "mini", "small", "base", "large"])
     parser.add_argument("--datasets", nargs="+", help="Only run these dataset names")
+    parser.add_argument(
+        "--keep-residuals", action="store_true",
+        help="Retain per-timestep residuals in the output JSON. Needed for "
+             "Diebold-Mariano tests; off by default because residuals "
+             "inflate result files roughly 7-10x (measured: the committed "
+             "1,840-file scaling sweep would grow from ~0.8 MB to ~8 MB, and "
+             "results are git-tracked, so that growth is permanent in history).",
+    )
     args = parser.parse_args()
 
     datasets = load_all()
@@ -77,7 +100,7 @@ def main():
     print(f"Running ARIMA vs Chronos-{args.size} on {len(datasets)} datasets...")
     for name, dataset in datasets.items():
         print(f"\n{'=' * 60}\n{name} | n={dataset.n} | freq={dataset.freq}\n{'=' * 60}")
-        run_dataset(name, dataset, args.size)
+        run_dataset(name, dataset, args.size, keep_residuals=args.keep_residuals)
     print(f"\nDone. Results saved to {RESULTS_DIR}")
 
 

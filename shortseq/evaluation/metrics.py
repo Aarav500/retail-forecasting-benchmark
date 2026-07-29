@@ -33,6 +33,23 @@ def compute_metrics(actual, predicted, model_name: str, train_time: float, pred_
     }
 
 
+def without_residuals(metrics: dict) -> dict:
+    """Drop per-timestep residuals from a metrics dict, returning a copy.
+
+    Every result-writing script strips residuals before serialising: they
+    are one float per test point and dominate the output file size. The
+    scripts each expose a `--keep-residuals` flag that skips this call,
+    because Diebold-Mariano testing needs the per-timestep error series
+    (it compares two of them point-by-point) and RMSE cannot reconstruct
+    one.
+
+    Lives here, beside the `compute_metrics` return value that creates the
+    key, so the four call sites share one spelling of it rather than four
+    independent string literals that can drift apart via a typo.
+    """
+    return {k: v for k, v in metrics.items() if k != "residuals"}
+
+
 def crps(actual, dist) -> float:
     raise NotImplementedError(
         "CRPS requires a predictive distribution, which no currently "

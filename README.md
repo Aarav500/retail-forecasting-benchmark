@@ -140,6 +140,14 @@ Results land as one JSON per dataset in `experiments/results/`, e.g.
 `experiments/results/dmart_food_results.json` (RMSE/MAE/MAPE per model,
 Bonferroni-corrected DM tests vs. ARIMA, and any per-model failures).
 
+Per-timestep residuals are **stripped by default** (they inflate result
+files roughly 7-10x, and results are git-tracked). Post-hoc Diebold-Mariano
+testing needs them, so pass `--keep-residuals` if a run is meant to support
+DM analysis — every result-writing script accepts it. The committed results,
+including the 1,840-file Chronos scaling sweep, were produced *without* it,
+so DM tests on that corpus require re-running the sweep rather than just
+re-reading the files.
+
 Run the test suite with:
 
 ```bash
