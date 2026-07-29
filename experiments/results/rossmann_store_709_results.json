@@ -1,0 +1,20 @@
+{
+  "dataset": "rossmann_store_709",
+  "n_train": 753,
+  "n_test": 189,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 0, 5)",
+      "rmse": 3343.7096,
+      "mae": 2259.0326,
+      "mape": 18.0212,
+      "mean_residual": 245.9053,
+      "residual_std": 3334.6551,
+      "train_time": 195.6859,
+      "pred_time": 335.34
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

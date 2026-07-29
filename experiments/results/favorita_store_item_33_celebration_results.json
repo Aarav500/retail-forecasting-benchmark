@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_33_celebration",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 1, 1)",
+      "rmse": 10.7257,
+      "mae": 6.3861,
+      "mape": 134.393,
+      "mean_residual": -0.1573,
+      "residual_std": 10.7245,
+      "train_time": 5.8774,
+      "pred_time": 27.9904
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

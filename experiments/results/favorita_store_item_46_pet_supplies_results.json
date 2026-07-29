@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_46_pet_supplies",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(5, 1, 5)",
+      "rmse": 9.6257,
+      "mae": 7.2266,
+      "mape": 32.4677,
+      "mean_residual": -0.0549,
+      "residual_std": 9.6255,
+      "train_time": 78.1349,
+      "pred_time": 143.2258
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

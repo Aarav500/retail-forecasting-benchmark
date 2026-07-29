@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_5_grocery_i",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 0, 3)",
+      "rmse": 572.0754,
+      "mae": 401.9401,
+      "mape": 12.4437,
+      "mean_residual": 4.382,
+      "residual_std": 572.0586,
+      "train_time": 10.7933,
+      "pred_time": 42.6506
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

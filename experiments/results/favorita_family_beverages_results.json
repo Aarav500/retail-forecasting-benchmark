@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_beverages",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 32703.0372,
+      "mae": 19625.3485,
+      "mape": 29.1122,
+      "mean_residual": -437.3869,
+      "residual_std": 32700.1122,
+      "train_time": 74.3376,
+      "pred_time": 345.255
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

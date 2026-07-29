@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_33_eggs",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 1)",
+      "rmse": 229.7856,
+      "mae": 94.098,
+      "mape": 53.0104,
+      "mean_residual": 4.485,
+      "residual_std": 229.7418,
+      "train_time": 29.1534,
+      "pred_time": 114.0693
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

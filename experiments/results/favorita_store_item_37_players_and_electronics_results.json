@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_37_players_and_electronics",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(3, 1, 1)",
+      "rmse": 5.4416,
+      "mae": 4.3127,
+      "mape": 46.1221,
+      "mean_residual": 0.0619,
+      "residual_std": 5.4413,
+      "train_time": 9.0723,
+      "pred_time": 53.9644
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

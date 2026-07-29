@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_beauty",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 75.1599,
+      "mae": 49.0903,
+      "mape": 57.6395,
+      "mean_residual": -0.5294,
+      "residual_std": 75.1581,
+      "train_time": 90.1618,
+      "pred_time": 349.5526
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

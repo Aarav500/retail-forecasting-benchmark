@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_bread_bakery",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 3994.9013,
+      "mae": 2446.947,
+      "mape": 26.5946,
+      "mean_residual": -20.3545,
+      "residual_std": 3994.8494,
+      "train_time": 102.2206,
+      "pred_time": 311.2991
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

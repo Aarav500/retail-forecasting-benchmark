@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_14_beauty",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(2, 1, 2)",
+      "rmse": 1.4291,
+      "mae": 0.8947,
+      "mape": 68.4128,
+      "mean_residual": 0.2535,
+      "residual_std": 1.4064,
+      "train_time": 14.4925,
+      "pred_time": 167.1175
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

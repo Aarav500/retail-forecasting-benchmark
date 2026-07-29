@@ -1,0 +1,20 @@
+{
+  "dataset": "m3m_M913",
+  "n_train": 107,
+  "n_test": 27,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 1, 2)",
+      "rmse": 26.4116,
+      "mae": 21.7681,
+      "mape": 0.2853,
+      "mean_residual": -0.0077,
+      "residual_std": 26.4116,
+      "train_time": 16.6396,
+      "pred_time": 2.0344
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

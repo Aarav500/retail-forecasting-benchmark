@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_13_deli",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 44.2653,
+      "mae": 31.7116,
+      "mape": 18.3759,
+      "mean_residual": -0.6773,
+      "residual_std": 44.2601,
+      "train_time": 87.2571,
+      "pred_time": 375.8574
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

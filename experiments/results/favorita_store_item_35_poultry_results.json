@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_35_poultry",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 1, 1)",
+      "rmse": 24.2446,
+      "mae": 19.4719,
+      "mape": 41.3923,
+      "mean_residual": 0.5807,
+      "residual_std": 24.2376,
+      "train_time": 3.2724,
+      "pred_time": 10.5363
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

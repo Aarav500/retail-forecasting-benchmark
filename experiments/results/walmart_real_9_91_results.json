@@ -1,0 +1,20 @@
+{
+  "dataset": "walmart_real_9_91",
+  "n_train": 114,
+  "n_test": 29,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(2, 0, 0)",
+      "rmse": 259.7981,
+      "mae": 205.6531,
+      "mape": 18.4167,
+      "mean_residual": 40.2366,
+      "residual_std": 256.6633,
+      "train_time": 5.5496,
+      "pred_time": 1.632
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

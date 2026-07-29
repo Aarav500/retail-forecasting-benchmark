@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_8_lawn_and_garden",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(2, 1, 1)",
+      "rmse": 21.5594,
+      "mae": 11.8616,
+      "mape": 39.6756,
+      "mean_residual": 0.3715,
+      "residual_std": 21.5562,
+      "train_time": 7.1827,
+      "pred_time": 36.717
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

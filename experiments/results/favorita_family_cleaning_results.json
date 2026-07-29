@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_cleaning",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(6, 1, 7)",
+      "rmse": 11652.5038,
+      "mae": 7344.3126,
+      "mape": 76.2395,
+      "mean_residual": 629.5678,
+      "residual_std": 11635.4841,
+      "train_time": 112.0716,
+      "pred_time": 307.0142
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

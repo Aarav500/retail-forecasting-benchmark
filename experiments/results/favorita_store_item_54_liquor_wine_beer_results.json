@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_54_liquor_wine_beer",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(3, 0, 4)",
+      "rmse": 29.0015,
+      "mae": 15.1234,
+      "mape": 107.2419,
+      "mean_residual": 1.1797,
+      "residual_std": 28.9775,
+      "train_time": 42.0433,
+      "pred_time": 156.7333
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

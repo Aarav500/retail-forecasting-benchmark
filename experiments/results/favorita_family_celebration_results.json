@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_celebration",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 142.5224,
+      "mae": 96.8668,
+      "mape": 48.7453,
+      "mean_residual": -0.8338,
+      "residual_std": 142.5199,
+      "train_time": 83.6237,
+      "pred_time": 217.2363
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_30_seafood",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 1, 1)",
+      "rmse": 3.2691,
+      "mae": 2.5957,
+      "mape": 73.159,
+      "mean_residual": -0.0813,
+      "residual_std": 3.2681,
+      "train_time": 3.3002,
+      "pred_time": 16.1415
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

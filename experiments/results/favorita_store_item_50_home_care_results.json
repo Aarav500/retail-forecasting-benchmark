@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_50_home_care",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 4)",
+      "rmse": 119.537,
+      "mae": 78.9436,
+      "mape": 16.4275,
+      "mean_residual": -1.1351,
+      "residual_std": 119.5316,
+      "train_time": 64.7128,
+      "pred_time": 160.5044
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

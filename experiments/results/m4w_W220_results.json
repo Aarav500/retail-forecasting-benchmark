@@ -1,0 +1,20 @@
+{
+  "dataset": "m4w_W220",
+  "n_train": 356,
+  "n_test": 89,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 1, 4)",
+      "rmse": 15.7852,
+      "mae": 10.867,
+      "mape": 0.6019,
+      "mean_residual": 2.519,
+      "residual_std": 15.5829,
+      "train_time": 84.3164,
+      "pred_time": 61.5281
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

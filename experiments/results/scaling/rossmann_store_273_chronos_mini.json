@@ -5,7 +5,7 @@
   "stratum": "long",
   "n_train": 753,
   "n_test": 189,
-  "arima_rmse": null,
+  "arima_rmse": 3183.6671,
   "metrics": {
     "Chronos-mini": {
       "model": "Chronos-mini",

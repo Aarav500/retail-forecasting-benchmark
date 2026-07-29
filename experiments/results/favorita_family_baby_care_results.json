@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_baby_care",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 1, 2)",
+      "rmse": 5.7718,
+      "mae": 4.5564,
+      "mape": 48.8947,
+      "mean_residual": -0.1975,
+      "residual_std": 5.7685,
+      "train_time": 12.0144,
+      "pred_time": 47.0367
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

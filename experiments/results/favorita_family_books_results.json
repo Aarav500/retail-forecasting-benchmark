@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_books",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 0, 0)",
+      "rmse": 30.2159,
+      "mae": 19.1039,
+      "mape": 100.0,
+      "mean_residual": 19.1039,
+      "residual_std": 23.4104,
+      "train_time": 0.1054,
+      "pred_time": 7.9025
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

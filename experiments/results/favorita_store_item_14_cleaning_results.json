@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_14_cleaning",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(6, 1, 7)",
+      "rmse": 775.8617,
+      "mae": 463.1265,
+      "mape": 33.2654,
+      "mean_residual": -6.1665,
+      "residual_std": 775.8372,
+      "train_time": 102.9701,
+      "pred_time": 222.1949
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

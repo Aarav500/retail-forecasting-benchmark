@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_23_automotive",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(1, 1, 1)",
+      "rmse": 2.0151,
+      "mae": 1.5228,
+      "mape": 60.451,
+      "mean_residual": 0.0179,
+      "residual_std": 2.015,
+      "train_time": 5.8375,
+      "pred_time": 26.7834
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_49_hardware",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(2, 1, 2)",
+      "rmse": 1.974,
+      "mae": 1.5312,
+      "mape": 58.588,
+      "mean_residual": 0.0053,
+      "residual_std": 1.974,
+      "train_time": 15.7034,
+      "pred_time": 56.1786
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

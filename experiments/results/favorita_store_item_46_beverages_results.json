@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_store_item_46_beverages",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 1)",
+      "rmse": 2016.5885,
+      "mae": 1311.918,
+      "mape": 19.3416,
+      "mean_residual": -20.5707,
+      "residual_std": 2016.4836,
+      "train_time": 40.9576,
+      "pred_time": 121.3917
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}
