@@ -52,7 +52,8 @@ def result_path(dataset_name: str, size: str) -> Path:
     return RESULTS_DIR / f"{dataset_name}_chronos_{size}.json"
 
 
-def run_one(dataset_name: str, dataset, size: str, split: float = 0.8) -> dict:
+def run_one(dataset_name: str, dataset, size: str, split: float = 0.8,
+            keep_residuals: bool = False) -> dict:
     """Run one (dataset, size) pair. Returns the result dict it wrote."""
     # Imported lazily so the pure-Python summary/stratification helpers in
     # this module can be imported and tested on a CPU-only machine, where
@@ -75,7 +76,10 @@ def run_one(dataset_name: str, dataset, size: str, split: float = 0.8) -> dict:
         m = compute_metrics(
             test.values, preds, model.name, model.train_time_, model.pred_time_
         )
-        metrics[model_key] = {k: v for k, v in m.items() if k != "residuals"}
+        metrics[model_key] = (
+            dict(m) if keep_residuals
+            else {k: v for k, v in m.items() if k != "residuals"}
+        )
         print(f"  {model_key}: RMSE={m['rmse']:.2f}")
     except Exception as exc:
         failed_models[model_key] = f"{type(exc).__name__}: {exc}"
@@ -184,6 +188,12 @@ def main():
     parser.add_argument(
         "--summary-only", action="store_true", help="Just print the summary and exit"
     )
+    parser.add_argument(
+        "--keep-residuals", action="store_true",
+        help="Retain per-timestep residuals in the output JSON. Needed for "
+             "Diebold-Mariano tests; off by default because residuals "
+             "substantially inflate result files.",
+    )
     args = parser.parse_args()
 
     if args.summary_only:
@@ -205,7 +215,7 @@ def main():
                 print(f"[{done}/{total}] {name} @ {size}: cached, skipping")
                 continue
             print(f"[{done}/{total}] {name} | n={dataset.n} | size={size}")
-            run_one(name, dataset, size)
+            run_one(name, dataset, size, keep_residuals=args.keep_residuals)
 
     print_summary(summarize())
     print(f"\nDone. Results in {RESULTS_DIR}")

@@ -83,7 +83,8 @@ def build_models(config: dict, freq: str, season_length: int) -> dict:
     }
 
 
-def run_dataset(name: str, dataset, config: dict, split: float = None) -> dict:
+def run_dataset(name: str, dataset, config: dict, split: float = None,
+                keep_residuals: bool = False) -> dict:
     if split is None:
         split = config["evaluation"]["train_test_split"]
 
@@ -145,7 +146,11 @@ def run_dataset(name: str, dataset, config: dict, split: float = None) -> dict:
         "dataset": name,
         "n_train": split_idx,
         "n_test": len(test),
-        "metrics": {k: {mk: mv for mk, mv in v.items() if mk != "residuals"} for k, v in results.items()},
+        "metrics": {
+            k: (dict(v) if keep_residuals
+                else {mk: mv for mk, mv in v.items() if mk != "residuals"})
+            for k, v in results.items()
+        },
         "dm_tests": dm_tests,
         "failed_models": failed_models,
     }
@@ -155,26 +160,36 @@ def run_dataset(name: str, dataset, config: dict, split: float = None) -> dict:
     return output
 
 
-def main(dataset_names: list[str] = None):
-    with open(CONFIG_PATH) as f:
-        config = yaml.safe_load(f)
-
-    datasets = load_all()
-    if dataset_names:
-        datasets = {k: v for k, v in datasets.items() if k in dataset_names}
-    print(f"Running baselines on {len(datasets)} datasets...")
-    for name, dataset in datasets.items():
-        print(f"\n{'=' * 60}\n{name} | n={dataset.n} | freq={dataset.freq}\n{'=' * 60}")
-        run_dataset(name, dataset, config)
-    print(f"\nDone. Results saved to {RESULTS_DIR}")
-
-
-if __name__ == "__main__":
+def main():
+    # Argument parsing lives here, not under `if __name__ == "__main__"`, so
+    # that every CLI flag is reachable (and testable) through main() — the
+    # same arrangement run_size_scaling.py and run_ranking.py already use.
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--datasets", nargs="+",
         help="Only run these dataset names (e.g. dmart_food walmart), for smoke-testing "
              "before committing to the full ~30-60 minute, 35-dataset sweep",
     )
+    parser.add_argument(
+        "--keep-residuals", action="store_true",
+        help="Retain per-timestep residuals in the output JSON. Needed for "
+             "Diebold-Mariano tests; off by default because residuals "
+             "substantially inflate result files.",
+    )
     args = parser.parse_args()
-    main(dataset_names=args.datasets)
+
+    with open(CONFIG_PATH) as f:
+        config = yaml.safe_load(f)
+
+    datasets = load_all()
+    if args.datasets:
+        datasets = {k: v for k, v in datasets.items() if k in args.datasets}
+    print(f"Running baselines on {len(datasets)} datasets...")
+    for name, dataset in datasets.items():
+        print(f"\n{'=' * 60}\n{name} | n={dataset.n} | freq={dataset.freq}\n{'=' * 60}")
+        run_dataset(name, dataset, config, keep_residuals=args.keep_residuals)
+    print(f"\nDone. Results saved to {RESULTS_DIR}")
+
+
+if __name__ == "__main__":
+    main()
