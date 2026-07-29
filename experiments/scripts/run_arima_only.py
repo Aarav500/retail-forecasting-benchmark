@@ -74,8 +74,16 @@ def main():
         (name, ds) for name, ds in datasets.items()
         if args.force or not (RESULTS_DIR / f"{name}_results.json").exists()
     ]
-    print(f"ARIMA-only backfill: {len(todo)} of {len(datasets)} datasets need results",
-          flush=True)
+    # Shortest series first. ARIMA's rolling forecast does one sequential
+    # update+predict per test point, so cost grows with n -- a single
+    # n=2296 series can take minutes while a short one takes seconds.
+    # Ordering short-first means the short stratum (n<200), which is what
+    # the size-scaling campaign's headline claim rests on, completes early;
+    # the expensive long tail then becomes optional rather than blocking.
+    todo.sort(key=lambda pair: pair[1].n)
+    print(f"ARIMA-only backfill: {len(todo)} of {len(datasets)} datasets need results "
+          f"(shortest first; n range {todo[0][1].n}-{todo[-1][1].n})" if todo
+          else "ARIMA-only backfill: nothing to do", flush=True)
 
     for i, (name, ds) in enumerate(todo, 1):
         print(f"[{i}/{len(todo)}] {name} | n={ds.n} | freq={ds.freq}", flush=True)
