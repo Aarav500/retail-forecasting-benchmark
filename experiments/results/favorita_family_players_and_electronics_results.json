@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_players_and_electronics",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 0)",
+      "rmse": 168.4388,
+      "mae": 103.1222,
+      "mape": 50.0361,
+      "mean_residual": -0.1809,
+      "residual_std": 168.4387,
+      "train_time": 24.7209,
+      "pred_time": 97.8253
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

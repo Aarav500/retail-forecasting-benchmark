@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_magazines",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(6, 1, 4)",
+      "rmse": 80.2165,
+      "mae": 57.3977,
+      "mape": 52.2094,
+      "mean_residual": -0.0417,
+      "residual_std": 80.2165,
+      "train_time": 54.8166,
+      "pred_time": 219.5128
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

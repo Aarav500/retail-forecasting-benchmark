@@ -5,93 +5,16 @@
   "metrics": {
     "ARIMA": {
       "model": "ARIMA(2, 1, 4)",
-      "rmse": 255.7445,
-      "mae": 204.0089,
+      "rmse": 255.7442,
+      "mae": 204.0069,
       "mape": 33.5824,
-      "mean_residual": -14.9427,
-      "residual_std": 255.3076,
-      "train_time": 91.4987,
-      "pred_time": 193.6099
-    },
-    "SARIMA": {
-      "model": "SARIMA(1, 1, 0)x(2, 0, 2, 7)",
-      "rmse": 234.9763,
-      "mae": 167.374,
-      "mape": 36.2935,
-      "mean_residual": -1.9424,
-      "residual_std": 234.9683,
-      "train_time": 124.8073,
-      "pred_time": 559.9332
-    },
-    "XGBoost": {
-      "model": "XGBoost",
-      "rmse": 184.0939,
-      "mae": 130.9392,
-      "mape": 29.5254,
-      "mean_residual": -6.8632,
-      "residual_std": 183.966,
-      "train_time": 1.6674,
-      "pred_time": 0.5636
-    },
-    "LSTM": {
-      "model": "LSTM",
-      "rmse": 225.3014,
-      "mae": 170.7418,
-      "mape": 39.0649,
-      "mean_residual": -34.1194,
-      "residual_std": 222.7029,
-      "train_time": 154.186,
-      "pred_time": 80.0893
-    },
-    "Hybrid": {
-      "model": "Hybrid(ARIMA+XGB)",
-      "rmse": 207.4761,
-      "mae": 144.3326,
-      "mape": 29.4295,
-      "mean_residual": -15.5773,
-      "residual_std": 206.8905,
-      "train_time": 91.1262,
-      "pred_time": 189.4684
-    },
-    "Naive": {
-      "model": "SeasonalNaive(m=7)",
-      "rmse": 251.5887,
-      "mae": 179.7596,
-      "mape": 30.6712,
-      "mean_residual": -7.9416,
-      "residual_std": 251.4633,
-      "train_time": 0.0,
-      "pred_time": 0.0
+      "mean_residual": -14.9444,
+      "residual_std": 255.3072,
+      "train_time": 41.2325,
+      "pred_time": 94.3665
     }
   },
-  "dm_tests": {
-    "SARIMA": {
-      "dm_stat": 2.0971,
-      "p_value": 0.036,
-      "significant_bonferroni": false
-    },
-    "XGBoost": {
-      "dm_stat": 6.4945,
-      "p_value": 0.0,
-      "significant_bonferroni": true
-    },
-    "LSTM": {
-      "dm_stat": 2.6662,
-      "p_value": 0.0077,
-      "significant_bonferroni": true
-    },
-    "Hybrid": {
-      "dm_stat": 5.8625,
-      "p_value": 0.0,
-      "significant_bonferroni": true
-    },
-    "Naive": {
-      "dm_stat": 0.2546,
-      "p_value": 0.799,
-      "significant_bonferroni": false
-    }
-  },
-  "failed_models": {
-    "Prophet": "test is not the contiguous continuation of train at the given freq; Prophet's predict_rolling extrapolates future dates from train's end, so a gap or misaligned split would silently score against the wrong dates."
-  }
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
 }

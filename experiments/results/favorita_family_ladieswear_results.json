@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_ladieswear",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 173.3143,
+      "mae": 112.7593,
+      "mape": 17.5934,
+      "mean_residual": -3.0762,
+      "residual_std": 173.287,
+      "train_time": 96.7075,
+      "pred_time": 210.3754
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

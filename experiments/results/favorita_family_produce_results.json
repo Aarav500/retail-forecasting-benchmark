@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_produce",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 21192.2457,
+      "mae": 12693.6534,
+      "mape": 40.9031,
+      "mean_residual": -107.3117,
+      "residual_std": 21191.974,
+      "train_time": 96.3049,
+      "pred_time": 324.1416
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

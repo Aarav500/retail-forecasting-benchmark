@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_frozen_foods",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(2, 1, 3)",
+      "rmse": 4615.2954,
+      "mae": 2413.2737,
+      "mape": 31.8494,
+      "mean_residual": -17.8457,
+      "residual_std": 4615.2609,
+      "train_time": 20.7494,
+      "pred_time": 78.7535
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

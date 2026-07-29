@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_school_and_office_supplies",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(3, 1, 7)",
+      "rmse": 248.8556,
+      "mae": 107.1757,
+      "mape": 37.2891,
+      "mean_residual": -4.411,
+      "residual_std": 248.8165,
+      "train_time": 63.2397,
+      "pred_time": 155.8046
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

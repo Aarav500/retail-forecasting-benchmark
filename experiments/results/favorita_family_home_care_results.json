@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_home_care",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(7, 1, 7)",
+      "rmse": 3353.5472,
+      "mae": 2070.7875,
+      "mape": 61.9371,
+      "mean_residual": -28.1986,
+      "residual_std": 3353.4287,
+      "train_time": 77.2422,
+      "pred_time": 305.7874
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

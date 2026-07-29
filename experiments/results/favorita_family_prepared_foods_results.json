@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_prepared_foods",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(5, 1, 7)",
+      "rmse": 723.0116,
+      "mae": 476.3521,
+      "mape": 41.6201,
+      "mean_residual": -39.016,
+      "residual_std": 721.9581,
+      "train_time": 97.4617,
+      "pred_time": 196.247
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}

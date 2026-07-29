@@ -1,0 +1,20 @@
+{
+  "dataset": "favorita_family_home_and_kitchen_i",
+  "n_train": 1347,
+  "n_test": 337,
+  "metrics": {
+    "ARIMA": {
+      "model": "ARIMA(0, 1, 2)",
+      "rmse": 499.1602,
+      "mae": 347.6233,
+      "mape": 42.9576,
+      "mean_residual": -1.4255,
+      "residual_std": 499.1582,
+      "train_time": 6.0232,
+      "pred_time": 31.0636
+    }
+  },
+  "dm_tests": {},
+  "failed_models": {},
+  "partial": "ARIMA-only backfill; other classical baselines not run"
+}
