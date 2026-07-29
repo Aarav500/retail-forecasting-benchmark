@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_18_dairy",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 165.9973,
+      "mae": 82.1466,
+      "mape": 13.9792,
+      "mean_residual": 28.8764,
+      "residual_std": 163.4664,
+      "train_time": 0.3158,
+      "pred_time": 53.4211
+    }
+  },
+  "failed_models": {}
+}

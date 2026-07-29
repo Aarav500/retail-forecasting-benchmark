@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_pet_supplies",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 84.8143,
+      "mae": 54.25,
+      "mape": 52.5275,
+      "mean_residual": -0.8246,
+      "residual_std": 84.8103,
+      "train_time": 0.1266,
+      "pred_time": 5.0505
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "m3m_M562",
+  "size": "large",
+  "n": 144,
+  "stratum": "short",
+  "n_train": 115,
+  "n_test": 29,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 854.2177,
+      "mae": 689.8884,
+      "mape": 14.3483,
+      "mean_residual": 129.603,
+      "residual_std": 844.3287,
+      "train_time": 0.6901,
+      "pred_time": 4.6214
+    }
+  },
+  "failed_models": {}
+}

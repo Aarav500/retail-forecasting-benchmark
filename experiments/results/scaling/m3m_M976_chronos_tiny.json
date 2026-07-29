@@ -1,0 +1,22 @@
+{
+  "dataset": "m3m_M976",
+  "size": "tiny",
+  "n": 134,
+  "stratum": "short",
+  "n_train": 107,
+  "n_test": 27,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 25.3023,
+      "mae": 20.3678,
+      "mape": 0.7213,
+      "mean_residual": 0.426,
+      "residual_std": 25.2987,
+      "train_time": 0.1401,
+      "pred_time": 0.4146
+    }
+  },
+  "failed_models": {}
+}

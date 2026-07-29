@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_45_frozen_foods",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 485.7655,
+      "mae": 146.1389,
+      "mape": 23.2324,
+      "mean_residual": -17.3317,
+      "residual_std": 485.4562,
+      "train_time": 0.1319,
+      "pred_time": 5.0305
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_home_appliances",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 7.9324,
+      "mae": 5.9459,
+      "mape": 38.8556,
+      "mean_residual": 0.6726,
+      "residual_std": 7.9038,
+      "train_time": 0.4993,
+      "pred_time": 52.9343
+    }
+  },
+  "failed_models": {}
+}

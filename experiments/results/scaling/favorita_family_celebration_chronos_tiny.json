@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_celebration",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 150.1241,
+      "mae": 89.9011,
+      "mape": 62.1228,
+      "mean_residual": 1.5085,
+      "residual_std": 150.1165,
+      "train_time": 0.1316,
+      "pred_time": 5.1887
+    }
+  },
+  "failed_models": {}
+}

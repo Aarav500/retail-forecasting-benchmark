@@ -1,0 +1,22 @@
+{
+  "dataset": "walmart_real_38_25",
+  "size": "small",
+  "n": 143,
+  "stratum": "short",
+  "n_train": 114,
+  "n_test": 29,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 31.3767,
+      "mae": 23.4059,
+      "mape": 26.2428,
+      "mean_residual": 15.2393,
+      "residual_std": 27.4274,
+      "train_time": 0.1794,
+      "pred_time": 0.6116
+    }
+  },
+  "failed_models": {}
+}

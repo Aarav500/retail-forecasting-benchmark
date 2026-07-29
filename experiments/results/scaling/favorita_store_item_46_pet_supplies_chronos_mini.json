@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_46_pet_supplies",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 11.0142,
+      "mae": 8.1039,
+      "mape": 34.0414,
+      "mean_residual": 2.6683,
+      "residual_std": 10.6861,
+      "train_time": 0.3451,
+      "pred_time": 7.8716
+    }
+  },
+  "failed_models": {}
+}

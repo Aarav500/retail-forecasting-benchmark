@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_lingerie",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 64.3722,
+      "mae": 44.5349,
+      "mape": 60.8478,
+      "mean_residual": 16.2833,
+      "residual_std": 62.2787,
+      "train_time": 0.3141,
+      "pred_time": 53.0072
+    }
+  },
+  "failed_models": {}
+}

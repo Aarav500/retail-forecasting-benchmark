@@ -1,0 +1,22 @@
+{
+  "dataset": "rossmann_store_756",
+  "size": "tiny",
+  "n": 942,
+  "stratum": "long",
+  "n_train": 753,
+  "n_test": 189,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 11368.7756,
+      "mae": 8543.2251,
+      "mape": 57.909,
+      "mean_residual": 6404.8655,
+      "residual_std": 9392.91,
+      "train_time": 0.1307,
+      "pred_time": 2.9345
+    }
+  },
+  "failed_models": {}
+}

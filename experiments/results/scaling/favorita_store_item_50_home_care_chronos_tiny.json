@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_50_home_care",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 117.2737,
+      "mae": 74.1958,
+      "mape": 14.5418,
+      "mean_residual": 21.6391,
+      "residual_std": 115.2601,
+      "train_time": 0.1291,
+      "pred_time": 5.2098
+    }
+  },
+  "failed_models": {}
+}

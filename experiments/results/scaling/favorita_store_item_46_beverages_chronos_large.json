@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_46_beverages",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 1756.7399,
+      "mae": 962.6632,
+      "mape": 12.5253,
+      "mean_residual": 364.4501,
+      "residual_std": 1718.5201,
+      "train_time": 0.9792,
+      "pred_time": 176.3314
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_dairy",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 7164.268,
+      "mae": 3732.5501,
+      "mape": 39.3265,
+      "mean_residual": 697.139,
+      "residual_std": 7130.2688,
+      "train_time": 1.2121,
+      "pred_time": 176.033
+    }
+  },
+  "failed_models": {}
+}

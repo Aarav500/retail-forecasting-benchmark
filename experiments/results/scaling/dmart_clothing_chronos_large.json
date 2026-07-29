@@ -1,0 +1,22 @@
+{
+  "dataset": "dmart_clothing",
+  "size": "large",
+  "n": 181,
+  "stratum": "short",
+  "n_train": 144,
+  "n_test": 37,
+  "arima_rmse": 238.7779,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 242.755,
+      "mae": 193.715,
+      "mape": 1.8728,
+      "mean_residual": -17.8981,
+      "residual_std": 242.0943,
+      "train_time": 0.6912,
+      "pred_time": 6.9352
+    }
+  },
+  "failed_models": {}
+}

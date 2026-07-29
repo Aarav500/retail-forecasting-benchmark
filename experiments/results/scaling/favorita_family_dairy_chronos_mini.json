@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_dairy",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 6976.4555,
+      "mae": 4366.7283,
+      "mape": 33.9394,
+      "mean_residual": 333.2147,
+      "residual_std": 6968.4934,
+      "train_time": 0.181,
+      "pred_time": 7.8699
+    }
+  },
+  "failed_models": {}
+}

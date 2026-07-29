@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_48_produce",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 497.3957,
+      "mae": 287.4716,
+      "mape": 11.7269,
+      "mean_residual": 80.7947,
+      "residual_std": 490.7898,
+      "train_time": 0.2239,
+      "pred_time": 7.8733
+    }
+  },
+  "failed_models": {}
+}

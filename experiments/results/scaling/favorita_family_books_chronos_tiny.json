@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_books",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 18.4105,
+      "mae": 7.8008,
+      "mape": 46.1627,
+      "mean_residual": 2.7216,
+      "residual_std": 18.2082,
+      "train_time": 0.1393,
+      "pred_time": 5.2159
+    }
+  },
+  "failed_models": {}
+}

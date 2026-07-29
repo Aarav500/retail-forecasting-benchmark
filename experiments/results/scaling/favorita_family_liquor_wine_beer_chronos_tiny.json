@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_liquor_wine_beer",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 2533.6756,
+      "mae": 1306.7362,
+      "mape": 24.9344,
+      "mean_residual": 569.6078,
+      "residual_std": 2468.8173,
+      "train_time": 0.13,
+      "pred_time": 5.195
+    }
+  },
+  "failed_models": {}
+}

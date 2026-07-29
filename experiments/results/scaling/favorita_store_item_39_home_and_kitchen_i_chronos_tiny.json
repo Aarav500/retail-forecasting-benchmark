@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_39_home_and_kitchen_i",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 35.327,
+      "mae": 14.8397,
+      "mape": 45.7521,
+      "mean_residual": 6.5371,
+      "residual_std": 34.7169,
+      "train_time": 0.1295,
+      "pred_time": 5.095
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_33_eggs",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 313.9514,
+      "mae": 96.7993,
+      "mape": 35.9472,
+      "mean_residual": 66.5402,
+      "residual_std": 306.819,
+      "train_time": 1.2766,
+      "pred_time": 176.2661
+    }
+  },
+  "failed_models": {}
+}

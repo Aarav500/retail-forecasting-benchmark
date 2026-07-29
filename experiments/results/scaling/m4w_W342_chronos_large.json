@@ -1,0 +1,22 @@
+{
+  "dataset": "m4w_W342",
+  "size": "large",
+  "n": 93,
+  "stratum": "short",
+  "n_train": 74,
+  "n_test": 19,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 168.8709,
+      "mae": 120.2538,
+      "mape": 9.005,
+      "mean_residual": 61.0195,
+      "residual_std": 157.4611,
+      "train_time": 0.6903,
+      "pred_time": 2.3232
+    }
+  },
+  "failed_models": {}
+}

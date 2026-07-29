@@ -1,0 +1,22 @@
+{
+  "dataset": "uci_lunch_bag",
+  "size": "base",
+  "n": 53,
+  "stratum": "short",
+  "n_train": 42,
+  "n_test": 11,
+  "arima_rmse": 1367.1971,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 1843.5468,
+      "mae": 1297.239,
+      "mape": 25.9974,
+      "mean_residual": 1014.5023,
+      "residual_std": 1539.3018,
+      "train_time": 0.3091,
+      "pred_time": 0.4033
+    }
+  },
+  "failed_models": {}
+}

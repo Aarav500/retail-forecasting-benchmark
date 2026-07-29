@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_prepared_foods",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 716.8012,
+      "mae": 483.7685,
+      "mape": 36.0689,
+      "mean_residual": 95.8878,
+      "residual_std": 710.3587,
+      "train_time": 0.1302,
+      "pred_time": 5.0495
+    }
+  },
+  "failed_models": {}
+}

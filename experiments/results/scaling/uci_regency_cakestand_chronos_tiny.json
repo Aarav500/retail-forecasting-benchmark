@@ -1,0 +1,22 @@
+{
+  "dataset": "uci_regency_cakestand",
+  "size": "tiny",
+  "n": 53,
+  "stratum": "short",
+  "n_train": 42,
+  "n_test": 11,
+  "arima_rmse": 1022.7284,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 977.3087,
+      "mae": 811.9688,
+      "mape": 33.0847,
+      "mean_residual": 507.0066,
+      "residual_std": 835.5098,
+      "train_time": 0.127,
+      "pred_time": 0.1714
+    }
+  },
+  "failed_models": {}
+}

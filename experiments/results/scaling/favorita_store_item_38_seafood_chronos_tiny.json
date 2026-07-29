@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_38_seafood",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 7.5904,
+      "mae": 5.9539,
+      "mape": 53.5039,
+      "mean_residual": 0.6808,
+      "residual_std": 7.5598,
+      "train_time": 0.1293,
+      "pred_time": 5.083
+    }
+  },
+  "failed_models": {}
+}

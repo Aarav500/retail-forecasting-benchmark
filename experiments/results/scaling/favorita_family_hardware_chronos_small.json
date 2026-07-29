@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_hardware",
+  "size": "small",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 16.5654,
+      "mae": 12.2419,
+      "mape": 16.5777,
+      "mean_residual": 3.5911,
+      "residual_std": 16.1714,
+      "train_time": 0.1834,
+      "pred_time": 13.8275
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "m4w_W339",
+  "size": "small",
+  "n": 93,
+  "stratum": "short",
+  "n_train": 74,
+  "n_test": 19,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 486.7026,
+      "mae": 380.9319,
+      "mape": 10.4695,
+      "mean_residual": 143.2894,
+      "residual_std": 465.1318,
+      "train_time": 0.1637,
+      "pred_time": 0.4014
+    }
+  },
+  "failed_models": {}
+}

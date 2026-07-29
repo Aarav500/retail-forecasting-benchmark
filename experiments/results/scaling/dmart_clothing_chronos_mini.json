@@ -1,0 +1,22 @@
+{
+  "dataset": "dmart_clothing",
+  "size": "mini",
+  "n": 181,
+  "stratum": "short",
+  "n_train": 144,
+  "n_test": 37,
+  "arima_rmse": 238.7779,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 238.9728,
+      "mae": 189.2743,
+      "mape": 1.8267,
+      "mean_residual": -2.3871,
+      "residual_std": 238.9609,
+      "train_time": 0.134,
+      "pred_time": 0.5567
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_home_care",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 3010.3314,
+      "mae": 1850.7129,
+      "mape": 48.2122,
+      "mean_residual": 522.5205,
+      "residual_std": 2964.6362,
+      "train_time": 0.1331,
+      "pred_time": 5.1906
+    }
+  },
+  "failed_models": {}
+}

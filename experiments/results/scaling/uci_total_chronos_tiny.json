@@ -1,0 +1,22 @@
+{
+  "dataset": "uci_total",
+  "size": "tiny",
+  "n": 53,
+  "stratum": "short",
+  "n_train": 42,
+  "n_test": 11,
+  "arima_rmse": 97294.5882,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 87292.5278,
+      "mae": 65224.3618,
+      "mape": 20.3614,
+      "mean_residual": 55877.0916,
+      "residual_std": 67065.1628,
+      "train_time": 0.1261,
+      "pred_time": 0.1771
+    }
+  },
+  "failed_models": {}
+}

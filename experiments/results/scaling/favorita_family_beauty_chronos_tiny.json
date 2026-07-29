@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_beauty",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 80.6053,
+      "mae": 49.8932,
+      "mape": 60.1788,
+      "mean_residual": 12.5105,
+      "residual_std": 79.6285,
+      "train_time": 0.1642,
+      "pred_time": 5.2194
+    }
+  },
+  "failed_models": {}
+}

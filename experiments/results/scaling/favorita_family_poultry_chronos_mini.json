@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_poultry",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 3734.3236,
+      "mae": 2272.041,
+      "mape": 59.5215,
+      "mean_residual": 253.0349,
+      "residual_std": 3725.741,
+      "train_time": 0.1437,
+      "pred_time": 7.8924
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_seafood",
+  "size": "small",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 186.1765,
+      "mae": 123.5634,
+      "mape": 40.0392,
+      "mean_residual": -8.931,
+      "residual_std": 185.9621,
+      "train_time": 0.1766,
+      "pred_time": 13.8334
+    }
+  },
+  "failed_models": {}
+}

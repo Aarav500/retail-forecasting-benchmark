@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_home_and_kitchen_ii",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 313.6003,
+      "mae": 228.2198,
+      "mape": 42.7821,
+      "mean_residual": 37.4102,
+      "residual_std": 311.361,
+      "train_time": 0.1226,
+      "pred_time": 5.1958
+    }
+  },
+  "failed_models": {}
+}

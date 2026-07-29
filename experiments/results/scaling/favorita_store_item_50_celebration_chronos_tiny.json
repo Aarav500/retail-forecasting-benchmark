@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_50_celebration",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 22.89,
+      "mae": 15.8131,
+      "mape": 44.5453,
+      "mean_residual": 6.705,
+      "residual_std": 21.886,
+      "train_time": 0.1309,
+      "pred_time": 5.21
+    }
+  },
+  "failed_models": {}
+}

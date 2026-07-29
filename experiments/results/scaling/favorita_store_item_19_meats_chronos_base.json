@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_19_meats",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 36.6214,
+      "mae": 25.6069,
+      "mape": 21.7483,
+      "mean_residual": 4.1604,
+      "residual_std": 36.3843,
+      "train_time": 0.3319,
+      "pred_time": 53.4249
+    }
+  },
+  "failed_models": {}
+}

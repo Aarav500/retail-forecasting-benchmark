@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_baby_care",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 5.5311,
+      "mae": 4.3042,
+      "mape": 46.7532,
+      "mean_residual": 0.1299,
+      "residual_std": 5.5296,
+      "train_time": 0.3058,
+      "pred_time": 53.1834
+    }
+  },
+  "failed_models": {}
+}

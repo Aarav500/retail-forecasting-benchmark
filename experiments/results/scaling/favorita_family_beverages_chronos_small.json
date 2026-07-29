@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_beverages",
+  "size": "small",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 27315.7869,
+      "mae": 15530.9898,
+      "mape": 26.3091,
+      "mean_residual": 1209.1633,
+      "residual_std": 27289.0113,
+      "train_time": 0.1836,
+      "pred_time": 13.9357
+    }
+  },
+  "failed_models": {}
+}

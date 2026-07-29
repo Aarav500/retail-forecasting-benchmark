@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_home_care",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 2720.686,
+      "mae": 1456.0113,
+      "mape": 61.2149,
+      "mean_residual": 423.0659,
+      "residual_std": 2687.5914,
+      "train_time": 1.0372,
+      "pred_time": 175.9066
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_47_players_and_electronics",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 13.1169,
+      "mae": 9.9444,
+      "mape": 30.3865,
+      "mean_residual": 3.2515,
+      "residual_std": 12.7075,
+      "train_time": 0.2689,
+      "pred_time": 7.8643
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "m4_M10100",
+  "size": "tiny",
+  "n": 186,
+  "stratum": "short",
+  "n_train": 148,
+  "n_test": 38,
+  "arima_rmse": 321.7316,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 258.2731,
+      "mae": 218.1864,
+      "mape": 9.1397,
+      "mean_residual": 14.5302,
+      "residual_std": 257.864,
+      "train_time": 0.1247,
+      "pred_time": 0.5843
+    }
+  },
+  "failed_models": {}
+}

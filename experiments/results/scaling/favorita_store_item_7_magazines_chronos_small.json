@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_7_magazines",
+  "size": "small",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 5.8558,
+      "mae": 4.5248,
+      "mape": 46.6979,
+      "mean_residual": 0.6201,
+      "residual_std": 5.8229,
+      "train_time": 0.1823,
+      "pred_time": 13.9156
+    }
+  },
+  "failed_models": {}
+}

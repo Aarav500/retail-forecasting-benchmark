@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_ladieswear",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 143.4241,
+      "mae": 82.0203,
+      "mape": 11.7876,
+      "mean_residual": 11.3612,
+      "residual_std": 142.9734,
+      "train_time": 0.3058,
+      "pred_time": 52.9393
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_pet_supplies",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 77.1788,
+      "mae": 48.0367,
+      "mape": 56.6158,
+      "mean_residual": 10.0677,
+      "residual_std": 76.5193,
+      "train_time": 0.3913,
+      "pred_time": 52.952
+    }
+  },
+  "failed_models": {}
+}

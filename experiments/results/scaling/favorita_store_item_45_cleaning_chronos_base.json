@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_45_cleaning",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 576.4491,
+      "mae": 339.6018,
+      "mape": 15.0232,
+      "mean_residual": 85.4605,
+      "residual_std": 570.079,
+      "train_time": 0.3133,
+      "pred_time": 53.3251
+    }
+  },
+  "failed_models": {}
+}

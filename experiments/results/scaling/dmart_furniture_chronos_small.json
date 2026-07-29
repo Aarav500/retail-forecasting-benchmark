@@ -1,0 +1,22 @@
+{
+  "dataset": "dmart_furniture",
+  "size": "small",
+  "n": 181,
+  "stratum": "short",
+  "n_train": 144,
+  "n_test": 37,
+  "arima_rmse": 219.0582,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 239.05,
+      "mae": 181.6302,
+      "mape": 1.7342,
+      "mean_residual": 21.7819,
+      "residual_std": 238.0556,
+      "train_time": 0.1728,
+      "pred_time": 0.7826
+    }
+  },
+  "failed_models": {}
+}

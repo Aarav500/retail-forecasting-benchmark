@@ -1,0 +1,22 @@
+{
+  "dataset": "m3m_M530",
+  "size": "base",
+  "n": 144,
+  "stratum": "short",
+  "n_train": 115,
+  "n_test": 29,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 433.9266,
+      "mae": 360.5208,
+      "mape": 6.3347,
+      "mean_residual": 91.9231,
+      "residual_std": 424.0784,
+      "train_time": 0.292,
+      "pred_time": 1.5172
+    }
+  },
+  "failed_models": {}
+}

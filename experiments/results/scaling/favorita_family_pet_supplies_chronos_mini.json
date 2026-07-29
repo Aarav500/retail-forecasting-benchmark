@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_pet_supplies",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 87.8795,
+      "mae": 54.9254,
+      "mape": 49.6106,
+      "mean_residual": 8.4092,
+      "residual_std": 87.4762,
+      "train_time": 0.1371,
+      "pred_time": 7.9067
+    }
+  },
+  "failed_models": {}
+}

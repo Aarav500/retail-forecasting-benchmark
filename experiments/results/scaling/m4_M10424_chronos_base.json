@@ -1,0 +1,22 @@
+{
+  "dataset": "m4_M10424",
+  "size": "base",
+  "n": 68,
+  "stratum": "short",
+  "n_train": 54,
+  "n_test": 14,
+  "arima_rmse": 41.1633,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 42.9075,
+      "mae": 33.7208,
+      "mape": 2.8338,
+      "mean_residual": 24.2676,
+      "residual_std": 35.3855,
+      "train_time": 0.3005,
+      "pred_time": 0.5408
+    }
+  },
+  "failed_models": {}
+}

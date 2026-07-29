@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_14_cleaning",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 877.0978,
+      "mae": 471.9269,
+      "mape": 25.8334,
+      "mean_residual": 337.2312,
+      "residual_std": 809.6762,
+      "train_time": 0.155,
+      "pred_time": 7.8777
+    }
+  },
+  "failed_models": {}
+}

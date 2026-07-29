@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_produce",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 18104.4533,
+      "mae": 10310.2091,
+      "mape": 30.4055,
+      "mean_residual": 3626.8677,
+      "residual_std": 17737.448,
+      "train_time": 0.1305,
+      "pred_time": 5.0625
+    }
+  },
+  "failed_models": {}
+}

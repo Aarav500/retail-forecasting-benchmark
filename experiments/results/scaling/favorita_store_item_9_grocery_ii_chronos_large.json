@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_9_grocery_ii",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 8.5618,
+      "mae": 5.7666,
+      "mape": 79.8154,
+      "mean_residual": 1.9092,
+      "residual_std": 8.3462,
+      "train_time": 1.094,
+      "pred_time": 175.9721
+    }
+  },
+  "failed_models": {}
+}

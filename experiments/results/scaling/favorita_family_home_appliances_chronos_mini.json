@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_home_appliances",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 8.7137,
+      "mae": 6.4694,
+      "mape": 38.9672,
+      "mean_residual": 0.9841,
+      "residual_std": 8.6579,
+      "train_time": 0.1396,
+      "pred_time": 7.9144
+    }
+  },
+  "failed_models": {}
+}

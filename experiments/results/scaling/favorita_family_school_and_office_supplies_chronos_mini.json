@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_school_and_office_supplies",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 292.6501,
+      "mae": 107.4749,
+      "mape": 27.6954,
+      "mean_residual": 13.805,
+      "residual_std": 292.3243,
+      "train_time": 0.1483,
+      "pred_time": 7.8999
+    }
+  },
+  "failed_models": {}
+}

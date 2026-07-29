@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_49_hardware",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 2.1345,
+      "mae": 1.569,
+      "mape": 54.4008,
+      "mean_residual": 0.2979,
+      "residual_std": 2.1136,
+      "train_time": 0.3182,
+      "pred_time": 53.1656
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_50_home_care",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 112.9453,
+      "mae": 63.6637,
+      "mape": 12.1081,
+      "mean_residual": 24.0936,
+      "residual_std": 110.3456,
+      "train_time": 1.0251,
+      "pred_time": 176.1172
+    }
+  },
+  "failed_models": {}
+}

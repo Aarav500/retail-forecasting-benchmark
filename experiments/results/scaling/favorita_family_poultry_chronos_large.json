@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_poultry",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 3001.3128,
+      "mae": 1732.9071,
+      "mape": 59.6464,
+      "mean_residual": 398.2557,
+      "residual_std": 2974.7724,
+      "train_time": 1.1464,
+      "pred_time": 175.7461
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_deli",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 2854.4675,
+      "mae": 1380.0822,
+      "mape": 45.8915,
+      "mean_residual": 322.0346,
+      "residual_std": 2836.2437,
+      "train_time": 0.3086,
+      "pred_time": 53.0315
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "m3m_M950",
+  "size": "small",
+  "n": 134,
+  "stratum": "short",
+  "n_train": 107,
+  "n_test": 27,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 131.0454,
+      "mae": 103.9281,
+      "mape": 1.501,
+      "mean_residual": 17.1605,
+      "residual_std": 129.9169,
+      "train_time": 0.1621,
+      "pred_time": 0.5739
+    }
+  },
+  "failed_models": {}
+}

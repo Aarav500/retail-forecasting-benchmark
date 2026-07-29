@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_51_grocery_ii",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 18.2095,
+      "mae": 12.0569,
+      "mape": 47.0723,
+      "mean_residual": 5.2382,
+      "residual_std": 17.4399,
+      "train_time": 0.1607,
+      "pred_time": 7.8893
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "dmart_electronics",
+  "size": "large",
+  "n": 181,
+  "stratum": "short",
+  "n_train": 144,
+  "n_test": 37,
+  "arima_rmse": 227.2025,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 225.6082,
+      "mae": 168.3427,
+      "mape": 1.9008,
+      "mean_residual": -15.696,
+      "residual_std": 225.0615,
+      "train_time": 0.9073,
+      "pred_time": 6.9466
+    }
+  },
+  "failed_models": {}
+}

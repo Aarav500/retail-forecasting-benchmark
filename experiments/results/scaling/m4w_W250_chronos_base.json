@@ -1,0 +1,22 @@
+{
+  "dataset": "m4w_W250",
+  "size": "base",
+  "n": 2191,
+  "stratum": "long",
+  "n_train": 1752,
+  "n_test": 439,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 29.2476,
+      "mae": 20.235,
+      "mape": 0.8639,
+      "mean_residual": 1.9432,
+      "residual_std": 29.1829,
+      "train_time": 0.3168,
+      "pred_time": 69.837
+    }
+  },
+  "failed_models": {}
+}

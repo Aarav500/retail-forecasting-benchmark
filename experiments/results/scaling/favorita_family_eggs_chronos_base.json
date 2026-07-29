@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_eggs",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 1683.2024,
+      "mae": 993.5687,
+      "mape": 43.2312,
+      "mean_residual": 143.0803,
+      "residual_std": 1677.1101,
+      "train_time": 0.295,
+      "pred_time": 53.0706
+    }
+  },
+  "failed_models": {}
+}

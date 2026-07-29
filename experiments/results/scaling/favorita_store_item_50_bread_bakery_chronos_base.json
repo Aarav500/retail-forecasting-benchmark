@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_50_bread_bakery",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 122.2604,
+      "mae": 85.0385,
+      "mape": 12.8696,
+      "mean_residual": 11.3181,
+      "residual_std": 121.7354,
+      "train_time": 0.378,
+      "pred_time": 53.1998
+    }
+  },
+  "failed_models": {}
+}

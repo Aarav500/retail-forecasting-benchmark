@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_personal_care",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 3751.6308,
+      "mae": 2197.9081,
+      "mape": 54.8645,
+      "mean_residual": 720.2863,
+      "residual_std": 3681.8367,
+      "train_time": 0.128,
+      "pred_time": 5.0986
+    }
+  },
+  "failed_models": {}
+}

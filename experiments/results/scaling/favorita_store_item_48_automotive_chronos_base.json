@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_48_automotive",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 5.9214,
+      "mae": 4.5399,
+      "mape": 50.4419,
+      "mean_residual": 0.9921,
+      "residual_std": 5.8377,
+      "train_time": 0.3115,
+      "pred_time": 53.2406
+    }
+  },
+  "failed_models": {}
+}

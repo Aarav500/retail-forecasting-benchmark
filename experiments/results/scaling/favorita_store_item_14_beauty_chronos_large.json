@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_14_beauty",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 1.5631,
+      "mae": 0.8955,
+      "mape": 80.4001,
+      "mean_residual": 0.3717,
+      "residual_std": 1.5182,
+      "train_time": 0.9437,
+      "pred_time": 176.0611
+    }
+  },
+  "failed_models": {}
+}

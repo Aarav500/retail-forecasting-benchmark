@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_8_lawn_and_garden",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 21.3888,
+      "mae": 11.1215,
+      "mape": 33.4418,
+      "mean_residual": 3.7274,
+      "residual_std": 21.0616,
+      "train_time": 0.3053,
+      "pred_time": 53.0676
+    }
+  },
+  "failed_models": {}
+}

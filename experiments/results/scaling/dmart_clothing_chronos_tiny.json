@@ -1,0 +1,22 @@
+{
+  "dataset": "dmart_clothing",
+  "size": "tiny",
+  "n": 181,
+  "stratum": "short",
+  "n_train": 144,
+  "n_test": 37,
+  "arima_rmse": 238.7779,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 239.2795,
+      "mae": 186.2331,
+      "mape": 1.8024,
+      "mean_residual": -37.537,
+      "residual_std": 236.3168,
+      "train_time": 0.1331,
+      "pred_time": 0.5742
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_produce",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 16587.2841,
+      "mae": 8147.9871,
+      "mape": 38.3142,
+      "mean_residual": 438.7253,
+      "residual_std": 16581.481,
+      "train_time": 1.3047,
+      "pred_time": 175.8122
+    }
+  },
+  "failed_models": {}
+}

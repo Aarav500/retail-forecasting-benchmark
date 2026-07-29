@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_magazines",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 68.8523,
+      "mae": 46.4715,
+      "mape": 48.657,
+      "mean_residual": 5.96,
+      "residual_std": 68.5939,
+      "train_time": 1.3229,
+      "pred_time": 175.8609
+    }
+  },
+  "failed_models": {}
+}

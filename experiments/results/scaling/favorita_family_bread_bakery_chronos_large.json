@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_bread_bakery",
+  "size": "large",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 3388.1142,
+      "mae": 1784.5461,
+      "mape": 26.9962,
+      "mean_residual": 218.0777,
+      "residual_std": 3381.0885,
+      "train_time": 0.9965,
+      "pred_time": 176.2916
+    }
+  },
+  "failed_models": {}
+}

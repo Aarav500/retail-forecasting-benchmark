@@ -1,0 +1,22 @@
+{
+  "dataset": "dmart_food",
+  "size": "tiny",
+  "n": 181,
+  "stratum": "short",
+  "n_train": 144,
+  "n_test": 37,
+  "arima_rmse": 255.7638,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 271.1467,
+      "mae": 222.155,
+      "mape": 2.1596,
+      "mean_residual": 26.2647,
+      "residual_std": 269.8716,
+      "train_time": 1.4497,
+      "pred_time": 1.3361
+    }
+  },
+  "failed_models": {}
+}

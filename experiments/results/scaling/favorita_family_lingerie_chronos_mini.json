@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_lingerie",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 69.1718,
+      "mae": 50.0571,
+      "mape": 53.878,
+      "mean_residual": 12.8597,
+      "residual_std": 67.966,
+      "train_time": 0.1341,
+      "pred_time": 7.8805
+    }
+  },
+  "failed_models": {}
+}

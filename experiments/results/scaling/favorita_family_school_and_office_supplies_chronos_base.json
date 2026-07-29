@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_school_and_office_supplies",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 276.0888,
+      "mae": 96.1604,
+      "mape": 22.6674,
+      "mean_residual": 13.2406,
+      "residual_std": 275.7711,
+      "train_time": 0.3054,
+      "pred_time": 52.9867
+    }
+  },
+  "failed_models": {}
+}

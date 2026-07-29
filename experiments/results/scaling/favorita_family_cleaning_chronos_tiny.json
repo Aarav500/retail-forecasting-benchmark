@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_cleaning",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 11267.1219,
+      "mae": 7211.5496,
+      "mape": 62.7813,
+      "mean_residual": 1825.9145,
+      "residual_std": 11118.1866,
+      "train_time": 0.136,
+      "pred_time": 5.1968
+    }
+  },
+  "failed_models": {}
+}

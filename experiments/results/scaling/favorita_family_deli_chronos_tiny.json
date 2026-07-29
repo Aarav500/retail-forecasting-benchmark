@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_deli",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 2741.1691,
+      "mae": 1697.6485,
+      "mape": 36.0136,
+      "mean_residual": 446.6379,
+      "residual_std": 2704.5374,
+      "train_time": 0.1337,
+      "pred_time": 5.1896
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_25_deli",
+  "size": "small",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-small": {
+      "model": "Chronos-small",
+      "rmse": 59.7929,
+      "mae": 33.8525,
+      "mape": 22.6213,
+      "mean_residual": 18.3454,
+      "residual_std": 56.909,
+      "train_time": 0.2398,
+      "pred_time": 13.8899
+    }
+  },
+  "failed_models": {}
+}

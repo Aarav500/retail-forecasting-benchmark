@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_4_liquor_wine_beer",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 59.3817,
+      "mae": 32.9053,
+      "mape": 37.5357,
+      "mean_residual": 10.9963,
+      "residual_std": 58.3547,
+      "train_time": 0.2324,
+      "pred_time": 7.8711
+    }
+  },
+  "failed_models": {}
+}

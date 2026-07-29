@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_8_lawn_and_garden",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 21.3356,
+      "mae": 11.5496,
+      "mape": 35.4165,
+      "mean_residual": 4.2659,
+      "residual_std": 20.9048,
+      "train_time": 0.1409,
+      "pred_time": 7.8891
+    }
+  },
+  "failed_models": {}
+}

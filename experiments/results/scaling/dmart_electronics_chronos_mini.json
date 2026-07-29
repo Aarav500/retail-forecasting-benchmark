@@ -1,0 +1,22 @@
+{
+  "dataset": "dmart_electronics",
+  "size": "mini",
+  "n": 181,
+  "stratum": "short",
+  "n_train": 144,
+  "n_test": 37,
+  "arima_rmse": 227.2025,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 227.1512,
+      "mae": 173.6142,
+      "mape": 1.9625,
+      "mean_residual": -33.3429,
+      "residual_std": 224.6907,
+      "train_time": 0.1446,
+      "pred_time": 0.5724
+    }
+  },
+  "failed_models": {}
+}

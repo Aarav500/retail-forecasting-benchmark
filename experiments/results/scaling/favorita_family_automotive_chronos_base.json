@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_automotive",
+  "size": "base",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-base": {
+      "model": "Chronos-base",
+      "rmse": 71.023,
+      "mae": 44.492,
+      "mape": 45.7181,
+      "mean_residual": 12.1018,
+      "residual_std": 69.9843,
+      "train_time": 0.314,
+      "pred_time": 53.339
+    }
+  },
+  "failed_models": {}
+}

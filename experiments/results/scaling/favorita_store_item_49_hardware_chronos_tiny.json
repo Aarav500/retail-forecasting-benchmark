@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_49_hardware",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 2.182,
+      "mae": 1.6279,
+      "mape": 55.7394,
+      "mean_residual": 0.4085,
+      "residual_std": 2.1434,
+      "train_time": 0.1297,
+      "pred_time": 5.2347
+    }
+  },
+  "failed_models": {}
+}

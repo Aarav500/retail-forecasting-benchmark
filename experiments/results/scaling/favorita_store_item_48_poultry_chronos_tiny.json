@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_store_item_48_poultry",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 281.9381,
+      "mae": 171.4426,
+      "mape": 17.2887,
+      "mean_residual": 89.5586,
+      "residual_std": 267.3357,
+      "train_time": 0.1338,
+      "pred_time": 5.2234
+    }
+  },
+  "failed_models": {}
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "uci_jumbo_bag",
+  "size": "tiny",
+  "n": 53,
+  "stratum": "short",
+  "n_train": 42,
+  "n_test": 11,
+  "arima_rmse": 7153.0383,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 8074.4158,
+      "mae": 5268.0907,
+      "mape": 29.556,
+      "mean_residual": 4267.8888,
+      "residual_std": 6854.2918,
+      "train_time": 0.1355,
+      "pred_time": 0.1824
+    }
+  },
+  "failed_models": {}
+}

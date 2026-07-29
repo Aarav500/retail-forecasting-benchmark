@@ -1,0 +1,22 @@
+{
+  "dataset": "uci_red_retrospot",
+  "size": "large",
+  "n": 53,
+  "stratum": "short",
+  "n_train": 42,
+  "n_test": 11,
+  "arima_rmse": 953.3698,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 1010.403,
+      "mae": 826.549,
+      "mape": 28.9965,
+      "mean_residual": 493.1194,
+      "residual_std": 881.8999,
+      "train_time": 0.6793,
+      "pred_time": 1.008
+    }
+  },
+  "failed_models": {}
+}

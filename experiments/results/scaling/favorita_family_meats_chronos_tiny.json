@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_meats",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 5957.7779,
+      "mae": 2108.3686,
+      "mape": 26.4663,
+      "mean_residual": 845.6953,
+      "residual_std": 5897.45,
+      "train_time": 0.1313,
+      "pred_time": 5.1911
+    }
+  },
+  "failed_models": {}
+}

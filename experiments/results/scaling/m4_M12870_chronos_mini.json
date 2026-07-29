@@ -1,0 +1,22 @@
+{
+  "dataset": "m4_M12870",
+  "size": "mini",
+  "n": 174,
+  "stratum": "short",
+  "n_train": 139,
+  "n_test": 35,
+  "arima_rmse": 26.4659,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 29.0584,
+      "mae": 24.0683,
+      "mape": 0.5185,
+      "mean_residual": 8.067,
+      "residual_std": 27.9162,
+      "train_time": 0.126,
+      "pred_time": 0.5243
+    }
+  },
+  "failed_models": {}
+}

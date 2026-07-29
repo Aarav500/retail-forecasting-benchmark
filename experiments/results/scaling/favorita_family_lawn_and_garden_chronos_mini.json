@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_lawn_and_garden",
+  "size": "mini",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-mini": {
+      "model": "Chronos-mini",
+      "rmse": 547.0945,
+      "mae": 169.807,
+      "mape": 34.5043,
+      "mean_residual": 44.7869,
+      "residual_std": 545.2582,
+      "train_time": 0.1527,
+      "pred_time": 7.8986
+    }
+  },
+  "failed_models": {}
+}

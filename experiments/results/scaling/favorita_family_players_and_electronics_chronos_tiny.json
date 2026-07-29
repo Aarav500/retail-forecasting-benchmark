@@ -1,0 +1,22 @@
+{
+  "dataset": "favorita_family_players_and_electronics",
+  "size": "tiny",
+  "n": 1684,
+  "stratum": "long",
+  "n_train": 1347,
+  "n_test": 337,
+  "arima_rmse": null,
+  "metrics": {
+    "Chronos-tiny": {
+      "model": "Chronos-tiny",
+      "rmse": 138.001,
+      "mae": 80.9635,
+      "mape": 36.7736,
+      "mean_residual": 12.6054,
+      "residual_std": 137.4241,
+      "train_time": 0.135,
+      "pred_time": 5.0532
+    }
+  },
+  "failed_models": {}
+}

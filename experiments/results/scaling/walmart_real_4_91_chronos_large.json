@@ -1,0 +1,22 @@
+{
+  "dataset": "walmart_real_4_91",
+  "size": "large",
+  "n": 143,
+  "stratum": "short",
+  "n_train": 114,
+  "n_test": 29,
+  "arima_rmse": 4102.0107,
+  "metrics": {
+    "Chronos-large": {
+      "model": "Chronos-large",
+      "rmse": 2999.0334,
+      "mae": 2169.8476,
+      "mape": 3.1793,
+      "mean_residual": -354.546,
+      "residual_std": 2978.0025,
+      "train_time": 1.0133,
+      "pred_time": 4.6202
+    }
+  },
+  "failed_models": {}
+}
