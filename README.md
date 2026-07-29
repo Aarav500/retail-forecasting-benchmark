@@ -15,8 +15,10 @@ This repo hosts the TMLR submission above **and** its in-progress successor,
 models against classical baselines on short retail time series. The TMLR
 results (6 models, 5 dataset sources) are preserved exactly and are now
 served by the `shortseq` package described below; ShortSeq's follow-on work
-(8 foundation models, more datasets, probabilistic metrics) is scaffolded
-but not yet run. See [Project status](#project-status) for exactly what's
+is partly under way — the additional datasets are loaded (368 series in
+total) and Chronos is implemented and swept across all five of its model
+sizes, while the other 7 foundation models and the probabilistic metrics
+are still scaffolding. See [Project status](#project-status) for exactly what's
 implemented vs. stubbed, and
 [`docs/superpowers/specs/2026-07-23-shortseq-scaffold-design.md`](docs/superpowers/specs/2026-07-23-shortseq-scaffold-design.md)
 for the full design rationale behind the package layout.
@@ -51,6 +53,10 @@ Linux/macOS contributors aren't affected and can use a normal in-repo `.venv` as
 ---
 
 ## Summary
+
+*This section describes the TMLR submission's scope. For what the repo
+covers today — 368 series, plus the Chronos campaign — see
+[Project status](#project-status).*
 
 We benchmark six forecasting methods across **5 dataset sources, 3 countries, 35 time series**:
 
@@ -123,18 +129,42 @@ pip install -e .
 # LSTM's default 100-epoch training dominates the runtime even for one dataset)
 python experiments/scripts/run_baselines.py --datasets dmart_food
 
-# Run the full baseline sweep: all 7 baselines x all 35 currently-loaded
-# series (D-Mart x4, UCI x5, Walmart, M5, M4 x24) — expect 30-90+ minutes
-# on CPU, dominated by LSTM training
+# Run the full baseline sweep: all 7 baselines x every currently-loaded
+# series (368 of them: D-Mart x4, UCI x5, calibrated Walmart, M5, M4
+# Micro x24, M4 Weekly x50, M3 Monthly x100, Rossmann x50, real Walmart
+# x50, Favorita x83). The 35-series TMLR subset alone took 30-90+ minutes
+# on CPU; SARIMA's seasonal search and LSTM's rolling forecast both scale
+# badly past n~1000, so the whole set is a multi-day job — scope it with
+# --datasets unless you mean it.
 python experiments/scripts/run_baselines.py
 
 # Run the training-window-size ablation (D-Mart Food)
 python experiments/scripts/run_ablation.py
 python experiments/scripts/run_ablation.py --lstm   # include the LSTM arm
 
+# Rank the five Chronos sizes within each length stratum
+# (Friedman omnibus + Nemenyi post-hoc). CPU-only, runs NO models, and
+# reads the already-committed size-scaling results — it finishes in
+# seconds and needs no campaign re-run, no GPU, and no model downloads.
+python experiments/scripts/run_ranking.py
+# Expected output: two strata, SHORT (n<200) 199 series x 5 sizes and
+# LONG (n>=200) 169 series x 5 sizes, with the omnibus Friedman test
+# significant in both. Project status links to the write-up of what
+# that result actually means.
+
 # Generate figures (see shortseq/visualization/figures.py for the fig_*
 # functions; each takes a results dict rather than reading fixed paths)
 ```
+
+`run_ranking.py` is deterministic apart from its `generated_at` stamp, so
+re-running it leaves the two files under `experiments/results/ranking/`
+showing as modified with only that one line changed. That is expected —
+it confirms the reproduction rather than casting doubt on it. The safe
+response is to leave the timestamp change alone or `git stash` it;
+reflexively `git checkout`-ing result files to tidy the worktree is a
+habit worth not forming here, where those files are the scientific record
+and line-ending normalisation can rewrite far more than the one line you
+meant to discard.
 
 Results land as one JSON per dataset in `experiments/results/`, e.g.
 `experiments/results/dmart_food_results.json` (RMSE/MAE/MAPE per model,
@@ -143,10 +173,12 @@ Bonferroni-corrected DM tests vs. ARIMA, and any per-model failures).
 Per-timestep residuals are **stripped by default** (they inflate result
 files roughly 7-10x, and results are git-tracked). Post-hoc Diebold-Mariano
 testing needs them, so pass `--keep-residuals` if a run is meant to support
-DM analysis — every result-writing script accepts it. The committed results,
-including the 1,840-file Chronos scaling sweep, were produced *without* it,
-so DM tests on that corpus require re-running the sweep rather than just
-re-reading the files.
+DM analysis. It is accepted by the four sweeps that write a per-model
+`metrics` block — `run_baselines.py`, `run_chronos.py`,
+`run_size_scaling.py` and `run_arima_only.py`. The committed results,
+including the 1,840-file Chronos scaling sweep, were produced *without*
+it, so DM tests on that corpus require re-running the sweep rather than
+just re-reading the files.
 
 Run the test suite with:
 
@@ -161,26 +193,42 @@ pytest tests/
 ```
 retail-forecasting-benchmark/
 ├── shortseq/                        # the pip-installable package
+│   ├── constants.py                 # CHRONOS_SIZES — the one canonical size list
+│   ├── results_io.py                # strict-JSON result writer (write_result_json)
 │   ├── datasets/                    # SeriesDataset loaders + registry (dmart, uci,
-│   │                                 # walmart, m5, m4; load_all()/load_regime()/load_source())
+│   │                                 # walmart, walmart_real, m5, m4, m4w, m3m,
+│   │                                 # rossmann, favorita;
+│   │                                 # load_all()/load_regime()/load_source())
 │   ├── models/                      # BaseForecaster implementations
-│   │   └── foundation/              # foundation-model stubs (not yet implemented)
-│   ├── evaluation/                  # metrics, DM test, ranking
+│   │   └── foundation/              # Chronos (implemented) + 7 stubs
+│   ├── evaluation/                  # metrics, DM test, Friedman/Nemenyi ranking
 │   ├── analysis/                    # boundary analysis (not yet implemented)
 │   └── visualization/               # reproducible figure generation
 ├── experiments/
 │   ├── configs/hyperparams.yaml     # all model hyperparameters
-│   ├── scripts/                     # run_baselines.py, run_ablation.py
+│   ├── scripts/                     # prepare_datasets.py, run_baselines.py,
+│   │                                 # run_ablation.py, run_arima_only.py,
+│   │                                 # run_chronos.py, run_size_scaling.py,
+│   │                                 # patch_scaling_baselines.py, run_ranking.py
 │   └── results/                     # JSON results (TMLR + any local reruns)
-├── data/                            # D-Mart / UCI / M4 / Walmart / M5 CSVs
+│       ├── foundation/              # per-dataset Chronos vs. ARIMA runs
+│       ├── scaling/                 # the Chronos size-scaling campaign (1,840 files)
+│       └── ranking/                 # Friedman/Nemenyi output, one file per stratum
+├── data/                            # D-Mart / UCI / M4 Micro / Walmart / M5 CSVs
+│   └── derived/                     # series extracted by prepare_datasets.py
+│                                     # (Rossmann, real Walmart, Favorita,
+│                                     # M3 Monthly, M4 Weekly); the raw Kaggle
+│                                     # dumps they come from are gitignored
 ├── paper/
 │   ├── paper.pdf                    # the TMLR submission
 │   └── figures/                     # the paper's 12 figures (PNG + PDF)
 ├── tests/                           # pytest suite for shortseq/ and experiments/scripts
-├── docs/superpowers/                # design spec + implementation plan for this scaffold
+├── docs/superpowers/                # design specs + implementation plans, incl. the
+│                                     # ranking spec and its recorded Outcome
 ├── notebooks/                       # EDA and result exploration
 ├── pyproject.toml                   # PEP 621 + setuptools — `pip install -e .`
-└── requirements.txt                 # pinned deps (alternative to pyproject.toml install)
+├── requirements.txt                 # pinned deps (alternative to pyproject.toml install)
+└── requirements-gpu.txt             # torch + chronos-forecasting, for the GPU sweep only
 ```
 
 ---
@@ -197,26 +245,59 @@ and the old-code-to-new-package migration mapping.
 **Implemented and verified against real data (7 baselines):**
 ARIMA, SARIMA, XGBoost, LSTM, Hybrid (ARIMA+XGBoost residual correction),
 Prophet, and SeasonalNaive — all in `shortseq/models/`, run end-to-end by
-`experiments/scripts/run_baselines.py` across all 35 currently-loaded series.
+`experiments/scripts/run_baselines.py`, which sweeps whatever `load_all()`
+returns (currently 368 series).
+
+*Committed* coverage is uneven, which is worth knowing before reading
+`experiments/results/`: the original 35 TMLR series carry all seven
+baselines; the 333 series added since carry **ARIMA only**. SARIMA's
+seasonal search and LSTM's rolling forecast scale badly past n≈1000
+(Favorita n=1684, Rossmann n=942), so `experiments/scripts/run_arima_only.py`
+backfilled just the ARIMA reference the Chronos campaign needs. It writes
+the same schema, so a later job can merge the remaining baselines in
+rather than replacing those files.
+
+**Implemented — foundation models (1 of 8):**
+Chronos (`shortseq/models/foundation/chronos.py`), a real wrapper over the
+`chronos-forecasting` package — not a stub. Run per-dataset by
+`experiments/scripts/run_chronos.py` and swept across all five model sizes
+by `experiments/scripts/run_size_scaling.py`. The committed campaign is
+**1,840 runs** (368 series x 5 sizes, zero failures) under
+`experiments/results/scaling/`. The sweep itself needs a GPU; everything
+downstream of it does not.
 
 **Implemented — evaluation and figures:**
 RMSE/MAE/MAPE metrics, the Diebold-Mariano test with a Bonferroni-correction
-helper (`shortseq/evaluation/`), and reproducible figure generation
-(`shortseq/visualization/figures.py`).
+helper, and Friedman/Nemenyi statistical ranking
+(`shortseq/evaluation/ranking.py`, driven by
+`experiments/scripts/run_ranking.py`) — all in `shortseq/evaluation/` —
+plus reproducible figure generation (`shortseq/visualization/figures.py`).
+
+The ranking has been **run**, not merely implemented. The five Chronos
+sizes are ranked within each length stratum in
+`experiments/results/ranking/chronos_sizes_short.json` and
+`chronos_sizes_long.json`: the omnibus Friedman test is significant in
+both strata, the pre-registered prediction about *adjacent* size pairs was
+**not** borne out (5 of 8 adjacent pairs separate), and the long-stratum
+`base` anomaly turns out to be noise that within-series ranking actually
+reverses. That outcome is written up in full — beneath the untouched
+prediction it is being scored against — in
+[the Outcome section of the ranking design spec](docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md#outcome-recorded-2026-07-29-after-the-analysis).
 
 **Stubbed (interfaces defined, raise `NotImplementedError`, real work not started):**
-- 8 foundation models — Chronos, TimesFM, Moirai, Moment, Timer, TTM,
+- 7 foundation models — TimesFM, Moirai, Moment, Timer, TTM,
   Lag-Llama, ForecastPFN (`shortseq/models/foundation/`)
-- 7 additional dataset sources — Favorita, Rossmann, real Walmart,
-  Corporación Favorita, StoreSales, M4 Weekly, M3 Monthly, Tourism
-  (named in `shortseq/datasets/registry.py`, not yet acquired/loaded)
+- 1 additional dataset source — Tourism (named in
+  `shortseq/datasets/registry.py`, not yet acquired; it needs R and
+  `tsibbledata` to extract)
 - Probabilistic metrics — CRPS, prediction-interval coverage
-  (`shortseq/evaluation/metrics.py`) — meaningless until a model above
-  produces a predictive distribution
-- Friedman/Nemenyi statistical ranking (`shortseq/evaluation/ranking.py`)
-  and boundary-map logistic regression (`shortseq/analysis/boundary.py`)
-  — meaningful only once the foundation-model results above exist across
-  many (n, AC(1)) combinations
+  (`shortseq/evaluation/metrics.py`) — meaningless until one of the
+  models above produces a predictive distribution
+- Boundary-map logistic regression (`shortseq/analysis/boundary.py`) —
+  needs foundation-model results across many (n, AC(1)) combinations, and
+  is deferred for a second reason the ranking spec records: its premise,
+  that there is a region where no foundation model wins, is undermined by
+  Chronos-large already winning 71% of short series
 
 None of the stubbed pieces fabricate results — they raise clearly, with a
 docstring pointing at what has to happen first.
@@ -228,7 +309,13 @@ docstring pointing at what has to happen first.
 - Fixed random seeds: `numpy.random.seed(42)`, `tf.random.set_seed(42)`
 - Strict temporal 80/20 split — no look-ahead
 - Practitioner-default hyperparameters throughout (`experiments/configs/hyperparams.yaml`)
-- CPU-only — no GPU required
+- **CPU-only for the classical baselines, the ablation, and every analysis
+  step** — including `run_ranking.py`, which reads committed results and
+  runs no models. The Chronos work is the exception: `run_chronos.py` and
+  `run_size_scaling.py` load pretrained transformer checkpoints and were
+  run on a GPU instance against `requirements-gpu.txt`. Re-running *that*
+  sweep needs a GPU; re-running anything downstream of its committed
+  results does not.
 - All DM tests: two-sided, Newey-West variance, squared-error loss, p<0.001
 - ARIMA, SARIMA, XGBoost, and Hybrid are deterministic given the seed
   **within a fixed dependency environment**, but are not guaranteed

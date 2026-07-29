@@ -21,6 +21,7 @@ import pytest
 import experiments.scripts.run_ranking as rr
 import shortseq.constants as sc
 from shortseq.evaluation.ranking import nemenyi_critical_difference
+from shortseq.results_io import ResultWriteError
 
 
 def _write_scaling(tmp_path, dataset, size, n, rmse, arima_rmse=100.0, failure=None):
@@ -387,7 +388,7 @@ def test_report_does_not_warn_at_the_reporting_threshold(tmp_path, monkeypatch, 
 @pytest.mark.filterwarnings("ignore:invalid value encountered")
 def test_main_writes_strict_json(tmp_path, monkeypatch):
     # Every size identical on every series makes the Friedman statistic
-    # and p-value nan. json.dump would emit a bare `NaN` literal, which is
+    # and p-value nan. Writing it would emit a bare `NaN` literal, which is
     # not valid JSON, so the artifact would fail in whatever reads it
     # rather than here, where the actual problem is.
     scaling, out_dir = tmp_path / "scaling", tmp_path / "ranking"
@@ -398,8 +399,17 @@ def test_main_writes_strict_json(tmp_path, monkeypatch):
         for size in ["tiny", "small", "large"]:
             _write_scaling(scaling, f"s{i}", size, n=100, rmse=50.0)
 
-    with pytest.raises(ValueError, match="Out of range float"):
+    with pytest.raises(ResultWriteError, match="friedman_statistic = nan"):
         _run_main(monkeypatch)
+
+    # Raising is only half of it, and asserting only the raise passed
+    # equally well against the bug this replaced: `json.dump` into an
+    # open file truncated the previous run's artifact on entry and then
+    # failed part-way through the encoder's walk, leaving a fragment of
+    # unparseable JSON where a valid result had been. Nothing may survive
+    # a rejected write - matching the sibling assertion in
+    # test_main_rejects_a_percentage_alpha.
+    assert not list(out_dir.glob("*.json"))
 
 
 def test_main_writes_provenance(tmp_path, monkeypatch):

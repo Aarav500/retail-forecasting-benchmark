@@ -21,6 +21,7 @@ docs/superpowers/specs/2026-07-29-friedman-nemenyi-ranking-design.md,
 import argparse
 from pathlib import Path
 
+from shortseq.constants import CHRONOS_SIZES
 from shortseq.datasets.registry import load_all
 from shortseq.evaluation.dm_test import bonferroni_correct, diebold_mariano_test
 from shortseq.evaluation.metrics import compute_metrics, without_residuals
@@ -84,7 +85,7 @@ def run_dataset(name: str, dataset, size: str, split: float = 0.8,
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--size", default="small", choices=["tiny", "mini", "small", "base", "large"])
+    parser.add_argument("--size", default="small", choices=CHRONOS_SIZES)
     parser.add_argument("--datasets", nargs="+", help="Only run these dataset names")
     parser.add_argument(
         "--keep-residuals", action="store_true",

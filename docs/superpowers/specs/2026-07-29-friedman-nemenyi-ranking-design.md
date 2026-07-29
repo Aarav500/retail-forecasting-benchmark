@@ -183,3 +183,103 @@ since adjacent sizes are close — and (b) whether `base` and `small`
 differ on the long stratum. **If adjacent pairs mostly do not separate,
 that materially weakens "scaling helps monotonically" into "the extremes
 differ but the steps do not," and must be reported that way.**
+
+## Outcome (recorded 2026-07-29, after the analysis)
+
+The prediction above is left exactly as written. This section records what
+actually happened.
+
+Source: `experiments/results/ranking/chronos_sizes_short.json` and
+`experiments/results/ranking/chronos_sizes_long.json`, produced by
+`experiments/scripts/run_ranking.py` from the committed 1,840-file scaling
+corpus at alpha = 0.05, k = 5 sizes, SHORT N = 199, LONG N = 169.
+
+### Omnibus: as predicted
+
+Significant in both strata, by a wide margin.
+
+| stratum | N | Friedman chi2 | p | significant |
+|---|---:|---:|---:|:--|
+| SHORT (n<200) | 199 | 102.6471 | 2.686e-21 | yes |
+| LONG (n>=200) | 169 | 284.9636 | 1.896e-60 | yes |
+
+### Adjacent pairs: the prediction did NOT hold
+
+The prediction expected "plausibly few" adjacent pairs to separate. In
+fact **5 of the 8 adjacent pairs separate**:
+
+| stratum | adjacent pairs separating | detail |
+|---|---|---|
+| SHORT | 2 of 4 | tiny–mini and base–large separate; mini–small and small–base do not |
+| LONG | 3 of 4 | tiny–mini, mini–small and base–large separate; only small–base does not |
+
+**The escape clause was therefore not triggered.** Stating that
+explicitly rather than leaving it to inference: the finding is *not*
+"the extremes differ but the steps do not," and it must not be written up
+that way. Most of the ladder does separate, especially on the long
+stratum.
+
+The broader picture is stronger still: **8 of 10 pairs separate on short,
+9 of 10 on long.** The only pair that fails in both strata is small–base.
+
+**One marginal call, stated rather than smoothed.** On the short stratum
+`tiny_vs_mini` clears the critical difference by only **0.0249** — a gap
+of 0.4573 against a CD of 0.4324. It is a separation at alpha = 0.05 and
+is counted as one above, but it is a near-threshold one; reporting it as
+a clean separation without the margin would overclaim. The corresponding
+long-stratum gap (0.7692 against CD 0.4692) is not marginal.
+
+### Goal Q2: the `base` anomaly is noise — and the answer is stronger than "non-significant"
+
+`small_vs_base` is the one comparison that fails in both strata, and it
+fails with room to spare: **0.2739 against CD 0.4324 on short, 0.1775
+against CD 0.4692 on long.** The anomaly is not confirmed.
+
+The long stratum says more than that: **the rank ordering reverses the
+anomaly.** Mean rank `base` = 2.5947 *beats* `small` = 2.7722, where the
+raw RMSE ratios that raised the question in the first place had `base`
+(0.927) *worse* than `small` (0.916). Within-series ranking does not
+merely fail to confirm the break in monotonicity; it points the other
+way.
+
+The mechanism is visible in the underlying grid. Across the 169 long
+series:
+
+- `base` beats `small` head-to-head on raw RMSE in **95 of 169** series
+  (56%), and `base`'s *median* raw RMSE is the lower of the two (282.97
+  vs 289.94).
+- `base`'s *mean* raw RMSE is nevertheless the higher (1664.11 vs
+  1498.99) — the mean is being pulled by a minority of large-magnitude
+  series on which `base` does worse.
+- The same concentration shows up on the ratio scale: **five Rossmann
+  store series** (ARIMA RMSE 2,034–5,754) account for **91%** of the
+  *net* summed per-series difference between `base`'s and `small`'s RMSE
+  ratios (+1.69 of +1.85 across all 169).
+
+Stated honestly, the summary statistics disagree with each other:
+`base` wins the head-to-head count and the median raw RMSE; `small` wins
+the mean ratio (0.9265 vs 0.9156) and the median ratio (0.9518 vs
+0.9190). That disagreement is precisely why a rank test is the right
+arbiter. A mean over per-series ratios lets five series outvote the other
+164; a within-series rank gives every series exactly one rank position
+regardless of its error magnitude — which is the artifact rank-based
+testing exists to defeat. Here it is enough to flip the sign of the
+comparison, while leaving the difference comfortably inside the critical
+difference either way.
+
+The reading that follows: **there is no detectable `small`-vs-`base`
+difference in either stratum, and the apparent break in monotonicity is
+best explained as a summary-statistic artifact of averaging ratios across
+series whose error magnitudes span orders of magnitude, rather than as a
+property of the models.**
+
+### Scope caveat
+
+This establishes an ordering *among the five Chronos sizes*, per stratum,
+on the committed corpus. It does **not** establish per-series
+Chronos-vs-ARIMA significance. That would need Diebold-Mariano tests,
+which need per-timestep residuals, which the committed corpus does not
+carry (see "Why not DM tests" above). The `--keep-residuals` flag added
+in this phase makes a future run *capable* of supporting them; whether to
+spend the GPU time on a re-sweep is a separate decision and remains
+deferred.

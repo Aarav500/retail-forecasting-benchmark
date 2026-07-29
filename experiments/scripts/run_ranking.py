@@ -14,7 +14,14 @@ The strata have opposite-signed effects at the small end, so pooling
 would average away the structure being measured. See the Phase B spec's
 stratification addendum.
 
-CPU-only; consumes committed data, runs no models.
+CPU-only; consumes committed data, runs no models. It takes seconds and
+needs no campaign re-run.
+
+Re-running it is deterministic except for the `generated_at` stamp, so a
+re-run leaves the two files under experiments/results/ranking/ showing as
+modified with only that one line changed. That is expected. Do NOT
+`git checkout` result files to tidy the worktree - see the README's
+Reproducibility section.
 """
 import argparse
 import collections
@@ -36,6 +43,7 @@ import pandas as pd
 # largest.
 from shortseq.constants import CHRONOS_SIZES as SIZE_ORDER
 from shortseq.evaluation.ranking import friedman_nemenyi
+from shortseq.results_io import write_result_json
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCALING_DIR = REPO_ROOT / "experiments" / "results" / "scaling"
@@ -234,15 +242,22 @@ def main():
         payload.update(provenance)
         print_report(stratum, payload)
         out_path = OUT_DIR / f"chronos_sizes_{stratum}.json"
-        with open(out_path, "w") as f:
-            # allow_nan=False: the statistic/p-value are nan only if every
-            # size scores identically on every series (unreachable on the
-            # real grid). Python's default would emit a bare `NaN` literal,
-            # which is invalid strict JSON, so a downstream consumer would
-            # fail on a malformed artifact instead of on the actual problem.
-            # This turns that impossible-on-real-data case into a loud,
-            # immediate failure here.
-            json.dump(payload, f, indent=2, allow_nan=False)
+        # Routed through shortseq.results_io, which documents why: strict
+        # JSON (allow_nan=False) is right - the statistic and p-value are
+        # nan only if every size scores identically on every series,
+        # unreachable on the real grid, and a bare `NaN` literal would
+        # push that failure downstream onto whoever reads the artifact.
+        # But `json.dump` into an already-open file makes the rejection
+        # destructive rather than merely loud: `open(..., "w")` truncates
+        # on entry and the encoder then raises part-way through the walk,
+        # so the previous run's valid artifact is replaced by a fragment
+        # of unparseable JSON. There are two writes per invocation, so a
+        # failure on `long` corrupts `long` while `short` sits there
+        # looking freshly written. `write_result_json` serialises to a
+        # string first and opens the file only if that succeeds, so a
+        # rejected payload leaves the directory exactly as it was and
+        # raises ResultWriteError naming the offending key path.
+        write_result_json(out_path, payload)
         written.append(out_path.name)
 
     if written:

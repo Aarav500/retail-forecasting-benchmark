@@ -207,9 +207,13 @@ def test_cd_requires_at_least_one_block():
 
 @pytest.mark.parametrize("bad_alpha", [5, 0.0, 1.0, -0.05, 95])
 def test_cd_rejects_alpha_outside_the_unit_interval(bad_alpha):
-    # alpha reaches this function from hyperparams.yaml, so a percent-vs-
-    # fraction mix-up is a live risk rather than a hypothetical one. Unguarded,
-    # alpha=5 returns nan (so nothing is ever significant) while the omnibus
+    # alpha does not reach this function from hyperparams.yaml -
+    # `significance_levels` there is read at exactly one site
+    # (run_baselines.py's DM/Bonferroni path) and nothing routes it here.
+    # The live footgun is the CLI: run_ranking.py takes alpha from
+    # `--alpha`, and `--alpha 5` is the obvious way to type "5%" - argparse
+    # accepts it, 5 being a perfectly good float. Unguarded, alpha=5
+    # returns nan (so nothing is ever significant) while the omnibus
     # p_value < 5 test fires - a coherent-looking, entirely wrong table.
     with pytest.raises(ValueError, match="alpha must be in"):
         nemenyi_critical_difference(k=5, n_blocks=199, alpha=bad_alpha)
