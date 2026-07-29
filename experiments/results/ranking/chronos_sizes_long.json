@@ -1,0 +1,58 @@
+{
+  "n_series": 169,
+  "n_models": 5,
+  "alpha": 0.05,
+  "mean_ranks": {
+    "tiny": 4.366863905325443,
+    "mini": 3.5976331360946747,
+    "small": 2.772189349112426,
+    "base": 2.594674556213018,
+    "large": 1.668639053254438
+  },
+  "friedman_statistic": 284.96359869783976,
+  "friedman_p_value": 1.8955602173876977e-60,
+  "friedman_significant": true,
+  "critical_difference": 0.4691914554267602,
+  "pairwise": {
+    "tiny_vs_mini": {
+      "rank_difference": 0.7692,
+      "significant": true
+    },
+    "tiny_vs_small": {
+      "rank_difference": 1.5947,
+      "significant": true
+    },
+    "tiny_vs_base": {
+      "rank_difference": 1.7722,
+      "significant": true
+    },
+    "tiny_vs_large": {
+      "rank_difference": 2.6982,
+      "significant": true
+    },
+    "mini_vs_small": {
+      "rank_difference": 0.8254,
+      "significant": true
+    },
+    "mini_vs_base": {
+      "rank_difference": 1.003,
+      "significant": true
+    },
+    "mini_vs_large": {
+      "rank_difference": 1.929,
+      "significant": true
+    },
+    "small_vs_base": {
+      "rank_difference": 0.1775,
+      "significant": false
+    },
+    "small_vs_large": {
+      "rank_difference": 1.1036,
+      "significant": true
+    },
+    "base_vs_large": {
+      "rank_difference": 0.926,
+      "significant": true
+    }
+  }
+}
