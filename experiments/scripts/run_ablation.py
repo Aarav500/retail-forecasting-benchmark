@@ -1,9 +1,20 @@
 """Training-window-size ablation on D-Mart Food, using the ported baselines.
 
 Ported from `code/ablation.py`.
+
+This is the one result-writing script that produces a failure marker BY
+DESIGN: a model that raises has no RMSE for that window, and the run must
+still report the models that succeeded on the same window. So it does NOT
+route through `shortseq.results_io.write_result_json` like the sweeps do
+-- that refuses to write anything when the payload is not strict JSON,
+which here would discard every model that worked. The marker is JSON
+`null` instead: valid strict JSON, and the failure stays visible, where a
+bare `NaN` literal is unreadable to any strict consumer and a 0.0 would
+read as a perfect forecast.
 """
 import argparse
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -49,15 +60,43 @@ def run_ablation(include_lstm: bool = False) -> dict:
                 rmse = float(np.sqrt(mean_squared_error(test.values, preds[:len(test)])))
             except Exception as exc:
                 print(f"  [{mname} n={n_train}] Error: {exc}")
-                rmse = float("nan")
-            row[mname] = round(rmse, 4)
-            row_str += f"{rmse:<12.2f}"
+                rmse = None
+            if rmse is not None and not math.isfinite(rmse):
+                # Nothing raised, but the number is meaningless. Reachable
+                # without an exception: `mean_squared_error` validates its
+                # inputs for finiteness, so a diverging model's predictions
+                # pass at 1e200 and then overflow to inf when squared.
+                # Distinct wording from the `except` branch above, because
+                # "Error" would send the operator looking for a traceback
+                # that does not exist.
+                print(f"  [{mname} n={n_train}] Non-finite RMSE ({rmse}); recording as failure.")
+                rmse = None
+            # `round(None, 4)` and `f"{None:<12.2f}"` are both TypeErrors, so
+            # the failure case needs its own value and its own cell -- padded
+            # to a number cell's width so the table still lines up.
+            row[mname] = None if rmse is None else round(rmse, 4)
+            row_str += f"{'FAIL':<12}" if rmse is None else f"{rmse:<12.2f}"
         results[n_train] = row
         print(row_str)
 
     out_path = RESULTS_DIR / "ablation_results.json"
+    # `results` is keyed by n_train, an int, and json.dumps stringifies int
+    # keys silently -- a consumer gets "50", not 50.
+    #
+    # allow_nan=False is an assertion here, not a filter: every failure is
+    # already `None` by this point, so a non-finite value reaching this call
+    # means some other path produced one, and failing loudly beats writing a
+    # bare NaN literal no strict parser will read back.
+    #
+    # Serialised before the file is opened, because `open(..., "w")`
+    # truncates on entry and the encoder streams as it walks: a rejected
+    # payload would otherwise leave a partial file where the previous run's
+    # ablation sat. This is deliberately NOT a switch to write_result_json --
+    # a failed model is an expected outcome here and must still produce a
+    # file, recorded as `null` above.
+    encoded = json.dumps(results, indent=2, allow_nan=False)
     with open(out_path, "w") as f:
-        json.dump(results, f, indent=2)
+        f.write(encoded)
     print(f"\nSaved -> {out_path}")
     return results
 
