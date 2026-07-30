@@ -1,0 +1,58 @@
+cff-version: 1.2.0
+message: "If you use ShortSeq in your research, please cite it using these metadata."
+type: software
+title: "ShortSeq: A benchmark for foundation model evaluation on short time series"
+abstract: >-
+  ShortSeq evaluates classical, machine-learning, and foundation-model
+  forecasters on short time series, where the sample sizes that favour
+  large pretrained models are absent. It provides a pip-installable
+  package, a rolling one-step-ahead evaluation protocol with no
+  look-ahead, and statistical significance testing (Diebold-Mariano with
+  Bonferroni correction; Friedman omnibus with Nemenyi post-hoc).
+
+  The benchmark covers 368 series drawn from ten public sources, split
+  into a short stratum (n < 200, 199 series) and a long stratum
+  (n >= 200, 169 series) that are analysed separately and never pooled.
+
+  Note that ShortSeq redistributes loaders, evaluation code, and computed
+  results, but not the underlying raw data: several constituent sources
+  are governed by licences that prohibit redistribution and must be
+  obtained by the user from their original providers.
+authors:
+  - family-names: Shah
+    given-names: Aarav
+    email: ashah264@ucr.edu
+    # affiliation: "University of California, Riverside"   # verify before release
+    # orcid: "https://orcid.org/0000-0000-0000-0000"       # add if you have one
+repository-code: "https://github.com/Aarav500/retail-forecasting-benchmark"
+license: MIT
+version: 0.1.0
+date-released: "2026-07-29"
+keywords:
+  - time series forecasting
+  - benchmark
+  - foundation models
+  - short time series
+  - ARIMA
+  - Chronos
+  - statistical significance testing
+  - reproducibility
+# Uncomment and fill in once the GitHub-Zenodo integration mints a DOI for
+# the first tagged release. The DOI belongs here, not in .zenodo.json --
+# Zenodo assigns it rather than reading it.
+# doi: "10.5281/zenodo.XXXXXXX"
+
+# The paper below is the earlier study this benchmark grew out of. It is
+# NOT a citation for the software; cite the software above for ShortSeq
+# itself, and this only when referring to the original empirical results.
+references:
+  - type: article
+    title: >-
+      Regime-Dependent Performance of ARIMA and Modern Forecasting Methods:
+      An Empirical Benchmark on Small-Scale Retail Demand Data
+    authors:
+      - family-names: Shah
+        given-names: Aarav
+    journal: "Transactions on Machine Learning Research"
+    year: 2025
+    url: "https://github.com/Aarav500/retail-forecasting-benchmark"

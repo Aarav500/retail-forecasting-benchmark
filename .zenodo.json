@@ -1,0 +1,32 @@
+{
+  "upload_type": "software",
+  "title": "ShortSeq: A benchmark for foundation model evaluation on short time series",
+  "description": "<p>ShortSeq evaluates classical, machine-learning, and foundation-model forecasters on short time series, where the sample sizes that favour large pretrained models are absent.</p><p>It provides a pip-installable package (<code>shortseq</code>), a rolling one-step-ahead evaluation protocol with no look-ahead, and statistical significance testing: Diebold-Mariano with Bonferroni correction for pairwise per-series comparisons, and a Friedman omnibus test with Nemenyi post-hoc for ranking multiple models across series.</p><p>The benchmark covers 368 series drawn from ten public sources, split into a short stratum (n &lt; 200, 199 series) and a long stratum (n &ge; 200, 169 series). The two strata are analysed separately and never pooled, because they exhibit opposite-signed effects at the small-model end.</p><p><strong>Scope of this release.</strong> ShortSeq distributes dataset loaders, evaluation code, and computed results. It does <em>not</em> redistribute the underlying raw data: several constituent sources are governed by licences that prohibit redistribution, and must be obtained by the user from their original providers. The repository documents how to acquire each one.</p>",
+  "creators": [
+    {
+      "name": "Shah, Aarav"
+    }
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "version": "0.1.0",
+  "language": "eng",
+  "keywords": [
+    "time series forecasting",
+    "benchmark",
+    "foundation models",
+    "short time series",
+    "ARIMA",
+    "Chronos",
+    "statistical significance testing",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Aarav500/retail-forecasting-benchmark",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    }
+  ]
+}
