@@ -10,14 +10,25 @@ abstract: >-
   look-ahead, and statistical significance testing (Diebold-Mariano with
   Bonferroni correction; Friedman omnibus with Nemenyi post-hoc).
 
-  The benchmark covers 368 series drawn from ten public sources, split
-  into a short stratum (n < 200, 199 series) and a long stratum
-  (n >= 200, 169 series) that are analysed separately and never pooled.
+  The benchmark comprises 368 series, split into a short stratum
+  (n < 200, 199 series) and a long stratum (n >= 200, 169 series) that
+  are analysed separately and never pooled. Of these, 366 are real series
+  drawn from at most eight distinct upstream providers, and 2 are seeded
+  simulations included for continuity with an earlier study. Note that
+  the ten dataset keys in the registry are NOT ten independent sources:
+  two are simulated, two cover a single M-competition, and one Kaggle
+  release is held as two non-independent views.
 
-  Note that ShortSeq redistributes loaders, evaluation code, and computed
-  results, but not the underlying raw data: several constituent sources
-  are governed by licences that prohibit redistribution and must be
-  obtained by the user from their original providers.
+  ShortSeq contributes dataset loaders, evaluation code, and computed
+  results. It also distributes derived (aggregated or column-selected)
+  series for several sources. The upstream terms of use for those sources
+  are NOT yet recorded or verified, and several originate in Kaggle
+  competition releases whose rules may restrict redistribution. See
+  DATASHEET.md section 6.2 for the per-source status; treat the derived
+  data as of uncertain licensing status until that table is completed.
+
+  DATASHEET.md documents composition, provenance, preprocessing, known
+  defects, and intended and discouraged uses in full.
 authors:
   - family-names: Shah
     given-names: Aarav
