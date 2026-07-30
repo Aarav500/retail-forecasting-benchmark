@@ -12,8 +12,10 @@ Following the framework of Gebru et al., *Datasheets for Datasets* (CACM, 2021).
 > newly collected dataset. It contributes loaders, an evaluation protocol, and computed
 > results. Every claim below that concerns an upstream provider is limited to what the
 > repository itself records; where the repository records nothing, this datasheet says so
-> rather than supplying an answer. Section 6 contains an **unresolved licensing question**
-> that a prospective user must read before relying on the distributed data.
+> rather than supplying an answer. Section 6.2 contains a **partially resolved licensing
+> position** — two sources confirmed CC BY 4.0, one confirmed to have no licence at all, and
+> three Kaggle competitions still unverified — which a prospective user must read before
+> relying on the distributed data.
 
 ---
 
@@ -282,43 +284,80 @@ per-dataset, and Friedman + Nemenyi for multi-model ranking.
 Via GitHub (above), with archival releases planned on Zenodo. The software is **MIT
 licensed** (`LICENSE`). The `shortseq` package is intended for PyPI.
 
-### 6.2 Licensing of the data — UNRESOLVED
+### 6.2 Licensing of the data — PARTIALLY RESOLVED
 
-**This section states a known gap rather than an answer.**
+The repository distributes **339 derived series files** under `data/derived/`, plus bundled
+raw files for three further sources. The MIT licence covers **the software only**. Upstream
+licensing was reviewed on 2026-07-29; the results are below. Rows marked **PENDING** are
+unresolved and are the blocker for an archival release.
 
-The repository distributes **339 derived series files** under `data/derived/`, including
-material prepared from three Kaggle competition dumps:
+| source | files distributed | upstream licence | verified | may derived series be redistributed? |
+|---|---|---|---|---|
+| `uci` | bundled raw + derived | **CC BY 4.0** | ✅ | **Yes**, with attribution (see 6.3) |
+| `m3_monthly` | 100 derived | **CC BY 4.0** (Zenodo 4656298) | ✅ | **Yes**, with attribution (see 6.3) |
+| `m4_weekly` | 50 derived | **none stated** | ✅ (confirmed absent) | **Unresolved** — see below |
+| `m4` | bundled raw + derived | **none stated** | partial | **Unresolved** — see below |
+| `rossmann` | 50 derived | not established | ❌ | **PENDING** |
+| `walmart_real` | 50 derived | not established | ❌ | **PENDING** |
+| `favorita_store_item` | 50 derived | not established | ❌ | **PENDING** |
+| `favorita_family` | 33 derived | not established | ❌ | **PENDING** |
+| `dmart` | bundled raw + derived | **no provenance recorded** | ❌ | **Unresolvable** as things stand |
+| `walmart`, `m5` | bundled | n/a — original simulations | ✅ | Yes (MIT) |
 
-| source | derived files distributed | upstream terms recorded in repo | redistribution permitted? |
-|---|---|---|---|
-| `rossmann` | 50 | **none** | **not verified** |
-| `walmart_real` | 50 | **none** | **not verified** |
-| `favorita_store_item` | 50 | **none** | **not verified** |
-| `favorita_family` | 33 | **none** | **not verified** |
-| `m4_weekly` | 50 | **none** | **not verified** |
-| `m3_monthly` | 100 | **none** | **not verified** |
-| `dmart`, `uci`, `m4` | bundled raw + derived | **none** | **not verified** |
-| `walmart`, `m5` | simulated | n/a — original work | yes (MIT) |
+**M4 (`m4`, `m4_weekly`) — no licence exists to rely on.** A CC BY 4.0 release of M4 Weekly
+does exist on Zenodo (record 3892676, Monash), **but it is not the source used here.** The
+`datasetsforecast` package downloads M4 from
+`raw.githubusercontent.com/Mcompetitions/M4-methods/master/Dataset/` — the original
+competition repository, which carries no LICENSE file and states no terms in its README. An
+issue asking under which licence the data is released
+(`Mcompetitions/M4-methods` issue 16, opened 2018) was closed without an answer. Citing the
+Monash CC BY 4.0 for these series would be incorrect.
 
-**No data licence, terms-of-use, or attribution file exists anywhere in the repository for
-any upstream source.** The MIT licence covers the software only.
+**The three Kaggle competitions — not verified, and the default points the wrong way.**
+Their rules pages require login, so they could not be checked programmatically. Kaggle's
+standard competition rules template states that participants must not "transmit, duplicate,
+publish, redistribute or otherwise provide or make available the Data to any party not
+participating in the Competition" — a restriction that applies whether or not commercial use
+is permitted. **If that clause governs these three competitions, distributing the 183 derived
+files from them is not permitted.** This is not a determination: per-competition terms vary,
+Getting Started competitions are frequently more permissive than Featured or Recruiting ones,
+and whether an aggregated derivative constitutes "the Data" is a genuine open question. It
+must be checked at `kaggle.com/competitions/<slug>/rules` for each of
+`rossmann-store-sales`, `walmart-recruiting-store-sales-forecasting`, and
+`store-sales-time-series-forecasting`, and the result recorded in the table above.
 
-Kaggle *competition* data is frequently governed by competition rules that restrict
-redistribution more tightly than open-data licences do, and those rules vary per
-competition. **Whether ShortSeq is permitted to redistribute the derived Rossmann, Walmart,
-and Favorita series has not been verified.**
+**Until those rows are resolved, a user should treat the Rossmann, Walmart, and Favorita
+derived series as of uncertain licensing status.** None of the above is legal advice.
 
-**Required before any archival release or publication:** review each source's terms, record
-the finding per source in this table, and either confirm the derived files may be
-distributed or remove them and document the acquisition path instead. A user relying on this
-artifact should treat the derived data as of uncertain licensing status until this table is
-completed.
+**Acquisition paths**, for anyone regenerating rather than relying on the distributed files:
 
-**Acquisition instructions do not currently exist.** There is no Kaggle CLI command,
-competition URL, or UCI accession recorded, so a user cannot regenerate `data/derived/` from
-this repository alone.
+| source | how to obtain |
+|---|---|
+| `uci` | UCI ML Repository, dataset 352, DOI `10.24432/C5BW33` |
+| `m3_monthly` | Zenodo record `4656298`, or via `datasetsforecast` |
+| `m4`, `m4_weekly` | `Mcompetitions/M4-methods`, `Dataset/` directory, or via `datasetsforecast` |
+| `rossmann` | Kaggle competition `rossmann-store-sales` (account + rules acceptance required) |
+| `walmart_real` | Kaggle competition `walmart-recruiting-store-sales-forecasting` |
+| `favorita` | Kaggle competition `store-sales-time-series-forecasting` |
+| `dmart` | **Unknown** — no provenance recorded (Section 3) |
 
-### 6.3 Export controls or regulatory restrictions?
+### 6.3 Required attributions
+
+Two sources are CC BY 4.0, which permits redistribution **on condition that credit is given**.
+That condition is satisfied here and must be carried by anyone redistributing these series:
+
+- **UCI Online Retail** — Chen, D. (2015). *Online Retail* [Dataset]. UCI Machine Learning
+  Repository. https://doi.org/10.24432/C5BW33. Licensed CC BY 4.0.
+- **M3 Monthly** — Godahewa, R., Bergmeir, C., Webb, G., Hyndman, R., Montero-Manso, P.
+  *M3 Monthly Dataset*. Zenodo. https://doi.org/10.5281/zenodo.4656298. Licensed CC BY 4.0.
+  The depositors request citation of Makridakis, S. and Hibon, M. (2000), "The M3-competition:
+  results, conclusions and implications", *International Journal of Forecasting* 16(4),
+  451–476.
+
+For the remaining sources, attribution is recorded in Section 3 as far as the repository
+supports it; no licence obliges a specific form of credit because none is established.
+
+### 6.4 Export controls or regulatory restrictions?
 
 None known. None assessed.
 
@@ -339,7 +378,10 @@ Zenodo.
 **Is there an erratum?** Not yet. The following are known open items at version 0.1.0 and
 should be treated as the initial erratum:
 
-1. The licensing status in **6.2 is unresolved**.
+1. The licensing status in **6.2 is partially resolved**. UCI and M3 are confirmed CC BY 4.0
+   and are attributed in 6.3. M4 has **no licence at all** at the source actually used. The
+   three Kaggle competitions (183 distributed files) are **still unverified** and are the
+   blocker for an archival release.
 2. **D-Mart has no recorded provenance** (Section 3).
 3. The **undocumented UCI gap** at 2011-01-02 (Section 2.6).
 4. Two loader docstrings **overstate length ranges** (Section 2.6).

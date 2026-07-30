@@ -21,11 +21,14 @@ abstract: >-
 
   ShortSeq contributes dataset loaders, evaluation code, and computed
   results. It also distributes derived (aggregated or column-selected)
-  series for several sources. The upstream terms of use for those sources
-  are NOT yet recorded or verified, and several originate in Kaggle
-  competition releases whose rules may restrict redistribution. See
-  DATASHEET.md section 6.2 for the per-source status; treat the derived
-  data as of uncertain licensing status until that table is completed.
+  series for several sources, whose upstream licensing is only partially
+  established: UCI Online Retail and M3 Monthly are confirmed CC BY 4.0
+  and attributed accordingly; the M4 series rest on a source that states
+  no licence at all; and three Kaggle competition sources (Rossmann,
+  Walmart Recruiting, Store Sales) remain unverified because their rules
+  require login. Kaggle's standard template restricts redistribution of
+  competition data, so users should treat those three as of uncertain
+  licensing status. See DATASHEET.md sections 6.2 and 6.3.
 
   DATASHEET.md documents composition, provenance, preprocessing, known
   defects, and intended and discouraged uses in full.
