@@ -3,14 +3,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/)
-[![TMLR Submission](https://img.shields.io/badge/TMLR-Under%20Review-orange)](https://jmlr.org/tmlr/)
 
 **Aarav Shah** · University of California, Riverside · `ashah264@ucr.edu`  
 GitHub: [github.com/Aarav500/retail-forecasting-benchmark](https://github.com/Aarav500/retail-forecasting-benchmark)
 
 ---
 
-This repo hosts the TMLR submission above **and** its in-progress successor,
+This repo hosts the paper above **and** its in-progress successor,
 **ShortSeq** — a pip-installable benchmark package for evaluating foundation
 models against classical baselines on short retail time series. The TMLR
 results (6 models, 5 dataset sources) are preserved exactly and are now
